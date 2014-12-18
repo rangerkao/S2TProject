@@ -9,4 +9,31 @@
     <welcome-file>default.htm</welcome-file>
     <welcome-file>default.jsp</welcome-file>
   </welcome-file-list>
+  
+   <filter>
+        <filter-name>struts2</filter-name>
+        <filter-class>org.apache.struts2.dispatcher.ng.filter.StrutsPrepareAndExecuteFilter</filter-class>
+        
+        <init-param>  
+        	<!-- 取消默認設置，改為手動配置 -->
+        	<!-- 只要出現congif 參數 ，所有配置都必須設定-->
+        	<!-- 路徑為classes的相對位置 -->
+	        <param-name>config</param-name>  
+	        <param-value>struts-default.xml,struts-plugin.xml,resource/struts.xml</param-value> 
+	    </init-param> 
+    </filter>
+    <filter-mapping>
+        <filter-name>struts2</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    
+    <listener>
+	    <listener-class>
+	        org.apache.struts2.tiles.StrutsTilesListener
+	    </listener-class>
+	</listener>
+	<context-param>
+	    <param-name>tilesDefinitions</param-name>
+	    <param-value>/WEB-INF/tiles.xml,/WEB-INF/DVRS_tiles.xml</param-value>
+	</context-param>
 </web-app>

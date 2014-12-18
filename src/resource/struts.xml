@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+   "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+   "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<include file="DVRS/DVRS.xml"></include>
+	
+	<constant name="" value=""></constant>
+	
+	<package name="default" extends="struts-default">
+     
+      
+      <action name="index" class="main.common.action.IndexAction" method="index">
+            <result name="success">/WEB-INF/web/login.jsp</result>
+      </action>  
+      
+   </package>
+   <package name="tiles" extends="tiles-default">
+		<action name="" class="main.common.action.IndexAction" method="index">
+            <result name="success" type="tiles">login</result>
+      </action>
+	</package>
+</struts>
