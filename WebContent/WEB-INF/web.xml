@@ -10,6 +10,7 @@
     <welcome-file>default.jsp</welcome-file>
   </welcome-file-list>
   
+  <!-- Struts2 設定 -->
    <filter>
         <filter-name>struts2</filter-name>
         <filter-class>org.apache.struts2.dispatcher.ng.filter.StrutsPrepareAndExecuteFilter</filter-class>
@@ -27,13 +28,25 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
     
+    <!-- Tiles 設定 -->
     <listener>
-	    <listener-class>
-	        org.apache.struts2.tiles.StrutsTilesListener
-	    </listener-class>
+    	<listener-class>org.apache.tiles.extras.complete.CompleteAutoloadTilesListener</listener-class>
 	</listener>
+	
+	<!-- Spring 設定 -->
+	<!-- 	其中xxxxxxxxxx.xml是Spring設定檔的位置及名稱
+			若有多個時用逗點分開
+			如果沒有設定Spring的設定檔的話，那預設會抓applicationContext.xml -->
+	<!-- classpath 為 scr位置 -->
 	<context-param>
-	    <param-name>tilesDefinitions</param-name>
-	    <param-value>/WEB-INF/tiles.xml,/WEB-INF/DVRS_tiles.xml</param-value>
-	</context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>	classpath:resource/config/action-context.xml,
+        				classpath:resource/DVRS/config/action-context.xml,
+        				classpath:resource/DVRS/config/service-context.xml,
+        				classpath:resource/DVRS/config/dao-context.xml,
+        				</param-value>
+    </context-param>
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
 </web-app>

@@ -14,10 +14,19 @@
             <result name="success">/WEB-INF/web/login.jsp</result>
       </action>  
       
+      
+      
    </package>
    <package name="tiles" extends="tiles-default">
-		<action name="" class="main.common.action.IndexAction" method="index">
+		<action name="" class="IndexAction" method="index">
             <result name="success" type="tiles">login</result>
-      </action>
+		</action>
+		<action name="login" class="main.common.action.LoginAction" method="login">
+            <result name="success" type="tiles">systemMenu</result>
+		</action>
+		
+		<action name="*SystemLink" class="main.common.action.SystemLinkAction" method="{1}" >
+			<result name="DVRS" type="tiles">DVRS_welcome</result>
+		</action>
 	</package>
 </struts>

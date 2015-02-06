@@ -1,13 +1,13 @@
 package main.common.action;
 
-public class IndexAction extends BaseAction{
+public class SystemLinkAction extends BaseAction {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public String index() {
-        return SUCCESS;
-    }
+	public String DVRS(){return "DVRS";}
+	
+	
 }

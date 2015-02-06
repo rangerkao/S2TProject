@@ -1,20 +1,11 @@
-<%@ page language="java" contentType="text/html; charset=BIG5"
-    pageEncoding="BIG5"%>
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles" %>  
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=BIG5">
-<title>Insert title here</title>
-</head>
-<body>
-<div>
-	<table>
-		<tr>
-			<td><div><tiles:insertDefinition name="menu" /> </div></td>
-			<td><div><tiles:insertDefinition name="main" /> </div></td>
-		</tr>
-	</table>
+<div class="container-fluid max_height">
+	<div class="max_height row">
+		<table class="max_height col-md-12">
+			<tr>
+				<td bgcolor="#AFFFB0" width="150px"><div class="max_height"><tiles:insertAttribute name="menu"/> </div></td>
+				<td ><div class="max_height"><tiles:insertAttribute name="main" /> </div></td>
+			</tr>
+		</table>
+	</div>
 </div>
-</body>
-</html>
