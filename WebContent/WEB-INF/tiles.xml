@@ -10,17 +10,6 @@
         <put-attribute name="middle" value="" />
     </definition>
     
-    
-    <definition name="baseLayout2" extends="baseLayout1">
-    	<put-attribute name="middle">
-    		<definition template="/WEB-INF/tiles/base2.jsp">
-    			<put-attribute name="menu" value="/WEB-INF/tiles/menu.jsp" />
-    			<put-attribute name="main" value=""  />
-    		</definition>
-    	</put-attribute>
-    </definition>
-    
-    
     <definition name="login" extends="baseLayout1">
         <put-attribute name="middle" value="/WEB-INF/web/login.jsp" />
     </definition>

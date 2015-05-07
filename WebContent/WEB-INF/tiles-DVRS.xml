@@ -5,9 +5,20 @@
        "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
 
 
-<tiles-definitions>        
+    
+<tiles-definitions>   
+
+	<definition name="baseLayout2" extends="baseLayout1">
+    	<put-attribute name="middle">
+    		<definition template="/WEB-INF/tiles/base2.jsp">
+    			<put-attribute name="menu" value="/WEB-INF/tiles/menu.jsp" />
+    			<put-attribute name="main" value=""  />
+    		</definition>
+    	</put-attribute>
+    </definition>  
+    
     <definition name="DVRS_welcome" extends="baseLayout2">
-        <put-attribute name="menu" value="/WEB-INF/tiles/menu.jsp" />
-        <put-attribute name="main" value="/web/DVRS/welcome.jsp" />
-    </definition>
+        <put-attribute name="main" value="/WEB-INF/web/DVRS/welcome.jsp" />
+    </definition>   
+
 </tiles-definitions>

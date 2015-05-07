@@ -1,0 +1,72 @@
+@CHARSET "BIG5";
+
+html, body{
+      height:100%;
+}
+
+.max_height {
+	height: 100%;
+	min-height: 100%; 
+	max-height: 100%; 
+	margin:0px;
+	padding:0px; 
+}
+.odd_columm{
+	background-color: #FEFFAF
+}
+.even_columm{
+	background-color: #C7FF91
+}
+.div_valign_middle{
+	position:absolute;
+	top: 50%;
+	height:50%
+	margin-top:-25% 
+}
+h1.title{
+	/* shadow effect*/
+	text-shadow: 5px 5px 5px #0000FF;
+}
+
+.accordion>h3{
+    text-align:center;
+    
+	background-color:black;
+	font-size:18px;
+	color:white;
+	border-color:white;
+	border-style:solid;
+	border-width:1px;
+	border-radius:5px;
+	height: 25px;
+	width:100%;
+	margin: 0px;
+	padding:0px; 
+}
+.accordion>h1{
+	background-color:black;
+	border-color:white;
+	border-style:solid;
+	border-width:1px;
+	border-radius:5px;
+	width:100%;
+	margin: 0px;
+	padding:0px; 
+	height: 10px;
+}
+.accordion>div{
+	width:95%;
+	/* height:200px; */
+	/*transition:height 2s; */
+	/*-moz-transition:height 2s; /* Firefox 4 */
+	/*-webkit-transition:height 2s; /* Safari and Chrome */
+	/*-o-transition:height 2s; /* Opera */
+	display:none;
+	overflow: auto;
+	margin: 0px;
+	padding:0px;
+	background-color: white; 
+}
+.accordion-content-hover{
+	height:200px;
+}
