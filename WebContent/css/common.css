@@ -5,9 +5,7 @@ html, body{
 }
 
 .max_height {
-	height: 100%;
-	min-height: 100%; 
-	max-height: 100%; 
+    height: inherit;
 	margin:0px;
 	padding:0px; 
 }
@@ -28,7 +26,61 @@ h1.title{
 	text-shadow: 5px 5px 5px #0000FF;
 }
 
-.accordion>h3{
+/* Accordion area */
+.accordion h4{
+	/*set menu title style*/
+	background-color: #FFBB73;
+	border-bottom-color: #DC7100;
+	border-right-color: #DC7100;
+	border-left-color: #FFD8AF;
+	border-top-color: #FFD8AF;
+	border-style: solid;
+	border-width: 5px;
+	margin-bottom: 0px;
+}
+
+.accordion h4:HOVER{
+	/*set menu title style*/
+	background-color: #FA8000;
+	border-bottom-color: #FFD8AF;
+	border-right-color: #FFD8AF;
+	border-left-color: #DC7100;
+	border-top-color: #DC7100;
+	border-style: solid;
+	border-width: 5px;
+	margin-bottom: 0px;
+}
+
+.accordion div.content{
+	/*set items animation */
+	/* transition:height 2s;
+	-moz-transition:height 2s;  Firefox 4
+	-webkit-transition:height 2s;  Safari and Chrome
+	-o-transition:height 2s;  Opera */
+	
+	margin: 0px;
+	min-height: 10px; 
+	background-color: #FEFFAF;
+	overflow-y: auto;
+}
+.accordion div.content.active{
+	visibility: visible;
+}
+.accordion p{
+	margin: 0px;
+	/*chrome*/
+    word-wrap: break-word;
+	/*IE*/
+	-ms-word-break: break-all;
+}
+
+
+/*
+.accordion>ul li{
+	list-style-type:none;
+}
+
+ .accordion>h3{
     text-align:center;
     
 	background-color:black;
@@ -56,11 +108,11 @@ h1.title{
 }
 .accordion>div{
 	width:95%;
-	/* height:200px; */
-	/*transition:height 2s; */
-	/*-moz-transition:height 2s; /* Firefox 4 */
-	/*-webkit-transition:height 2s; /* Safari and Chrome */
-	/*-o-transition:height 2s; /* Opera */
+	height:200px;
+	transition:height 2s;
+	-moz-transition:height 2s; /* Firefox 4
+	-webkit-transition:height 2s; /* Safari and Chrome
+	-o-transition:height 2s; /* Opera
 	display:none;
 	overflow: auto;
 	margin: 0px;
@@ -69,4 +121,4 @@ h1.title{
 }
 .accordion-content-hover{
 	height:200px;
-}
+} */

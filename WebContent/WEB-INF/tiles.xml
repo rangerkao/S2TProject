@@ -5,20 +5,37 @@
        "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
 
 <tiles-definitions>
-    <definition name="baseLayout1" template="/WEB-INF/tiles/base1.jsp">
-        <put-attribute name="top" value="/WEB-INF/tiles/top.jsp" />
+    <definition name="baseLayout1" template="/web/tiles/base1.jsp">
+        <put-attribute name="top" value="/web/tiles/top.jsp" />
         <put-attribute name="middle" value="" />
     </definition>
     
     <definition name="login" extends="baseLayout1">
-        <put-attribute name="middle" value="/WEB-INF/web/login.jsp" />
+        <put-attribute name="middle" value="/web/login.jsp" />
     </definition>
     
     <definition name="welcome" extends="baseLayout1">
-        <put-attribute name="middle" value="/WEB-INF/web/login.jsp" />
+        <put-attribute name="middle" value="/web/login.jsp" />
     </definition>
     
     <definition name="systemMenu" extends="baseLayout1">
-        <put-attribute name="middle" value="/WEB-INF/web/systemMenu.jsp" />
+        <put-attribute name="middle" value="/web/systemMenu.jsp" />
+    </definition>
+    
+    <definition name="DVRS_welcome" extends="baseLayout1">
+    	<put-attribute name="middle">
+    		<definition template="/web/tiles/base2.jsp">
+    			<put-attribute name="menu" value="/web/DVRS/menu.jsp" />
+    			<put-attribute name="main" value="/web/DVRS/welcome.jsp"  />
+    		</definition>
+    	</put-attribute>
+    </definition>  
+    <definition name="CRM_welcome" extends="baseLayout1">
+    	<put-attribute name="middle">
+    		<definition template="/web/tiles/base2.jsp">
+    			<put-attribute name="menu" value="/web/CRM/menu.jsp" />
+    			<put-attribute name="main" value="/web/CRM/welcome.jsp"  />
+    		</definition>
+    	</put-attribute>
     </definition>
 </tiles-definitions>

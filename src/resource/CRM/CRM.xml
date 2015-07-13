@@ -3,8 +3,11 @@
    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
    "http://struts.apache.org/dtds/struts-2.0.dtd">
 <struts>
-	<!-- 路徑預設從class開始 -->
-	<include file="resource/common.xml"/>
-	<include file="resource/DVRS/DVRS.xml"/>
-	<include file="resource/CRM/CRM.xml"/>
+	<package name="CRM-default" extends="struts-default">
+		
+	</package>
+	<package name="CRM-tiles" extends="tiles-default">
+	</package>
+	<package name="CRM-ajax" extends="json-default">
+	</package>
 </struts>

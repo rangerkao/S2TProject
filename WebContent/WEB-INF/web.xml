@@ -28,10 +28,21 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
     
-    <!-- Tiles 設定 -->
+    <!-- Tiles 設定   -->
+    <!-- 不設置context的話 默認為 /WEB-INF/下的 tile*.xml檔-->
+    <!--
+	<context-param>
+	    <param-name>org.apache.tiles.impl.BasicTilesContainer.DEFINITIONS_CONFIG</param-name>
+    	<param-value>/WEB-INF/tiles.xml</param-value>
+	</context-param>
+	<context-param id="struts_tiles">
+		<param-name>org.apache.tiles.impl.BasicTilesContainer.DEFINITIONS_CONFIG</param-name>
+		<param-value>/WEB-INF/classes/file1.xml,/WEB-INF/classes/file2.xml</param-value>
+	</context-param> -->
     <listener>
     	<listener-class>org.apache.tiles.extras.complete.CompleteAutoloadTilesListener</listener-class>
 	</listener>
+	
 	
 	<!-- Spring 設定 -->
 	<!-- 	其中xxxxxxxxxx.xml是Spring設定檔的位置及名稱

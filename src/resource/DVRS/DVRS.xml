@@ -3,5 +3,23 @@
    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
    "http://struts.apache.org/dtds/struts-2.0.dtd">
 <struts>
-   
+	<package name="DVRS-default" extends="struts-default">
+		
+	</package>
+	<package name="DVRS-tiles" extends="tiles-default">
+		<action name="*Link" method="{1}" class="main.DVRS.action.LinkAction">
+			<result name="{1}" type="tiles">DVRS_{1}</result>
+		</action>
+	</package>
+	<package name="DVRS-ajax" extends="json-default">
+		<action name="queryMenu" class="main.DVRS.action.MenuAction" method="queryMenu" >
+	        <result type="json"><param name="root">result</param></result>
+        </action>
+        
+		<action name="queryAdmin" class="main.DVRS.action.AdminAction" method="queryAdmin" >
+	        <result type="json">
+	        	<param name="root">result</param>
+	        </result>
+        </action>
+	</package>
 </struts>

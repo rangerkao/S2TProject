@@ -1,4 +1,4 @@
-package main.common.action;
+package main;
 
 import java.util.HashMap;
 import java.util.List;
