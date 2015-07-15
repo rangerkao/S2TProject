@@ -1,4 +1,4 @@
-package main.DVRS.service;
+package main.common.service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import main.common.bean.Link;
-import main.common.service.BaseService;
 
 public class MenuService extends BaseService {
 
@@ -15,6 +14,8 @@ public class MenuService extends BaseService {
 		
 		if("DVRS".equals(system))
 			return  getDVRSMenu(role);
+		else if("CRM".equals(system))
+			return  getCRMMenu(role);
 		
 		return null;
 	}
@@ -48,6 +49,47 @@ public class MenuService extends BaseService {
 		l3.add(new Link("searchList","numberChangeHistoryLink","換號記錄查詢查詢"));
 		
 		l3.add(new Link("elseList","queryQosLink","Qos供裝查詢頁面"));
+		//l3.add(new Link("elseList","logoutLink","登出"));
+		
+		Map<String,Integer> roleAuth=new HashMap<String,Integer>();
+		roleAuth.put("cs", 2);
+		roleAuth.put("act1", 2);
+		roleAuth.put("ranger", 1);
+		roleAuth.put("admin", 1);
+		
+		//邏輯開始
+		
+		Integer auth=roleAuth.get(role);
+		//XXX
+		auth=1;
+		if(auth==null || "".equals(auth))
+			auth=3;
+		
+		
+		switch(auth){
+		case 1:
+			result.addAll(l1);
+		case 2:
+			result.addAll(l2);
+		default:
+			result.addAll(l3);
+		}
+		return result;
+	}
+	
+	private List<Link> getCRMMenu(String role){
+		List<Link> result =new ArrayList<Link>();
+
+		//層級一 (最高)
+		List<Link> l1=new ArrayList<Link>();
+		
+		//層級二
+		List<Link> l2=new ArrayList<Link>();
+
+		//層級三
+		List<Link> l3=new ArrayList<Link>();
+		
+		l3.add(new Link("searchList","querySubscriber","客戶查詢頁面"));
 		//l3.add(new Link("elseList","logoutLink","登出"));
 		
 		Map<String,Integer> roleAuth=new HashMap<String,Integer>();

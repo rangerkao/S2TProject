@@ -12,10 +12,6 @@
 		</action>
 	</package>
 	<package name="DVRS-ajax" extends="json-default">
-		<action name="queryMenu" class="main.DVRS.action.MenuAction" method="queryMenu" >
-	        <result type="json"><param name="root">result</param></result>
-        </action>
-        
 		<action name="queryAdmin" class="main.DVRS.action.AdminAction" method="queryAdmin" >
 	        <result type="json">
 	        	<param name="root">result</param>

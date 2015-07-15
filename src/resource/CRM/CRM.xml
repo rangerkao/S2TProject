@@ -9,5 +9,20 @@
 	<package name="CRM-tiles" extends="tiles-default">
 	</package>
 	<package name="CRM-ajax" extends="json-default">
+		<action name="queryListById" class="main.CRM.action.SubscriberAction" method="queryListById" >
+	        <result type="json">
+	        	<param name="root">result</param>
+	        </result>
+        </action>
+        <action name="queryListByName" class="main.CRM.action.SubscriberAction" method="queryListByName" >
+	        <result type="json">
+	        	<param name="root">result</param>
+	        </result>
+        </action>
+        <action name="queryDataById" class="main.CRM.action.SubscriberAction" method="queryDataById" >
+	        <result type="json">
+	        	<param name="root">result</param>
+	        </result>
+        </action>
 	</package>
 </struts>

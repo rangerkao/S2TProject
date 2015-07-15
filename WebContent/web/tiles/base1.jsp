@@ -42,6 +42,7 @@
 <div id="sc">
 	<script src="js/service.js"></script>
 	<script src="js/common.js"></script>
+	<script src="js/jquery.blockUI.js"></script>
 </div>
 </body>
 

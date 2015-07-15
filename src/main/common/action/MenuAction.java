@@ -1,10 +1,10 @@
-package main.DVRS.action;
+package main.common.action;
 
 import java.util.List;
 
 import main.BaseAction;
-import main.DVRS.service.MenuService;
 import main.common.bean.Link;
+import main.common.service.MenuService;
 
 public class MenuAction extends BaseAction {
 

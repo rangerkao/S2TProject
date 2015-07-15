@@ -2,8 +2,9 @@
 <div ng-controller="MenuCtrl as mCtrl" class="max_height" >
 	<div class="max_height" align="center" >
 		<div class="tool">
-			<span>{{mCtrl.selectedItem}}</span>
-			<input type="button" ng-click="mCtrl.query()" value="query">
+			<div>
+				<a ng-href="#/">回首頁</a>
+			</div>
 		</div>
 		<div class="accordion">
 			<div>
@@ -29,6 +30,12 @@
 				<div id="content3" class="content {{mCtrl.selectedItem===3?'active':''}}" >
 					<div ng-repeat="element in mCtrl.elseList">
 						<a ng-href="#/{{element.action}}">{{element.name}}</a>
+					</div>
+					<div>
+						<a href="goSystemMenu">回系統頁</a>
+					</div>
+					<div>
+						<a href="logout">登出</a>
 					</div>
 				</div>
 			</div>

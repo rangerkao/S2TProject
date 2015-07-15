@@ -11,7 +11,6 @@ public class AdminService extends BaseService{
 	
 	public AdminService() throws Exception {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 	
 	private AdminDao adminDao=new AdminDao();

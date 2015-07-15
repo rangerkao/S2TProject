@@ -21,6 +21,9 @@ public class SystemMenuAction extends BaseAction {
 		
 		return SUCCESS;	
 	}
+	public String goSystemMenu(){
+		return SUCCESS;
+	}
 	
 	/**
 	 * 
