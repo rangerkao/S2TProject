@@ -110,13 +110,13 @@ angular.module('MainApp',['ngRoute','mService'])
 		self.selectTab=function(index){
 			self.selectedTab=index;
 		};
-		$(document).ready({
-			
+		
+		$(document).ready(function () {
+
 		});
 		
-		
 		self.radioList=[{id:"id",name:"ID"},{id:"name",name:"名稱"}];
-		
+		self.IDList=[];
 		//查詢by id_taxid
 		self.queryList=function(){
 			if(self.input==null||self.input==""){
@@ -133,17 +133,28 @@ angular.module('MainApp',['ngRoute','mService'])
 			
 			AjaxService.query(action,{input:self.input})
 			.success(function(data, status, headers, config) {
-				self.IDList=[];
-				angular.forEach(data['data'],function(obj){
-					self.IDList.push({id:obj.idTaxid,name:obj.name});
-				});
-				if(self.IDList.length==0){
-					alert("查無資料");
+				if(data['error']){
+					alert(data['error']);
+				}else{
+					self.IDList=[];
+					angular.forEach(data['data'],function(obj){
+						self.IDList.push(obj);
+					});
+					if(self.IDList.length==0){
+						alert("查無資料");
+					}else{
+						if(self.IDList.length==1){
+				    		self.selectedId=self.IDList[0].id;
+				    		self.selectId();
+				    	}else{
+				    		$(".modal").modal('show');
+				    	}
+					}
+					//alert("success");
 				}
-				alert("success");
 		    }).error(function(data, status, headers, config) {   
 		           alert("error");
-		           alert(data['error']);
+		           
 		    }).then(function(){
 		    	ActionService.unblock();
 		    });
@@ -152,20 +163,31 @@ angular.module('MainApp',['ngRoute','mService'])
 		self.selectId=function(){
 			if(self.selectedId==null||self.selectedId=="")
 				return;
+			ActionService.block();
 			AjaxService.query('queryDataById',{input:self.selectedId})
 			.success(function(data, status, headers, config) {	
-				self.custInfo=data['data'];
-				alert("success");
+				if(data['error']){
+					alert(data['error']);
+				}else{
+					self.custInfo=data['data'];
+					//alert("success");
+				}
+					
 		    }).error(function(data, status, headers, config) {   
 		           alert("error");
-		           alert(data['error']);
+		          
 		    }).then(function(){
+		    	ActionService.unblock();
 		    });
 		};
 		//type選擇
 		self.selectType=function(){
 			//alert(self.selectedType);
 		};
-	
+		self.chooseId=function(id){
+			$(".modal").modal('hide');
+			self.selectedId=id;
+    		self.selectId();
+		};
 	
 	}]);

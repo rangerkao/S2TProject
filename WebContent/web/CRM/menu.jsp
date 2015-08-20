@@ -47,15 +47,12 @@
 			CRM_menu.setAttribute("src", "js/CRM/CRM_menu.js");
 			$("#CRM").append(CRM_menu); 
 		}
+		
+		if(!document.getElementById("directive")){
+			 var directive = document.createElement("script");
+				directive.setAttribute("id","directive");
+				directive.setAttribute("src", "js/directive.js");
+				$("#sc").append(directive);  
+		} 
 	});
 </script> 
-<script>
-	$(document).ready(function(){
-			if(!document.getElementById("directive")){
-				 var directive = document.createElement("script");
-					directive.setAttribute("id","directive");
-					directive.setAttribute("src", "js/directive.js");
-					$("#DVRS").append(directive);  
-			} 
-	});
-</script>

@@ -15,18 +15,18 @@ html, body{
 .even_columm{
 	background-color: #C7FF91
 }
-.div_valign_middle{
+/* .div_valign_middle{
 	position:absolute;
 	top: 50%;
 	height:50%
 	margin-top:-25% 
-}
+} */
 h1.title{
 	/* shadow effect*/
 	text-shadow: 5px 5px 5px #0000FF;
 }
 
-/* Accordion area */
+/******************************* Accordion area ********************************/
 .accordion h4{
 	/*set menu title style*/
 	background-color: #FFBB73;
@@ -74,51 +74,19 @@ h1.title{
 	-ms-word-break: break-all;
 }
 
-
-/*
-.accordion>ul li{
-	list-style-type:none;
+/******************************* dataTable area ********************************/
+.dataTable{
+	background-color: #D6FFAF;
+	border: 3px;
+	border-color: white;
+	width: 100%;
 }
-
- .accordion>h3{
-    text-align:center;
-    
-	background-color:black;
-	font-size:18px;
-	color:white;
-	border-color:white;
-	border-style:solid;
-	border-width:1px;
-	border-radius:5px;
-	height: 25px;
-	width:100%;
-	margin: 0px;
-	padding:0px; 
+.dataTable tr:nth-child(odd) {
+	background-color: #FEFFAF
 }
-.accordion>h1{
-	background-color:black;
-	border-color:white;
-	border-style:solid;
-	border-width:1px;
-	border-radius:5px;
-	width:100%;
-	margin: 0px;
-	padding:0px; 
-	height: 10px;
+.dataTable tr:nth-child(even) {
+	background-color: #C7FF91
 }
-.accordion>div{
-	width:95%;
-	height:200px;
-	transition:height 2s;
-	-moz-transition:height 2s; /* Firefox 4
-	-webkit-transition:height 2s; /* Safari and Chrome
-	-o-transition:height 2s; /* Opera
-	display:none;
-	overflow: auto;
-	margin: 0px;
-	padding:0px;
-	background-color: white; 
+.dataTable tr:HOVER {
+	background-color: #A1C7EF
 }
-.accordion-content-hover{
-	height:200px;
-} */

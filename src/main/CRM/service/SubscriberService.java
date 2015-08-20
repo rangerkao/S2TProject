@@ -3,8 +3,8 @@ package main.CRM.service;
 import java.sql.SQLException;
 import java.util.List;
 
+import main.CRM.bean.Subscriber;
 import main.CRM.dao.SubscriberDao;
-import main.DVRS.bean.Subscriber;
 import main.common.service.BaseService;
 
 public class SubscriberService extends BaseService {

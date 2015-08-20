@@ -3,8 +3,8 @@ package main.DVRS.service;
 import java.sql.SQLException;
 import java.util.List;
 
+import main.DVRS.bean.Admin;
 import main.DVRS.dao.AdminDao;
-import main.common.bean.Admin;
 import main.common.service.BaseService;
 
 public class AdminService extends BaseService{

@@ -8,7 +8,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import main.common.bean.Admin;
+import main.DVRS.bean.Admin;
 import main.common.dao.BaseDao;
 
 public class AdminDao extends BaseDao {	

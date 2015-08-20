@@ -4,8 +4,8 @@ import java.sql.SQLException;
 import java.util.List;
 
 import main.BaseAction;
+import main.DVRS.bean.Admin;
 import main.DVRS.service.AdminService;
-import main.common.bean.Admin;
 
 public class AdminAction extends BaseAction{
 

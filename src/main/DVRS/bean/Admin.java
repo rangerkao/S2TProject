@@ -1,4 +1,4 @@
-package main.common.bean;
+package main.DVRS.bean;
 
 public class Admin {
 

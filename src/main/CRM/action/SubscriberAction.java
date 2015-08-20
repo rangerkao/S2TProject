@@ -6,8 +6,8 @@ import java.sql.SQLException;
 import java.util.List;
 
 import main.BaseAction;
+import main.CRM.bean.Subscriber;
 import main.CRM.service.SubscriberService;
-import main.DVRS.bean.Subscriber;
 
 public class SubscriberAction extends BaseAction{
 

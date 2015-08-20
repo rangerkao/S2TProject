@@ -7,7 +7,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import main.DVRS.bean.Subscriber;
+import main.CRM.bean.Subscriber;
 import main.common.dao.BaseDao;
 
 public class SubscriberDao extends BaseDao{
@@ -19,28 +19,23 @@ public class SubscriberDao extends BaseDao{
 
 	public List<Subscriber> queryListById(String id) throws SQLException{
 		List<Subscriber> result = new ArrayList<Subscriber>();
-		
-		String sql = "SELECT A.ID_TAXID ID,A.NAME FROM CRM_SUBSCRIBER A WHERE A.ID_TAXID='"+id+"' ";
-		Statement st = conn.createStatement();
-		ResultSet rs = st.executeQuery(sql);
-		
-		while(rs.next()){
-			Subscriber s = new Subscriber();
-			s.setIdTaxid(rs.getString("ID"));
-			s.setName(processEncodeData(rs.getString("NAME"),"ISO-8859-1","BIG5"));
-			result.add(s);
-		}
-
+		result = queryList("WHERE A.ID_TAXID='"+id+"' ");
 		closeConnection();
 		return result;
 	}
 	
 	public List<Subscriber> queryListByName(String name) throws SQLException{
 		List<Subscriber> result = new ArrayList<Subscriber>();
+		result = queryList("WHERE A.NAME Like '%"+processEncodeData(name,"BIG5","ISO-8859-1")+"%' ");
+		closeConnection();
+		return result;
+	}
+	
+	private List<Subscriber> queryList(String condition) throws SQLException{
+		List<Subscriber> result = new ArrayList<Subscriber>();
 		
-		String sql;
-
-		sql = "SELECT A.ID_TAXID ID,A.NAME FROM CRM_SUBSCRIBER A WHERE A.NAME Like '%"+processEncodeData(name,"BIG5","ISO-8859-1")+"%' ";
+		String sql = "SELECT A.ID_TAXID ID,A.NAME,A.PERMANENT_ADDRESS FROM CRM_SUBSCRIBER A "+condition;
+		
 		Statement st = conn.createStatement();
 		ResultSet rs = st.executeQuery(sql);
 		
@@ -48,9 +43,11 @@ public class SubscriberDao extends BaseDao{
 			Subscriber s = new Subscriber();
 			s.setIdTaxid(rs.getString("ID"));
 			s.setName(processEncodeData(rs.getString("NAME"),"ISO-8859-1","BIG5"));
+			s.setPermanentAddress(processEncodeData(rs.getString("PERMANENT_ADDRESS"),"ISO-8859-1","BIG5"));
 			result.add(s);
-		}
-		closeConnection();
+		}		
+		rs.close();
+		st.close();
 		return result;
 	}
 	
@@ -80,6 +77,8 @@ public class SubscriberDao extends BaseDao{
 			result.setType(processData(rs.getString("TYPE")));
 
 		}
+		rs.close();
+		st.close();
 		closeConnection();
 		return result;
 	}
