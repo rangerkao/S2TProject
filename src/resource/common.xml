@@ -13,11 +13,12 @@
 	<!-- tiles 可選擇繼承或設定 result type 進行使用 -->
 	<package name="tiles" extends="tiles-default">
 	<!-- Default page -->
-		<action name="" class="IndexAction" method="index">
+		<action name="" class="main.common.action.IndexAction" method="index">
             <result name="success" type="tiles">login</result>
 		</action>
 		<action name="login" class="main.common.action.LoginAction" method="login">
             <result name="success" type="tiles">systemMenu</result>
+            <result name="error" type="tiles">login</result>
 		</action>
 		<action name="*System" class="main.common.action.SystemMenuAction" method="{1}" >
 			<result name="{1}" type="tiles">{1}_welcome</result>
@@ -36,7 +37,9 @@
 	        </result>
         </action>
         <action name="queryMenu" class="main.common.action.MenuAction" method="queryMenu" >
-	        <result type="json"><param name="root">result</param></result>
+	        <result type="json">
+	        	<param name="root">result</param>
+        	</result>
         </action>
 	</package>
 </struts>

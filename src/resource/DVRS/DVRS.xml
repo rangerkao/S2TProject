@@ -17,5 +17,15 @@
 	        	<param name="root">result</param>
 	        </result>
         </action>
+        <action name="queryDataRate" class="main.DVRS.action.DataRateAction" method="queryDataRate" >
+	        <result type="json">
+	        	<param name="root">result</param>
+	        </result>
+        </action>
+        <action name="queryCurrentDay" class="main.DVRS.action.CurrentAction" method="queryCurrentDay" >
+	        <result type="json">
+	        	<param name="root">result</param>
+	        </result>
+        </action>
 	</package>
 </struts>

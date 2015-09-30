@@ -102,10 +102,14 @@ angular.module('MainApp',['ngRoute','mService'])
 			'updatetime':' '
 		};
 		self.tabs=[
-	           {title:'費用紀錄',content:'費用紀錄',active:false,disabled:false},
-	           {title:'租退記錄',content:'租退記錄',active:true,disabled:false},
+	           {title:'供裝記錄',content:'供裝記錄',active:false,disabled:false},
+	           {title:'申請書回收查詢',content:'申請書回收查詢',active:true,disabled:false},
+	           {title:'系統簡訊(開通、落地、超量)',content:'系統簡訊(開通、落地、超量)',active:false,disabled:false},
+	           {title:'月出帳記錄(含明細)',content:'月出帳記錄(含明細)',active:false,disabled:false},
 	           {title:'使用記錄',content:'使用記錄',active:false,disabled:false},
-	           {title:'申訴紀錄',content:'申訴紀錄',active:false,disabled:true}
+	           {title:'付款記錄',content:'付款記錄',active:false,disabled:false},
+	           {title:'催收記錄',content:'催收記錄',active:false,disabled:false},
+	           {title:'申訴記錄',content:'申訴記錄',active:false,disabled:false}
 	           ];
 		self.selectTab=function(index){
 			self.selectedTab=index;

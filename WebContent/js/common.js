@@ -55,7 +55,8 @@ angular.module('MainApp',['mService'])
 			self.query();
 		});
 		self.query=function(){
-			AjaxService.query('querySystemMenu',{}).success(function(data, status, headers, config) {  
+			AjaxService.query('querySystemMenu',{})
+			.success(function(data, status, headers, config) {  
 				angular.forEach(data['data'],function(obj){
 					self.systemList.push({name:obj.name,action:obj.action});
 				});

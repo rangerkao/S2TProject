@@ -10,9 +10,9 @@ import main.common.action.CacheAction;
 public class BaseDao {
 
 	protected String sql="";
-	protected Properties props =null;
-	protected Connection conn=null;
-	protected Connection conn2=null;
+	protected static Properties props =null;
+	protected static Connection conn=null;
+	protected static Connection conn2=null;
 
 	public BaseDao() throws Exception{
 		props=CacheAction.props;
@@ -21,12 +21,12 @@ public class BaseDao {
 	protected void createConnection() throws Exception{
 		conn=connectDB();
 		conn2=connectDB2();
-		System.out.print("Create connect!");
+		System.out.println("Create connect!");
 	}
-	protected void closeConnection() throws SQLException{
+	protected static void closeConnection() throws SQLException{
 		conn.close();
 		conn2.close();
-		System.out.print("Close connect!");
+		System.out.println("Close connect!");
 	}
 		//---------------建立DB 連結 conn1 主資料庫、conn2 Mboss----
 
@@ -49,7 +49,7 @@ public class BaseDao {
 				}
 			return conn;
 		}
-		protected Connection connectDB2() throws Exception {
+		protected static Connection connectDB2() throws Exception {
 			Connection conn2=null;
 			String url=props.getProperty("mBOSS.URL")
 					.replace("{{Host}}", props.getProperty("mBOSS.Host"))
@@ -67,7 +67,7 @@ public class BaseDao {
 			return conn2;
 		}
 		
-		public Connection connDB(String DriverClass, String URL,
+		public static Connection connDB(String DriverClass, String URL,
 				String UserName, String PassWord) throws ClassNotFoundException, SQLException {
 			Connection conn = null;
 

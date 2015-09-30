@@ -16,10 +16,7 @@ public class SystemMenuAction extends BaseAction {
 	public String querySystemMenu(){
 		
 		List<Link> menuList = systemMenuService.querySystemMenu();
-		
-		setResult("success",menuList);
-		
-		return SUCCESS;	
+		return setResult("success",menuList);
 	}
 	public String goSystemMenu(){
 		return SUCCESS;

@@ -37,12 +37,15 @@
 <!-- JQuery UI JS-->
 	<script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
 <!-- AngularJS -->
-	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.19/angular.js" ></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.19/angular-route.js"></script>
+	<!-- <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.19/angular.js" ></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.19/angular-route.js"></script> -->
 <div id="sc">
+	<script src="js/angular.js"></script>
+	<script src="js/angular-route.js"></script>
 	<script src="js/service.js"></script>
 	<script src="js/common.js"></script>
 	<script src="js/jquery.blockUI.js"></script>
+	<script src="js/ui-bootstrap-tpls-0.13.3.js"></script>
 </div>
 </body>
 

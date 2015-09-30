@@ -45,21 +45,8 @@
 					</li>
 				</ul>
 			</div>
-			<div class="tabContent" ng-show="sCtrl.selectedTab===0">
-				<!-- 費用記錄 -->
-				客戶費用記錄
-			</div>
-			<div class="tabContent" ng-show="sCtrl.selectedTab===1">
-				<!-- 租退記錄 -->
-				客戶租退記錄
-			</div>
-			<div class="tabContent" ng-show="sCtrl.selectedTab===2">
-				<!-- 使用記錄 -->
-				客戶使用記錄
-			</div>
-			<div class="tabContent" ng-show="sCtrl.selectedTab===3">
-				<!-- 申訴紀錄 -->
-				客戶申訴紀錄
+			<div ng-repeat="tab in sCtrl.tabs" class="tabContent" ng-show="sCtrl.selectedTab==={{$index}}">
+				<span ng-bind="tab.title"></span>
 			</div>
 		</div>
 	</div>

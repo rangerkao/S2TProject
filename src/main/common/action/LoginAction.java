@@ -1,5 +1,9 @@
 package main.common.action;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.security.NoSuchAlgorithmException;
+
 import main.BaseAction;
 import main.common.service.LoginService;
 
@@ -12,16 +16,11 @@ public class LoginAction extends BaseAction{
 	
 	
 	LoginService loginService = new LoginService();
-	
-	class User{
-		String account;
-		String password;
-	};
+
 	
 	String account;
 	String password;
-	User user=null;
-
+	String msg;
 	
 	public void validate() {
 
@@ -29,30 +28,23 @@ public class LoginAction extends BaseAction{
 	
 	
 	public String login(){
-		if(user==null){
-			result="沒有資料";
-			System.out.println("沒有資料");
-			System.out.println("account:"+account+",password:"+password);
-			return SUCCESS;
-		}
-			
-		System.out.println("account:"+user.account+",password:"+user.password);
+	
+		System.out.println("account:"+account+",password:"+password);
 		result="進行登陸";
-		if(SUCCESS.equals(loginService.checkAccount(session, user.account, user.password))){
-			return setResult("Welcome",(String)session.get("user"));
-		}else{
-			return setFail("The account is not exist or password is Error!", null);
+		
+		try {
+			if(SUCCESS.equals(loginService.checkAccount(session, account, password))){
+				msg = "Welcome";
+				return setResult("Welcome",(String)session.get("user"));
+			}else{
+				msg = "The account is not exist or password is Error!";
+				return setFail("The account is not exist or password is Error!", null);
+			}
+		} catch (NoSuchAlgorithmException e) {
+			StringWriter sw = new StringWriter();
+			e.printStackTrace(new PrintWriter(sw));
+			return setFail("login occured error!", sw.toString());
 		}
-	}
-
-
-	public User getUser() {
-		return user;
-	}
-
-
-	public void setUser(User user) {
-		this.user = user;
 	}
 
 	public String getAccount() {
@@ -69,6 +61,16 @@ public class LoginAction extends BaseAction{
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+
+	public String getMsg() {
+		return msg;
+	}
+
+
+	public void setMsg(String msg) {
+		this.msg = msg;
 	}
 	
 	

@@ -11,7 +11,7 @@ angular.module('mService',[])
 						'Content-Type':'application/x-www-form-urlencoded',
 						'Accept': 'application/json'},
 					transformRequest:function(data,headers){
-						var requestStr;
+						var requestStr=null;
 						for(var key in data){
 							if(requestStr){
 								requestStr += '&' + key + '=' +data[key];
@@ -23,7 +23,8 @@ angular.module('mService',[])
 					},
 					transformResponse:function(data,headersGetter){
 						//轉兩次才會成為Object
-						return angular.fromJson(angular.fromJson(data));
+						var temp = angular.fromJson(data);
+						return angular.fromJson(temp);
 					}
 				
 				});  

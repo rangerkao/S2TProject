@@ -42,39 +42,24 @@
 		</div>
 	</div>
 </div>
-
 <script>
 	$(document).ready(function(){
 		if(!document.getElementById("DVRS")){
-			/* $("#sc").append("<div id='DVRS'>"+
-					"<script src='js/DVRS/DVRS_menu.js' \x3C/script>"+
-				"</div>"); */
-				
 			var DVRS = document.createElement("div");
 			DVRS.setAttribute("id", "DVRS");
 			$("#sc").after(DVRS);
-			
-			/* var DVRS_admin = document.createElement("script");
-			//DVRS_admin.setAttribute("type","text/javascript");
-			DVRS_admin.setAttribute("src", "js/DVRS/DVRS_admin.js");
-			$("#DVRS").append(DVRS_admin);   */ 
-			
+
 			var DVRS_menu = document.createElement("script");
 			//DVRS_menu.setAttribute("type","text/javascript");
 			DVRS_menu.setAttribute("src", "js/DVRS/DVRS_menu.js");
 			$("#DVRS").append(DVRS_menu); 
-			
-			/*  var directive = document.createElement("script");
-			//directive.setAttribute("type","text/javascript");
-			directive.setAttribute("src", "js/directive.js");
-			$("#DVRS").append(directive);    */
 		}
 		
 		if(!document.getElementById("directive")){
-			 var directive = document.createElement("script");
-				directive.setAttribute("id","directive");
-				directive.setAttribute("src", "js/directive.js");
-				$("#sc").append(directive);  
+			var directive = document.createElement("script");
+			directive.setAttribute("id","directive");
+			directive.setAttribute("src", "js/directive.js");
+			$("#sc").append(directive);  
 		} 
 	});
 </script> 

@@ -17,12 +17,12 @@ public class BaseAction extends ActionSupport implements SessionAware{
 	 */
 	private static final long serialVersionUID = 1L;
 
-	protected Map<String, Object> session;
-	protected String result;
+	protected static Map<String, Object> session;
+	protected static String result;
 	
 	
 	
-	public String setResult(String msg,Object data){
+	public static String setResult(String msg,Object data){
 		
 		Map<String,Object> map = new HashMap<String,Object>();
 		map.put("msg", msg);
@@ -33,7 +33,7 @@ public class BaseAction extends ActionSupport implements SessionAware{
 		return SUCCESS;
 	}
 	
-	public String setFail(String msg,String error){
+	public static String setFail(String msg,String error){
 		
 		Map<String,String> map = new HashMap<String,String>();
 		map.put("msg", msg);
@@ -41,14 +41,14 @@ public class BaseAction extends ActionSupport implements SessionAware{
 		
 		result = beanToJSONObject(map);
 		
-		return ERROR;
+		return SUCCESS;
 	}
 	
 	protected String beanToJSONArray(List list){
 		JSONArray jo = (JSONArray) JSONObject.wrap(list);
 		return jo.toString();
 	}
-	protected String beanToJSONObject(Object object){
+	protected static String beanToJSONObject(Object object){
 		JSONObject jo = (JSONObject) JSONObject.wrap(object);
 		return jo.toString();
 	}
