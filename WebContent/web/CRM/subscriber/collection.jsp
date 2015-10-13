@@ -1,0 +1,4 @@
+<div>
+	{{tab.title}}
+	
+</div>

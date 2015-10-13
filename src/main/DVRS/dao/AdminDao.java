@@ -19,7 +19,7 @@ public class AdminDao extends BaseDao {
 	}
 	
 	public List<Admin> queryAdminList() throws SQLException{
-		sql=
+		String sql=
 				"SELECT A.ID,A.ACCOUNT,A.PASSWORD,A.ROLE "
 				+ "FROM HUR_ADMIN A ";
 		List<Admin> list=new ArrayList<Admin>();
@@ -46,7 +46,7 @@ public class AdminDao extends BaseDao {
 	
 	public Admin queryAdminByAccount(String account) throws SQLException{
 		Admin admin =null;
-		sql=
+		String sql=
 				"SELECT A.ID,A.ACCOUNT,A.PASSWORD,A.ROLE "
 				+ "FROM HUR_ADMIN A "
 				+ "WHERE A.ACCOUNT=? ";
@@ -72,7 +72,7 @@ public class AdminDao extends BaseDao {
 		return admin;
 	}
 	public int insert(Admin admin) throws SQLException{
-		sql=
+		String sql=
 				"INSERT INTO HUR_ADMIN(ID,ACCOUNT,PASSWORD,ROLE,CREATE_DATE)"
 				+ "VALUES(?,?,?,?,sysdate)";
 		int result=0;
@@ -90,7 +90,7 @@ public class AdminDao extends BaseDao {
 		return result;
 	}
 	public int update(Admin admin) throws SQLException{
-		sql=
+		String sql=
 				"UPDATE HUR_ADMIN "
 				+ "SET ID=?,PASSWORD=?,ROLE=?,UPDATE_DATE=sysdate "
 				+ "WHERE ACCOUNT=?";
@@ -111,7 +111,7 @@ public class AdminDao extends BaseDao {
 	}
 	
 	public int delete(Admin admin) throws SQLException{
-		sql=
+		String sql=
 				"DELETE HUR_ADMIN "
 				+ "WHERE ACCOUNT=?";
 		int result=0;

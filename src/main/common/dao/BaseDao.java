@@ -9,7 +9,6 @@ import main.common.action.CacheAction;
 
 public class BaseDao {
 
-	protected String sql="";
 	protected static Properties props =null;
 	protected static Connection conn=null;
 	protected static Connection conn2=null;
@@ -24,8 +23,10 @@ public class BaseDao {
 		System.out.println("Create connect!");
 	}
 	protected static void closeConnection() throws SQLException{
-		conn.close();
-		conn2.close();
+		if(conn!=null)
+			conn.close();
+		if(conn2!=null)
+			conn2.close();
 		System.out.println("Close connect!");
 	}
 		//---------------建立DB 連結 conn1 主資料庫、conn2 Mboss----

@@ -15,6 +15,10 @@ public class Subscriber {
 	String createtime;
 	String updatetime;
 	
+	String s2tMsisdn;
+	String chtMsisdn;
+	String serviceId;
+	
 	
 	
 	public String getName() {
@@ -88,6 +92,24 @@ public class Subscriber {
 	}
 	public void setUpdatetime(String updatetime) {
 		this.updatetime = updatetime;
+	}
+	public String getS2tMsisdn() {
+		return s2tMsisdn;
+	}
+	public void setS2tMsisdn(String s2tMsisdn) {
+		this.s2tMsisdn = s2tMsisdn;
+	}
+	public String getChtMsisdn() {
+		return chtMsisdn;
+	}
+	public void setChtMsisdn(String chtMsisdn) {
+		this.chtMsisdn = chtMsisdn;
+	}
+	public String getServiceId() {
+		return serviceId;
+	}
+	public void setServiceId(String serviceId) {
+		this.serviceId = serviceId;
 	}
 
 	

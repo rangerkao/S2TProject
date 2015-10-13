@@ -25,15 +25,20 @@
 				</modal>
 			</div>
 			<div class="col-xs-12">
+				<div class="col-xs-3" align="left"><label>S2T MSISDN:</label><span ng-bind="sCtrl.custInfo.s2tMsisdn"></span></div>
 				<div class="col-xs-3" align="left"><label>姓名:</label><span ng-bind="sCtrl.custInfo.name"></span></div>
+				<div class="col-xs-3" align="left"><label>統一編號/證號:</label><span ng-bind="sCtrl.custInfo.idTaxid"></span></div>
 				<div class="col-xs-3" align="left"><label>生日:</label><span ng-bind="sCtrl.custInfo.birthday"></span></div>
-				<div class="col-xs-3" align="left"><label>統一編號/身份證字號:</label><span ng-bind="sCtrl.custInfo.idTaxid"></span></div>
-				<div class="col-xs-3" align="left"><label>聯絡電話：</label><span ng-bind="sCtrl.custInfo.phone"></span></div>
+				
+				<div class="col-xs-3" align="left"><label>CHT MSISDN:</label><span ng-bind="sCtrl.custInfo.chtMsisdn"></span></div>
 				<div class="col-xs-3" align="left"><label>Email:</label><span ng-bind="sCtrl.custInfo.email"></span></div>
-				<div class="col-xs-3" align="left"><label>帳單地址：</label><span ng-bind="sCtrl.custInfo.billingAddress"></span></div>
-				<div class="col-xs-4" align="left"><label>戶籍地址：</label><span ng-bind="sCtrl.custInfo.permanentAddress"></span></div>
-				<div class="col-xs-3" align="left"><label>代辦處代號:：</label><span ng-bind="sCtrl.custInfo.agency"></span></div>
-				<div class="col-xs-9" align="left"><label>其他：</label><span ng-bind="sCtrl.custInfo.remark"></span></div>
+				<div class="col-xs-6" align="left"><label>帳單地址：</label><span ng-bind="sCtrl.custInfo.billingAddress"></span></div>
+				
+				<div class="col-xs-3" align="left"><label>Service ID：</label><span ng-bind="sCtrl.custInfo.serviceId"></span></div>
+				<div class="col-xs-3" align="left"><label>聯絡電話：</label><span ng-bind="sCtrl.custInfo.phone"></span></div>
+				<div class="col-xs-6" align="left"><label>戶籍地址：</label><span ng-bind="sCtrl.custInfo.permanentAddress"></span></div>
+				
+				<div class="col-xs-12" align="left"><label>代辦處代號:：</label><span ng-bind="sCtrl.custInfo.agency"></span></div>
 			</div>
 
 		</div>
@@ -46,7 +51,7 @@
 				</ul>
 			</div>
 			<div ng-repeat="tab in sCtrl.tabs" class="tabContent" ng-show="sCtrl.selectedTab==={{$index}}">
-				<span ng-bind="tab.title"></span>
+				<div ng-include="tab.url"></div>  
 			</div>
 		</div>
 	</div>

@@ -3,6 +3,7 @@ package main.CRM.service;
 import java.sql.SQLException;
 import java.util.List;
 
+import main.CRM.bean.SMS;
 import main.CRM.bean.Subscriber;
 import main.CRM.dao.SubscriberDao;
 import main.common.service.BaseService;
@@ -32,6 +33,13 @@ public class SubscriberService extends BaseService {
 	public Subscriber queryDataById(String id) throws SQLException{
 		Subscriber result = null;
 		result = subscriberDao.queryDataById(id);
+		return result;
+	}
+	
+	public List<SMS> querySMS(String s2tMsisdn ,String chtMsisdn,String startDate,String endDate) throws SQLException {
+		
+		List<SMS> result = null;
+		result = subscriberDao.querySMS(s2tMsisdn, chtMsisdn, startDate, endDate);
 		return result;
 	}
 }

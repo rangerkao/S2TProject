@@ -181,6 +181,7 @@ angular.module('MainApp',['ngRoute','mService','ui.bootstrap'])
 			           {name:"國家業者",col:"mccmnc",_width:"9%"},
 			           {name:"是否發送過每日警示",col:"alert",_width:"9%"}];
 		
+		self.dataList=[];
 		
 		//---------------- data query ---------------
 		function validate(){
@@ -216,33 +217,23 @@ angular.module('MainApp',['ngRoute','mService','ui.bootstrap'])
 		self.query = function(){
 			if(!self.imsi)
 				self.imsi="";
-			//reg=new RegExp(reg);
 			self.dataList =[];
-			self.Error=[];
-			//if(self.dateChange){
-				AjaxService.query('queryCurrentDay',
-						{	"imsi" : self.imsi,
-							"from":dateFormatString(self.dateFrom),
-							"to":dateFormatString(self.dateTo)})
-				.success(function(data, status, headers, config) {  
-					if(!data['data'])
-						self.dataList=data['data'];
-					if(!data['error'])
-						self.Error=data['error'];
-			    }).error(function(data, status, headers, config) {   
-			    	alert("AJAX Error:");
-			    });
-			/*}else{
-				alert("self.dateChang :"+self.dateChang);
-				if(self.dataList!='unddefine' && self.dataList.length>0){
-					self.dataList.splice(0,self.dataList.length);
-					 $.each(self.currenList,function(i,ListItem){
-						 if(reg.test(ListItem.imsi)||($("#imsi").val()==null||$("#imsi").val()=="")){
-							 self.dataList.push(ListItem);
-						 }
-					}); 
+			AjaxService.query('queryCurrentDay',
+					{	"imsi" : self.imsi,
+						"from":dateFormatString(self.dateFrom),
+						"to":dateFormatString(self.dateTo)})
+			.success(function(data, status, headers, config) {  
+				if(data['error']){
+					alert(data['error']);
+				}else{
+					
+					self.dataList=data['data'];
+
+					//alert("success");
 				}
-			}*/
+		    }).error(function(data, status, headers, config) {   
+		    	alert("Error:");
+		    });
 		};
 		
 		$(document).ready(function () {

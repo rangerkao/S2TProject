@@ -1,4 +1,4 @@
-angular.module('MainApp',['ngRoute','mService'])
+angular.module('MainApp',['ngRoute','mService','ui.bootstrap'])
 	.controller('CRMMenuCtrl',['AjaxService',function(AjaxService){
 		var self=this;
 		self.selectedItem=3;
@@ -102,14 +102,14 @@ angular.module('MainApp',['ngRoute','mService'])
 			'updatetime':' '
 		};
 		self.tabs=[
-	           {title:'供裝記錄',content:'供裝記錄',active:false,disabled:false},
-	           {title:'申請書回收查詢',content:'申請書回收查詢',active:true,disabled:false},
-	           {title:'系統簡訊(開通、落地、超量)',content:'系統簡訊(開通、落地、超量)',active:false,disabled:false},
-	           {title:'月出帳記錄(含明細)',content:'月出帳記錄(含明細)',active:false,disabled:false},
-	           {title:'使用記錄',content:'使用記錄',active:false,disabled:false},
-	           {title:'付款記錄',content:'付款記錄',active:false,disabled:false},
-	           {title:'催收記錄',content:'催收記錄',active:false,disabled:false},
-	           {title:'申訴記錄',content:'申訴記錄',active:false,disabled:false}
+	           {url:'web/CRM/subscriber/addon.jsp',title:'供裝記錄',content:'供裝記錄',active:false,disabled:false},
+	           {url:'web/CRM/subscriber/application.jsp',title:'申請書回收查詢',content:'申請書回收查詢',active:true,disabled:false},
+	           {url:'web/CRM/subscriber/sms.jsp',title:'系統簡訊(開通、落地、超量)',content:'系統簡訊(開通、落地、超量)',active:false,disabled:false},
+	           {url:'web/CRM/subscriber/bill.jsp',title:'月出帳記錄(含明細)',content:'月出帳記錄(含明細)',active:false,disabled:false},
+	           {url:'web/CRM/subscriber/using.jsp',title:'使用記錄',content:'使用記錄',active:false,disabled:false},
+	           {url:'web/CRM/subscriber/receive.jsp',title:'付款記錄',content:'付款記錄',active:false,disabled:false},
+	           {url:'web/CRM/subscriber/collection.jsp',title:'催收記錄',content:'催收記錄',active:false,disabled:false},
+	           {url:'web/CRM/subscriber/appeal.jsp',title:'申訴記錄',content:'申訴記錄',active:false,disabled:false}
 	           ];
 		self.selectTab=function(index){
 			self.selectedTab=index;
@@ -174,6 +174,8 @@ angular.module('MainApp',['ngRoute','mService'])
 					alert(data['error']);
 				}else{
 					self.custInfo=data['data'];
+					
+					self.querySMS(self.custInfo.s2tMsisdn, self.custInfo.chtMsisdn, null, null);
 					//alert("success");
 				}
 					
@@ -192,6 +194,80 @@ angular.module('MainApp',['ngRoute','mService'])
 			$(".modal").modal('hide');
 			self.selectedId=id;
     		self.selectId();
+		};
+		
+		//SMS Page
+		//------------- date picker setting ------------------
+		self.dateFrom = new Date();
+		self.fromOpened = false;
+		
+		self.dateTo = new Date();
+		self.toOpened = false;
+		
+		
+		self.maxDate = new Date();
+		  
+		self.disabled = function(date, mode) {
+			 //Disable 週末
+			 //return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
+			return false;
+		};
+		
+		function dateFormatString(dayTime){
+			var year=dayTime.getFullYear();
+			var month=dayTime.getMonth()+1;
+			var day=dayTime.getDate();
+			
+			if(month<10){
+				month = '0'+month;
+			}
+			
+			if(day<10){
+				day = '0'+day;
+			}
+			return year+""+month+""+day;
+		};
+		
+		//---------------------------------------------------------
+		  
+		self.dateOptions = {
+				formatYear: 'yy',
+				startingDay: 1
+		};
+		
+		self.smsHeader=[
+		                 {name:"簡訊分類",col:"smsclass",_width:"10%"},
+		                 {name:"發送號碼",col:"phoneno",_width:"10%"},
+		                 {name:"發送內容",col:"content",_width:"70%"},
+		                 {name:"發送時間",col:"sendTime",_width:"10%"}];
+		self.SMSList = [];
+	/*	startDate:dateFormatString(self.dateFrom),
+		endDate:dateFormatString(self.dateTo)})*/
+		self.querySMSwithTime = function(){
+			if(self.custInfo.s2tMsisdn==null)
+				return;
+			self.querySMS(self.custInfo.s2tMsisdn,self.custInfo.chtMsisdn,dateFormatString(self.dateFrom),dateFormatString(self.dateTo));
+		};
+			
+			
+		self.querySMS = function(s2tMsisdn,chtMsisdn,startDate,endDate){
+			//alert("s2tMsisdn:"+s2tMsisdn+",chtMsisdn:"+chtMsisdn+",startDate:"+startDate+",endDate:"+endDate);
+			AjaxService.query('querySMS',{	s2tMsisdn:s2tMsisdn,
+											chtMsisdn:chtMsisdn,
+											startDate:startDate,
+											endDate:endDate})
+											
+			.success(function(data, status, headers, config) {  
+				if(data['error']){
+					alert(data['error']);
+				}else{
+					self.SMSList=data['data'];
+					//alert("success");
+				}
+		    }).error(function(data, status, headers, config) {   
+		    	alert(data);
+		    	alert("error");
+		    });
 		};
 	
 	}]);

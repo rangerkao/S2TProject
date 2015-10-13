@@ -24,5 +24,10 @@
 	        	<param name="root">result</param>
 	        </result>
         </action>
+        <action name="querySMS" class="main.CRM.action.SubscriberAction" method="querySMS" >
+	        <result type="json">
+	        	<param name="root">result</param>
+	        </result>
+        </action>
 	</package>
 </struts>
