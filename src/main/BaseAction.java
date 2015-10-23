@@ -35,11 +35,11 @@ public class BaseAction extends ActionSupport implements SessionAware{
 		return SUCCESS;
 	}
 	
-	public void errorHandle(Exception e){
+	public String errorHandle(Exception e){
 		e.printStackTrace();
 		StringWriter s = new StringWriter();
 		e.printStackTrace(new PrintWriter(s));
-		setFail("error", s.toString());
+		return setFail("error", s.toString());
 	}
 	
 	public static String setFail(String msg,String error){

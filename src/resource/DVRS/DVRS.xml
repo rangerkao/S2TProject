@@ -32,5 +32,16 @@
 	        	<param name="root">result</param>
 	        </result>
         </action>
+        
+        <action name="queryCardChangeHistory" class="main.DVRS.action.HistoryAction" method="queryCardChangeHistory" >
+	        <result type="json">
+	        	<param name="root">result</param>
+	        </result>
+        </action>
+        <action name="queryNumberChangeHistory" class="main.DVRS.action.HistoryAction" method="queryNumberChangeHistory" >
+	        <result type="json">
+	        	<param name="root">result</param>
+	        </result>
+        </action>
 	</package>
 </struts>

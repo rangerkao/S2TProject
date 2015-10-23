@@ -39,15 +39,9 @@ public class CurrentAction extends BaseAction {
 			List<CurrentMonth> list = currentControl.queryCurrentMonth(imsi,from.replace("-",""),to.replace("-",""),suspend);
 			return setResult(SUCCESS, list);
 		} catch (SQLException e) {
-			e.printStackTrace();
-			StringWriter s = new StringWriter();
-			e.printStackTrace(new PrintWriter(s));
-			return setFail(ERROR, s.toString());
+			return errorHandle(e);
 		} catch (Exception e) {
-			e.printStackTrace();
-			StringWriter s = new StringWriter();
-			e.printStackTrace(new PrintWriter(s));
-			return setFail(ERROR, s.toString());
+			return errorHandle(e);
 		}
 	}
 	
@@ -58,15 +52,9 @@ public class CurrentAction extends BaseAction {
 			List<CurrentDay> list = currentControl.queryCurrentDay(imsi,from.replace("-",""),to.replace("-",""));
 			return setResult(SUCCESS, list);
 		} catch (SQLException e) {
-			e.printStackTrace();
-			StringWriter s = new StringWriter();
-			e.printStackTrace(new PrintWriter(s));
-			return setFail(ERROR, s.toString());
+			return errorHandle(e);
 		} catch (Exception e) {
-			e.printStackTrace();
-			StringWriter s = new StringWriter();
-			e.printStackTrace(new PrintWriter(s));
-			return setFail(ERROR, s.toString());
+			return errorHandle(e);
 		}
 	}
 	

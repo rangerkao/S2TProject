@@ -86,6 +86,12 @@ angular.module('MainApp',['ngRoute','mService','ui.bootstrap'])
 		.when('/currentDayLink',{
 			templateUrl:'web/DVRS/currentDay.jsp'
 		})
+		.when('/cardChangeHistoryLink',{
+			templateUrl:'web/DVRS/cardChangeHistory.jsp'
+		})
+		.when('/numberChangeHistoryLink',{
+			templateUrl:'web/DVRS/numberChangeHistory.jsp'
+		})
 		.otherwise({
 			redirectTo:'/'
 		});
@@ -264,9 +270,6 @@ angular.module('MainApp',['ngRoute','mService','ui.bootstrap'])
 		
 		self.suspend = self.suspends[0].value;
 		
-		self.query = function(){
-			alert("imsi:"+self.imsi+",suspend:"+self.suspend);
-		};
 		self.dataHeader =[	{name:"統計月份",col:"month",_width:"8%"},	           
 		                  	{name:"IMSI",col:"imsi",_width:"12%"},
 		                  	{name:"累計費用",col:"charge",_width:"8%"},
@@ -280,7 +283,6 @@ angular.module('MainApp',['ngRoute','mService','ui.bootstrap'])
 		                  	{name:"最後警示額度",col:"lastAlertThreshold",_width:"8%"},
 		                  	{name:"最後警示流量(byte)",col:"lastAlertVolume",_width:"8%"}];
 		self.query = function(){
-
 			self.dataList =[];
 			AjaxService.query('queryCurrentMonth',
 					{	"from":self.fy+""+self.fm,
@@ -303,10 +305,65 @@ angular.module('MainApp',['ngRoute','mService','ui.bootstrap'])
 			self.fy = self.years[0];
 			self.fm = self.mons[now.getMonth()];
 			self.ty = self.years[0];
-			alert(self.mons[now.getMonth()]);
 			self.tm = self.mons[now.getMonth()];
 			
 			//alert(self.fy+"/"+self.fm+"~"+self.ty+"/"+self.tm);
+		});	
+
+	}]).controller('CardChangeCtrl',['AjaxService','$q',function(AjaxService,$q){
+		var self=this;
+		
+		self.dataHeader =[{name:"舊號",col:"oldvalue",_width:"25%"},
+		                  {name:"新號",col:"newvalue",_width:"25%"},
+		                  {name:"狀態",col:"ststus",_width:"25%"},
+		                  {name:"完成時間",col:"completedate",_width:"25%"}];
+		self.query = function(){
+			self.dataList =[];
+			if(!self.imsi)
+				self.imsi="";
+			AjaxService.query('queryCardChangeHistory',
+					{	"imsi":	self.imsi})
+			.success(function(data, status, headers, config) {  
+				if(data['error']){
+					alert(data['error']);
+				}else{
+					self.dataList=data['data'];
+					//alert("success");
+				}
+		    }).error(function(data, status, headers, config) {   
+		    	alert("Error:");
+		    });
+		};
+		
+		$(document).ready(function () {
+		});	
+
+	}]).controller('NumberChangeCtrl',['AjaxService','$q',function(AjaxService,$q){
+		var self=this;
+		
+		self.dataHeader =[{name:"舊號",col:"oldvalue",_width:"25%"},
+		                  {name:"新號",col:"newvalue",_width:"25%"},
+		                  {name:"狀態",col:"ststus",_width:"25%"},
+		                  {name:"完成時間",col:"completedate",_width:"25%"}];
+		self.query = function(){
+			self.dataList =[];
+			if(!self.imsi)
+				self.imsi="";
+			AjaxService.query('queryNumberChangeHistory',
+					{	"imsi":	self.imsi})
+			.success(function(data, status, headers, config) {  
+				if(data['error']){
+					alert(data['error']);
+				}else{
+					self.dataList=data['data'];
+					//alert("success");
+				}
+		    }).error(function(data, status, headers, config) {   
+		    	alert("Error:");
+		    });
+		};
+		
+		$(document).ready(function () {
 		});	
 
 	}]);
