@@ -29,5 +29,15 @@
 	        	<param name="root">result</param>
 	        </result>
         </action>
+        <action name="queryListByS2tMisidn" class="main.CRM.action.SubscriberAction" method="queryListByS2tMisidn" >
+	        <result type="json">
+	        	<param name="root">result</param>
+	        </result>
+        </action>
+        <action name="queryListByChtMsisdn" class="main.CRM.action.SubscriberAction" method="queryListByChtMsisdn" >
+	        <result type="json">
+	        	<param name="root">result</param>
+	        </result>
+        </action>
 	</package>
 </struts>

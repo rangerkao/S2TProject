@@ -1,7 +1,6 @@
 package main.CRM.action;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
+
 import java.sql.SQLException;
 import java.util.List;
 
@@ -21,7 +20,6 @@ public class SubscriberAction extends BaseAction{
 	
 	public SubscriberAction() throws Exception{
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public String input;
@@ -41,10 +39,7 @@ public class SubscriberAction extends BaseAction{
 			List<Subscriber> sList = subscriberService.queryListById(input);
 			setResult("success", sList);
 		} catch (SQLException e) {
-			e.printStackTrace();
-			StringWriter s = new StringWriter();
-			e.printStackTrace(new PrintWriter(s));
-			setFail("error", s.toString());
+			errorHandle(e);
 		}
 		
 		return SUCCESS;
@@ -57,10 +52,33 @@ public class SubscriberAction extends BaseAction{
 			List<Subscriber> sList = subscriberService.queryListByName(input);
 			setResult("success", sList);
 		} catch (SQLException e) {
-			e.printStackTrace();
-			StringWriter s = new StringWriter();
-			e.printStackTrace(new PrintWriter(s));
-			setFail("error", s.toString());
+			errorHandle(e);
+		}
+		
+		return SUCCESS;
+	}
+	
+	public String queryListByS2tMisidn(){
+		
+		System.out.println("input="+input);
+		try {
+			List<Subscriber> sList = subscriberService.queryListByS2tMisidn(input);
+			setResult("success", sList);
+		} catch (SQLException e) {
+			errorHandle(e);
+		}
+		
+		return SUCCESS;
+	}
+
+	public String queryListByChtMsisdn(){
+		
+		System.out.println("input="+input);
+		try {
+			List<Subscriber> sList = subscriberService.queryListByChtMsisdn(input);
+			setResult("success", sList);
+		} catch (SQLException e) {
+			errorHandle(e);
 		}
 		
 		return SUCCESS;
@@ -73,10 +91,7 @@ public class SubscriberAction extends BaseAction{
 			Subscriber s = subscriberService.queryDataById(input);
 			setResult("success", s);
 		} catch (SQLException e) {
-			e.printStackTrace();
-			StringWriter s = new StringWriter();
-			e.printStackTrace(new PrintWriter(s));
-			setFail("error", s.toString());
+			errorHandle(e);
 		}
 		return SUCCESS;
 	}
@@ -88,10 +103,7 @@ public class SubscriberAction extends BaseAction{
 			List<SMS> list = subscriberService.querySMS(s2tMsisdn, chtMsisdn, startDate, endDate);
 			setResult("success", list);
 		} catch (SQLException e) {
-			e.printStackTrace();
-			StringWriter s = new StringWriter();
-			e.printStackTrace(new PrintWriter(s));
-			setFail("error", s.toString());
+			errorHandle(e);
 		}
 		return SUCCESS;
 	}

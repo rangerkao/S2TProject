@@ -97,11 +97,13 @@ public class CurrentDao extends BaseDao {
 		Set<String> filterServiceID = new HashSet<String>();
 		String sServiceID = "";
 		
-		if(imsi!=null &&!"".equals(imsi)){
-			imsi = imsi.replace("/", "");
+		if(imsi==null) {
+			imsi="";
 		}
+		imsi = imsi.replace("*", "\\d+");
+		imsi = "^"+imsi+"$";
 		
-		if(!"^$".equals(imsi)){
+		if(!"^$".equals(imsi)&& !"".equals(imsi)){
 			for(String s : imsitoServiceID.keySet()){
 				if(s.matches(imsi)){
 					filterServiceID.add(imsitoServiceID.get(s));
@@ -112,8 +114,6 @@ public class CurrentDao extends BaseDao {
 				sServiceID="("+sServiceID.substring(1)+")";
 			else
 				sServiceID="('')";
-			
-			
 		}
 		
 

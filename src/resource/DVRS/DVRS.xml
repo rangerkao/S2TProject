@@ -27,5 +27,10 @@
 	        	<param name="root">result</param>
 	        </result>
         </action>
+        <action name="queryCurrentMonth" class="main.DVRS.action.CurrentAction" method="queryCurrentMonth" >
+	        <result type="json">
+	        	<param name="root">result</param>
+	        </result>
+        </action>
 	</package>
 </struts>

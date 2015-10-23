@@ -1,5 +1,7 @@
 package main;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +33,13 @@ public class BaseAction extends ActionSupport implements SessionAware{
 		result = beanToJSONObject(map);
 		
 		return SUCCESS;
+	}
+	
+	public void errorHandle(Exception e){
+		e.printStackTrace();
+		StringWriter s = new StringWriter();
+		e.printStackTrace(new PrintWriter(s));
+		setFail("error", s.toString());
 	}
 	
 	public static String setFail(String msg,String error){

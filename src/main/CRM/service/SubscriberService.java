@@ -29,6 +29,17 @@ public class SubscriberService extends BaseService {
 		result = subscriberDao.queryListByName(name);
 		return result;
 	}
+	public List<Subscriber> queryListByS2tMisidn(String s2tMsisdn) throws SQLException{
+		List<Subscriber> result = null;
+		result = subscriberDao.queryListByS2tMisidn(s2tMsisdn);
+		return result;
+	}
+	
+	public List<Subscriber> queryListByChtMsisdn(String chtMsisdn) throws SQLException{
+		List<Subscriber> result = null;
+		result = subscriberDao.queryListByChtMsisdn(chtMsisdn);
+		return result;
+	}
 	
 	public Subscriber queryDataById(String id) throws SQLException{
 		Subscriber result = null;

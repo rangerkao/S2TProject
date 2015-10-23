@@ -1,3 +1,4 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <div>
 	<!-- <div class="col-xs-12" align="center">{{tab.title}}</div> -->
 	<div class="col-xs-3" align="right">查詢期間從</div>

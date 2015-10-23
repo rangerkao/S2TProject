@@ -119,7 +119,10 @@ angular.module('MainApp',['ngRoute','mService','ui.bootstrap'])
 
 		});
 		
-		self.radioList=[{id:"id",name:"ID"},{id:"name",name:"名稱"}];
+		self.radioList=[{id:"id",name:"ID"},
+		                {id:"name",name:"名稱"},
+		                {id:"s2tm",name:"香港號"},
+		                {id:"chtm",name:"中華號"}];
 		self.IDList=[];
 		//查詢by id_taxid
 		self.queryList=function(){
@@ -134,21 +137,25 @@ angular.module('MainApp',['ngRoute','mService','ui.bootstrap'])
 				action='queryListById';
 			else if(self.selectedType=='name')
 				action='queryListByName';
+			else if(self.selectedType=='s2tm')
+				action='queryListByS2tMisidn';
+			else if(self.selectedType=='chtm')
+				action='queryListByChtMsisdn';
 			
 			AjaxService.query(action,{input:self.input})
 			.success(function(data, status, headers, config) {
 				if(data['error']){
 					alert(data['error']);
 				}else{
-					self.IDList=[];
-					angular.forEach(data['data'],function(obj){
+					self.IDList=data['data'];
+					/*angular.forEach(data['data'],function(obj){
 						self.IDList.push(obj);
-					});
+					});*/
 					if(self.IDList.length==0){
 						alert("查無資料");
 					}else{
 						if(self.IDList.length==1){
-				    		self.selectedId=self.IDList[0].id;
+				    		self.selectedId=self.IDList[0].idTaxid;
 				    		self.selectId();
 				    	}else{
 				    		$(".modal").modal('show');
