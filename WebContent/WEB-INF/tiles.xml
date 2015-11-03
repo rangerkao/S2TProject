@@ -5,11 +5,42 @@
        "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
 
 <tiles-definitions>
-    <definition name="baseLayout1" template="/web/tiles/base1.jsp">
+    <!-- <definition name="baseLayout1" template="/web/tiles/base1.jsp">
         <put-attribute name="top" value="/web/tiles/top.jsp" />
         <put-attribute name="middle" value="" />
+        <put-attribute name="main" value="" />
+    </definition> -->
+    <definition name="baseLayout" template="/web/tiles/base.jsp">
+        <put-attribute name="page" value="" />
     </definition>
     
+    <definition name="login" extends="baseLayout">
+    	<put-attribute name="page">
+    		<definition template="/web/tiles/base1.jsp">
+    			<put-attribute name="top" value="/web/tiles/top.jsp" />
+       	 		<put-attribute name="middle" value="/web/login.jsp" />
+    		</definition>
+    	</put-attribute>
+    </definition>
+    <definition name="welcome" extends="baseLayout">
+    	<put-attribute name="page">
+    		<definition template="/web/tiles/base1.jsp">
+    			<put-attribute name="top" value="/web/tiles/top.jsp" />
+       	 		<put-attribute name="middle" value="/web/login.jsp" />
+    		</definition>
+    	</put-attribute>
+    </definition>
+    <definition name="systemMenu" extends="baseLayout">
+    	<put-attribute name="page">
+    		<definition template="/web/tiles/base1.jsp">
+    			<put-attribute name="top" value="/web/tiles/top.jsp" />
+       	 		<put-attribute name="middle" value="/web/systemMenu.jsp" />
+    		</definition>
+    	</put-attribute>
+    </definition>
+    
+    
+    <!-- 
     <definition name="login" extends="baseLayout1">
         <put-attribute name="middle" value="/web/login.jsp" />
     </definition>
@@ -20,9 +51,9 @@
     
     <definition name="systemMenu" extends="baseLayout1">
         <put-attribute name="middle" value="/web/systemMenu.jsp" />
-    </definition>
+    </definition> -->
     
-    <definition name="DVRS_welcome" extends="baseLayout1">
+    <!-- <definition name="DVRS_welcome" extends="baseLayout1">
     	<put-attribute name="middle">
     		<definition template="/web/tiles/base2.jsp">
     			<put-attribute name="menu" value="/web/DVRS/menu.jsp" />
@@ -35,6 +66,25 @@
     		<definition template="/web/tiles/base2.jsp">
     			<put-attribute name="menu" value="/web/CRM/menu.jsp" />
     			<put-attribute name="main" value="/web/CRM/welcome.jsp"  />
+    		</definition>
+    	</put-attribute>
+    </definition> -->
+    
+    <definition name="DVRS_welcome" extends="baseLayout">
+    	<put-attribute name="page">
+    		<definition template="/web/tiles/base2.jsp">
+    			<put-attribute name="top" value="/web/tiles/top.jsp" />
+       	 		<put-attribute name="menu" value="/web/DVRS/menu.jsp" />
+    			<put-attribute name="middle" value="/web/DVRS/welcome.jsp" />
+    		</definition>
+    	</put-attribute>
+    </definition>
+    <definition name="CRM_welcome" extends="baseLayout">
+    	<put-attribute name="page">
+    		<definition template="/web/tiles/base2.jsp">
+    			<put-attribute name="top" value="/web/tiles/top.jsp" />
+       	 		<put-attribute name="menu" value="/web/CRM/menu.jsp" />
+    			<put-attribute name="middle" value="/web/CRM/welcome.jsp" />
     		</definition>
     	</put-attribute>
     </definition>

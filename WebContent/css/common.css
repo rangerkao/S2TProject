@@ -36,9 +36,24 @@ h1.title{
 	border-top-color: #FFD8AF;
 	border-style: solid;
 	border-width: 5px;
+	margin-top: 0px;
 	margin-bottom: 0px;
 }
-
+.bg-info{
+	background-color:#3d658c;
+}
+a{
+	color:#8fb6de;
+}	
+.nav-tabs>li.active>a, .nav-tabs>li.active>a:hover, .nav-tabs>li.active>a:focus{
+	background-color:#c2daf2;
+}
+.tabContent{
+	color: black;
+}
+.info{
+	color: black;
+}
 .accordion h4:HOVER{
 	/*set menu title style*/
 	background-color: #FA8000;
@@ -59,8 +74,8 @@ h1.title{
 	-o-transition:height 2s;  Opera */
 	
 	margin: 0px;
-	min-height: 10px; 
-	background-color: #FEFFAF;
+	/*min-height: 10px;*/ 
+	background-color: #404040;
 	overflow-y: auto;
 }
 .accordion div.content.active{

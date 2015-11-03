@@ -13,7 +13,7 @@ public class CacheDao extends BaseDao{
 		// TODO Auto-generated constructor stub
 	}
 
-	public static Map<String,String> queryIMSItoServiceID() throws Exception{	
+	public Map<String,String> queryIMSItoServiceID() throws Exception{	
 		
 		Map<String,String> imsitoServiceID = new HashMap<String,String>();
 		System.out.println("setImsitoServiceID...");
@@ -53,7 +53,7 @@ public class CacheDao extends BaseDao{
 		return imsitoServiceID;
 	}
 	
-	public static Map<String,String> queryServiceIDtoIMSI() throws Exception{	
+	public Map<String,String> queryServiceIDtoIMSI() throws Exception{	
 		Map<String,String> serviceIDtoIMSI = new HashMap<String,String>();
 		
 		System.out.println("setServiceIDtoIMSI...");

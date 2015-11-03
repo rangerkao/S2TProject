@@ -1,13 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <div ng-controller="CRMMenuCtrl as mCtrl" class="max_height" >
 	<div class="max_height" align="center" >
-		<div class="tool">
+		<!-- <div class="tool">
 			<div>
 				<a ng-href="#/">回首頁</a>
 			</div>
-		</div>
+		</div> -->
 		<div class="accordion">
-			<div>
+			<!-- <div>
 				<h4 ng-click="mCtrl.select(0)">查詢功能</h4>
 				<div id="content0" class="content {{mCtrl.selectedItem===0?'active':''}}" >
 					<div ng-repeat="element in mCtrl.searchList">
@@ -26,6 +26,17 @@
 						<a href="logout">登出</a>
 					</div>
 				</div>
+			</div> -->
+			<div ng-repeat = "list in mCtrl.menuList">
+				<h4 ng-click="mCtrl.select($index)">{{list.name}}</h4>
+				<div id="{{'content'+$index}}" class="content {{mCtrl.selectedItem==$index?'active':''}}" >
+					<div ng-repeat="element in list.data">
+						<a ng-href="{{element.action}}">{{element.name}}</a>
+					</div>
+				</div>
+				
+			</div>
+			<div class="bottom">
 			</div>
 		</div>
 	</div>

@@ -13,13 +13,21 @@
 					<option value="" selected="selected">請選擇...</option>
 					<option ng-repeat="item in sCtrl.IDList" value="{{item.idTaxid}}">{{item.name}}</option>
 				</select> -->
-				<button data-toggle="modal" data-target=".modal" class="btn btn-warning btn-xs">choose item</button>
-				<modal title="Choose a Item">
+				<button data-toggle="modal" data-target="#companyModal" class="btn btn-warning btn-xs">choose company</button>
+				<modal title="Choose a company" id="companyModal">
 					<table class="dataTable">
 						<tr ng-repeat="item in sCtrl.IDList" ng-click="sCtrl.chooseId(item.idTaxid)">
 							<td>{{item.idTaxid}}</td>
 							<td>{{item.name}}</td>
 							<td>{{item.permanentAddress}}</td>
+					  	</tr>
+					</table>
+				</modal>				
+				<button data-toggle="modal" data-target="#serviceidModal" class="btn btn-success btn-xs" >choose serviceId</button>
+				<modal title="Choose a serviceid" id="serviceidModal">
+					<table class="dataTable">
+						<tr ng-repeat="item in sCtrl.serviceIdList" ng-click="sCtrl.chooseServiceId(item)">
+							<td>{{item}}</td>
 					  	</tr>
 					</table>
 				</modal>
@@ -56,7 +64,3 @@
 		</div>
 	</div>
 </div>
-<script type="text/ng-template" id="templateId">
-    <h1>Template heading</h1>
-    <p>Content goes here</p>
-</script>

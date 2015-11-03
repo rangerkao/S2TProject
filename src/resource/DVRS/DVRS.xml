@@ -43,5 +43,10 @@
 	        	<param name="root">result</param>
 	        </result>
         </action>
+        <action name="querySms" class="main.DVRS.action.SmsAction" method="querySms" >
+	        <result type="json">
+	        	<param name="root">result</param>
+	        </result>
+        </action>
 	</package>
 </struts>

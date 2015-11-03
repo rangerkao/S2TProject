@@ -30,15 +30,9 @@ public class DataRateAction extends BaseAction{
 			dataRateList=dataRateService.queryDataRateList();
 			return setResult(SUCCESS,dataRateList);
 		} catch (SQLException e) {
-			e.printStackTrace();
-			StringWriter s = new StringWriter();
-			e.printStackTrace(new PrintWriter(s));
-			return setFail(ERROR, s.toString());
+			return errorHandle(e);
 		} catch (Exception e) {
-			e.printStackTrace();
-			StringWriter s = new StringWriter();
-			e.printStackTrace(new PrintWriter(s));
-			return setFail(ERROR, s.toString());
+			return errorHandle(e);
 		}
 	}
 }

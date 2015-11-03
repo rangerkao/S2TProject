@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <div>
-	<!-- <div class="col-xs-12" align="center">{{tab.title}}</div> -->
+	<h4>{{tab.title}}({{sCtrl.smsMsg}})</h4>
 	<div class="col-xs-3" align="right">查詢期間從</div>
 	<div class="col-xs-3">
 		<p class="input-group">
@@ -49,11 +49,8 @@
 		<button type="button" class="btn btn-primary" ng-click="sCtrl.querySMSwithTime()">查詢簡訊</button>
 	</div>
 	<page-table 
-		tableWidth = "80%" 
+		table-width = "100%" 
 		table-header="sCtrl.smsHeader" 
 		table-data="sCtrl.SMSList">
 	</page-table>
-	<div class="col-xs-12" align="left"> 
-		<div ng-model="sCtrl.Error"></div>
-	</div>
 </div>

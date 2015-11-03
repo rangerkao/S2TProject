@@ -9,7 +9,8 @@ public class ApplicationData {
 	String chtMsisdn;
 	
 	String applicationDate;
-
+	String type;
+	
 	public String getS2tImsi() {
 		return s2tImsi;
 	}
@@ -48,6 +49,14 @@ public class ApplicationData {
 
 	public void setApplicationDate(String applicationDate) {
 		this.applicationDate = applicationDate;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
 	}
 	
 	

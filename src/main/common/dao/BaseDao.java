@@ -10,8 +10,8 @@ import main.common.action.CacheAction;
 public class BaseDao {
 
 	protected static Properties props =null;
-	protected static Connection conn=null;
-	protected static Connection conn2=null;
+	protected Connection conn=null;
+	protected Connection conn2=null;
 
 	public BaseDao() throws Exception{
 		props=CacheAction.props;
@@ -22,7 +22,7 @@ public class BaseDao {
 		conn2=connectDB2();
 		System.out.println("Create connect!");
 	}
-	protected static void closeConnection() throws SQLException{
+	protected void closeConnection() throws SQLException{
 		if(conn!=null)
 			conn.close();
 		if(conn2!=null)

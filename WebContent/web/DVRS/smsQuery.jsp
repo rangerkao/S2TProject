@@ -1,11 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<div ng-controller="CurrentDayCtrl as Ctrl" class="container-fluid max_height" style="vertical-align: middle;">
+<div ng-controller="SmsQueryCtrl as Ctrl" class="container-fluid max_height" style="vertical-align: middle;">
 	<div class="row max_height" align="center">
-		<h3>單日累計查詢</h3>
-		<div class="col-xs-3" align="right">查詢期間從</div>
-		<div class="col-xs-3">
-			<p class="input-group">
-				<input 	type="text" class="form-control" 
+		<H3>超量簡訊發送查詢頁面</H3>
+		<div class="col-xs-12">
+				查詢期間從
+				<input 	type="text" style=" height: 32px;"
 					datepicker-popup="yyyy-MM-dd" 
 					ng-model="Ctrl.dateFrom" 
 					is-open="Ctrl.fromOpened" 
@@ -16,19 +15,11 @@
 					date-disabled="Ctrl.disabled(date, mode)" 
 					ng-required="true"  close-text="Close" 
 					ng-change="Ctrl.dateChange = true"/>
-				<span class="input-group-btn">
 					<button type="button" class="btn btn-default" ng-click="Ctrl.fromOpened = true">
 						<i class="glyphicon glyphicon-calendar"></i>
 					</button>
-				</span>
-			</p>
-		</div>
-		<div class="col-xs-1">
 			到
-		</div>
-		<div class="col-xs-3">
-			<p class="input-group">
-				<input 	type="text" class="form-control" 
+				<input 	type="text"  style=" height: 32px;"
 					datepicker-popup="yyyy-MM-dd" 
 					ng-model="Ctrl.dateTo" 
 					is-open="Ctrl.toOpened" 
@@ -39,23 +30,20 @@
 					date-disabled="Ctrl.disabled(date, mode)" 
 					ng-required="true"  close-text="Close" 
 					ng-change="Ctrl.dateChange = true"/>
-				<span class="input-group-btn">
 					<button type="button" class="btn btn-default" ng-click="Ctrl.toOpened = true">
 						<i class="glyphicon glyphicon-calendar"></i>
 					</button>
-				</span>
-			</p>
-		</div>
-		<div class="col-xs-2"></div>
-		<div class="col-xs-4" align="right"><label for="imsi">IMSI:</label></div>
-		<div class="col-xs-2" align="left"><input ng-model="Ctrl.imsi" type="text" /></div>
-		<div class="btn-group col-xs-6">
-			<input type="button" class="btn btn-primary btn-sm" ng-click="Ctrl.query()" value="查詢">
-			<input type="button" class="btn btn-primary btn-sm" ng-click="Ctrl.imsi=''" value="清除">
 		</div>
 		<div class="col-xs-12">
-			<font size="2" color="red">(查詢IMSI時可使用"*"取代某區段號碼進行模糊查詢)</font>
+			<label>門號:</label>
+			<input type="text" ng-model="Ctrl.MSISDN">
+			<div class="btn-group" >
+				<input type="button" class="btn btn-primary btn-sm" ng-click="Ctrl.query()" value="查詢">
+				<input type="button" class="btn btn-primary btn-sm" ng-click="Ctrl.clearDate()" value="清除">
+				<input type="button" class="btn btn-primary btn-sm" ng-click="Ctrl.createExcel('#PageTable')" value="下載Excel"> 
+			</div>
 		</div>
+		<div class="col-xs-12"><font size="2" color="red">(查詢門號時可使用"*"取代某區段號碼進行模糊查詢)</font><label id="Qmsg" style="height: 30px;">&nbsp;</label></div>
 		<page-table 
 			table-width="90%" 
 			table-header="Ctrl.dataHeader" 

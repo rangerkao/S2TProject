@@ -14,7 +14,7 @@
 		<label>每頁筆數</label>
 		<input ng-model='onePage' type="text" value="10" style="width: 50px;">
 	</div>
-	<table class="table-bordered table-hover" style="width:{{tableWidth}}" id="{{tableId}}">
+	<table class="table-bordered table-hover" style="width:{{tableWidth}}" id="PageTable">
 		<tr class="even_columm" >
 			<td ng-repeat="head in tableHeader" align="center" style="width: {{head._width}}">{{head.name}}</td>
 		</tr>

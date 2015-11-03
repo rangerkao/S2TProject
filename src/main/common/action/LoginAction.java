@@ -1,7 +1,5 @@
 package main.common.action;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.security.NoSuchAlgorithmException;
 
 import main.BaseAction;
@@ -15,6 +13,13 @@ public class LoginAction extends BaseAction{
 	private static final long serialVersionUID = 1L;
 	
 	
+	
+	
+	public LoginAction() throws Exception{
+		super();
+	}
+
+
 	LoginService loginService = new LoginService();
 
 	
@@ -23,28 +28,30 @@ public class LoginAction extends BaseAction{
 	String msg;
 	
 	public void validate() {
-
+		if (account == null || "".equals(account))
+			addFieldError("acc", "帳號為必填，請輸入帳號");
+		if (password == null || "".equals(password))
+			addFieldError("psw", "密碼為必填，請輸入密碼");
 	}
-	
-	
+
 	public String login(){
 	
 		System.out.println("account:"+account+",password:"+password);
 		result="進行登陸";
 		
 		try {
-			if(SUCCESS.equals(loginService.checkAccount(session, account, password))){
+			loginService.checkAccount(session, account, password);
 				msg = "Welcome";
 				return setResult("Welcome",(String)session.get("user"));
-			}else{
-				msg = "The account is not exist or password is Error!";
-				return setFail("The account is not exist or password is Error!", null);
-			}
 		} catch (NoSuchAlgorithmException e) {
-			StringWriter sw = new StringWriter();
-			e.printStackTrace(new PrintWriter(sw));
-			return setFail("login occured error!", sw.toString());
+			errorHandle(e);
+			msg = e.getMessage();
+		} catch (Exception e) {
+			errorHandle(e);
+			msg = e.getMessage();
 		}
+		
+		return ERROR;
 	}
 
 	public String getAccount() {

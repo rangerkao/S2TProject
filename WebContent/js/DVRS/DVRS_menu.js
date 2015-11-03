@@ -14,8 +14,10 @@ angular.module('MainApp',['ngRoute','mService','ui.bootstrap'])
 		self.searchList=[];
 		self.elseList=[{name:'name3',action:'action3'}];
 		$(document).ready(function () {
-			var toolHright=50;
-			$(".tool").css('height', toolHright+'px');
+			/*var toolHright=50;
+			$(".tool").css('height', toolHright+'px');*/
+			var toolHright=0;
+			
 			var parentHeight=$(".accordion").parent().height();
 			$(".accordion").css('height', (parentHeight-toolHright)+'px');
 			$(".accordion").css('max-height', (parentHeight-toolHright)+'px');
@@ -91,6 +93,9 @@ angular.module('MainApp',['ngRoute','mService','ui.bootstrap'])
 		})
 		.when('/numberChangeHistoryLink',{
 			templateUrl:'web/DVRS/numberChangeHistory.jsp'
+		})
+		.when('/smsQueryLink',{
+			templateUrl:'web/DVRS/smsQuery.jsp'
 		})
 		.otherwise({
 			redirectTo:'/'
@@ -361,6 +366,66 @@ angular.module('MainApp',['ngRoute','mService','ui.bootstrap'])
 		    }).error(function(data, status, headers, config) {   
 		    	alert("Error:");
 		    });
+		};
+		
+		$(document).ready(function () {
+		});	
+
+	}]).controller('SmsQueryCtrl',['AjaxService','$q','$scope','$timeout',function(AjaxService,$q,$scope,$timeout){
+		var self=this;
+		//------------- date picker setting ------------------
+		self.dateFrom = new Date();
+		self.fromOpened = false;
+		
+		self.dateTo = new Date();
+		self.toOpened = false;
+		
+		
+		self.maxDate = new Date();
+		  
+		self.disabled = function(date, mode) {
+			 //Disable 週末
+			 //return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
+			return false;
+		};
+		  
+		self.dateOptions = {
+				formatYear: 'yy',
+				startingDay: 1
+		};
+		  
+		//-------------data head ---------------------
+		self.dataHeader =[{name:"紀錄ID",col:"id",_width:"10%"},
+		                  {name:"接收門號",col:"sendNumber",_width:"15%"},
+		                  {name:"簡訊ID",col:"msg",_width:"20%"},
+		                  {name:"發送時間",col:"sendDate",_width:"20%"},
+		                  {name:"發送結果",col:"result",_width:"20%"},
+		                  {name:"記錄時間",col:"createDate",_width:"15%"}];
+		
+		self.query = function(){
+			self.dataList =[];
+			if(!self.imsi)
+				self.imsi="";
+			AjaxService.query('querySms',
+					{	"imsi":	self.imsi})
+			.success(function(data, status, headers, config) {  
+				if(data['error']){
+					alert(data['error']);
+				}else{
+					self.dataList=data['data'];
+					//alert("success");
+				}
+		    }).error(function(data, status, headers, config) {   
+		    	alert("Error:");
+		    });
+		};
+		
+		self.clearDate = function(){
+			alert("clearDate");
+		};
+		
+		self.createExcel = function(tableId){
+			alert("createExcel");
 		};
 		
 		$(document).ready(function () {

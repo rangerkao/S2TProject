@@ -120,7 +120,7 @@ angular.module('MainApp')
 	        restrict: 'E',
 	        transclude: true,
 	        replace:true,
-	        scope:false,
+	        scope:true,
 	        link: function postLink(scope, element, attrs) {
 	          scope.title = attrs.title;
 

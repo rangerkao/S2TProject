@@ -2,6 +2,7 @@ package main.CRM.action;
 
 
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.List;
 
 import main.BaseAction;
@@ -24,10 +25,6 @@ public class SubscriberAction extends BaseAction{
 
 	public String input;
 	
-	public String s2tMsisdn;
-	public String chtMsisdn;
-	public String startDate;
-	public String endDate;
 	
 
 	SubscriberService subscriberService = new SubscriberService();
@@ -96,12 +93,23 @@ public class SubscriberAction extends BaseAction{
 		return SUCCESS;
 	}
 	
-	public String querySMS(){
-		System.out.println("querySMS");
+	public String queryServiceIdList(){
+		System.out.println("queryServiceIdList");
 		System.out.println("input="+input);
 		try {
-			List<SMS> list = subscriberService.querySMS(s2tMsisdn, chtMsisdn, startDate, endDate);
-			setResult("success", list);
+			List<String> s = subscriberService.queryServiceIdList(input);
+			setResult("success", s);
+		} catch (SQLException e) {
+			errorHandle(e);
+		}
+		return SUCCESS;
+	}
+	
+	public String queryDataByServiceId(){
+		System.out.println("input="+input);
+		try {
+			Subscriber s = subscriberService.queryDataByServiceId(input);
+			setResult("success", s);
 		} catch (SQLException e) {
 			errorHandle(e);
 		}
@@ -116,40 +124,6 @@ public class SubscriberAction extends BaseAction{
 
 	public void setInput(String input) {
 		this.input = input;
-	}
-
-	public String getS2tMsisdn() {
-		return s2tMsisdn;
-	}
-
-	public void setS2tMsisdn(String s2tMsisdn) {
-		this.s2tMsisdn = s2tMsisdn;
-	}
-
-	public String getChtMsisdn() {
-		return chtMsisdn;
-	}
-
-	public void setChtMsisdn(String chtMsisdn) {
-		this.chtMsisdn = chtMsisdn;
-	}
-
-	public String getStartDate() {
-		return startDate;
-	}
-
-	public void setStartDate(String startDate) {
-		this.startDate = startDate;
-	}
-
-	public String getEndDate() {
-		return endDate;
-	}
-
-	public void setEndDate(String endDate) {
-		this.endDate = endDate;
-	}
-	
-	
+	}	
 	
 }

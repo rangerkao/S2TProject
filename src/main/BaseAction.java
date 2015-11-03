@@ -23,7 +23,6 @@ public class BaseAction extends ActionSupport implements SessionAware{
 	protected static String result;
 	
 	
-	
 	public static String setResult(String msg,Object data){
 		
 		Map<String,Object> map = new HashMap<String,Object>();
@@ -71,9 +70,9 @@ public class BaseAction extends ActionSupport implements SessionAware{
 		return session;
 	}
 	public String getResult() {
-		  return result;
-		 }
-		public void setResult(String result) {
-			this.result = result;
-		}
+		return result;
+	}
+	public void setResult(String result) {
+		this.result = result;
+	}
 }

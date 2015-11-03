@@ -88,9 +88,11 @@ public class CacheAction  extends BaseAction{
 		
 	public static String reloadServiceIDwithIMSIMappingCache(){
 		flushServiceIDwithIMSIMappingCache();
+		
 		try {
-			serviceIDtoIMSI = CacheDao.queryServiceIDtoIMSI();
-			imsitoServiceID = CacheDao.queryIMSItoServiceID();
+			CacheDao cacheDao = new CacheDao();
+			serviceIDtoIMSI = cacheDao.queryServiceIDtoIMSI();
+			imsitoServiceID = cacheDao.queryIMSItoServiceID();
 			sendMail("k1988242001@gmail.com","DVRS Cache Reload!","DVRS Cache Reload! At "+new Date());
 			return setResult(SUCCESS, null);
 		} catch (SQLException e) {

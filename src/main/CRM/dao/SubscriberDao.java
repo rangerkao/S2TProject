@@ -4,6 +4,8 @@ import java.io.UnsupportedEncodingException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -139,7 +141,34 @@ public class SubscriberDao extends CRMBaseDao{
 			} catch (Exception e) {
 			}
 		}
-
+		return result;
+	}
+	
+	public List<String> queryServiceIdList(String id) throws SQLException{
+		List<String> result = new ArrayList<String>();
+		
+		String sql = "SELECT A.SERVICEID,A.SUBS_ID_TAXID FROM CRM_SUBSCRIPTION A WHERE A.SUBS_ID_TAXID = '"+id+"'";
+		
+		Statement st = null ;
+		ResultSet rs = null ;
+		
+		try{
+			st = conn.createStatement();
+			rs = st.executeQuery(sql);
+			
+			while(rs.next()){
+				String sId = rs.getString("SERVICEID");
+				result.add(sId);
+			}		
+		}finally{
+			try {
+				if(rs!=null)
+					rs.close();
+				if(st!=null)
+					st.close();
+			} catch (Exception e) {
+			}
+		}
 		return result;
 	}
 	
@@ -228,91 +257,66 @@ public class SubscriberDao extends CRMBaseDao{
 		return result;
 	}
 	
-	public List<SMS> querySMS(String S2TMSISDN,String CHTMSISDN,String startDate,String endDate) throws SQLException{
+	public Subscriber queryDataByServiceId(String id) throws SQLException{
+		Subscriber result = new Subscriber(); 
 		
-		
-		
-		String dateCondiyion = "";
-		if(startDate!=null && endDate !=null && !"".equals(startDate) && !"".equals(endDate) && !"NULL".equalsIgnoreCase(startDate) && !"NULL".equalsIgnoreCase(endDate)){
-			dateCondiyion = "WHERE SENDTIME >= to_date("+startDate+",'yyyyMMddhh24miss') "
-					+ "AND SENDTIME <= to_date("+endDate+",'yyyyMMddhh24miss')";
-		}
-		
-		List<SMS> result = new ArrayList<SMS>();
+		String sql = "SELECT A.SUBS_ID_TAXID ID,A.SUBS_NAME,A.SUBS_BIRTHDAY,A.SUBS_PHONE,A.SUBS_EMAIL,A.SUBS_PERMANENT_ADDRESS,A.SUBS_BILLING_ADDRESS,A.AGENCY_ID,A.REMARK, "
+				+ "to_char(A.CREATETIME,'yyy/MM/dd hh24:mi:ss') CREATETIME,to_char(A.UPDATETIME,'yyy/MM/dd hh24:mi:ss') UPDATETIME,A.SUBS_TYPE "
+				+ "FROM CRM_SUBSCRIBERS A,CRM_SUBSCRIPTION B WHERE A.SUBS_ID_TAXID = B.SUBS_ID_TAXID AND B.SERVICEID='"+id+"' ";
 		
 		Statement st = null;
 		Statement st2 = null;
 		ResultSet rs = null;
-
+		
 		try {
+			
 			st = conn.createStatement();
 			st2 = conn2.createStatement();
-			
-			String sql = "SELECT SCLASS,SEND_NUMBER,MSG,TO_CHAR(SENDTIME,'yyyyMMddhh24miss') SENDTIME "
-					+ "FROM( "
-					+ "		SELECT 'DVRS' SCLASS ,A.SEND_NUMBER,A.MSG,A.SEND_DATE  SENDTIME "
-					+ "		FROM HUR_SMS_LOG A "
-					+ "		WHERE A.SEND_NUMBER = '"+S2TMSISDN+"'"
-					+ "		UNION "
-					+ "		SELECT 'TWNLD' SCLASS,A.PHONENUMBER SEND_NUMBER,A.CONTENT MSG,A.CREATETIME SENDTIME "
-					+ "		FROM S2T_BL_SMS_LOG A "
-					+ "		WHERE A.PHONENUMBER = '"+CHTMSISDN+"' "
-					+ "		UNION "
-					+ "		SELECT 'ARRIVED' SCLASS,A.PHONENUMBER SEND_NUMBER,A.CONTENT MSG,A.CREATETIME SENDTIME "
-					+ "		FROM S2T_BL_SMS_LOG A "
-					+ "		WHERE A.PHONENUMBER = '"+S2TMSISDN+"' "
-					+ ") "
-					+dateCondiyion
-					+ " ORDER BY SENDTIME DESC ";
-
-			System.out.println(sql);
 			rs = st.executeQuery(sql);
 			
 			while(rs.next()){
-				SMS r = new SMS();
-				r.setSmsclass(rs.getString("SCLASS"));
-				r.setPhoneno(rs.getString("SEND_NUMBER"));
-				r.setContent(processEncodeData(rs.getString("MSG"),"ISO-8859-1","BIG5"));
-				r.setSendTime(rs.getString("SENDTIME"));
-				result.add(r);
+
+				result.setName(processEncodeData(rs.getString("SUBS_NAME"),"ISO-8859-1","BIG5"));
+				result.setIdTaxid(processData(rs.getString("ID")));
+				result.setBirthday(processData(rs.getString("SUBS_BIRTHDAY")));
+				result.setPhone(processData(rs.getString("SUBS_PHONE")));
+				result.setEmail(processData(rs.getString("SUBS_EMAIL")));
+				result.setPermanentAddress(processEncodeData(rs.getString("SUBS_PERMANENT_ADDRESS"),"ISO-8859-1","BIG5"));
+				result.setBillingAddress(processEncodeData(rs.getString("SUBS_BILLING_ADDRESS"),"ISO-8859-1","BIG5"));
+				result.setAgency(processEncodeData(rs.getString("AGENCY_ID"),"ISO-8859-1","BIG5"));
+				result.setRemark(processEncodeData(rs.getString("REMARK"),"ISO-8859-1","BIG5"));
+				result.setCreatetime(processData(rs.getString("CREATETIME")));
+				result.setUpdatetime(processData(rs.getString("UPDATETIME")));
+				result.setType(processData(rs.getString("SUBS_TYPE")));
+
 			}
 			
 			rs.close();
-			rs = null;
+			rs = null ;
 			
-			sql = "SELECT SCLASS,SEND_NUMBER,MSG,TO_CHAR(SENDTIME,'yyyyMMddhh24miss') SENDTIME "
-					+ "FROM( "
-					+ "		SELECT 'MSSENDINGTASK' SCLASS,A.SERVICECODE SEND_NUMBER,A.MSGCONTENT MSG,A.LASTSUCCESSTIME SENDTIME "
-					+ "		FROM MSSENDINGTASK A "
-					+ "		WHERE A.SERVICECODE = '"+S2TMSISDN+"' "
-					+ "		UNION "
-					+ "		SELECT 'MSSENDINGTASK' SCLASS,A.SERVICECODE SEND_NUMBER,A.MSGCONTENT MSG,A.LASTSUCCESSTIME SENDTIME "
-					+ "		FROM MSSENDINGTASK A "
-					+ "		WHERE A.SERVICECODE = '"+CHTMSISDN+"' "
-					+ "		UNION "
-					+ "		SELECT 'MESSAGETASK' SCLASS,A.SERVICECODE SEND_NUMBER,A.MSGCONTENT MSG,A.LASTSUCCESSTIME SENDTIME "
-					+ "		FROM MESSAGETASK A "
-					+ "		WHERE A.SERVICECODE = '"+S2TMSISDN+"' "
-					+ "		UNION "
-					+ "		SELECT 'MESSAGETASK' SCLASS,A.SERVICECODE SEND_NUMBER,A.MSGCONTENT MSG,A.LASTSUCCESSTIME SENDTIME "
-					+ "		FROM MESSAGETASK A "
-					+ "		WHERE A.SERVICECODE = '"+CHTMSISDN+"' "
-					+ ") "
-					+dateCondiyion
-					+ " ORDER BY SENDTIME DESC ";
+			String serviceId = id;
+			result.setServiceId(serviceId);
 
-			System.out.println(sql);
-			rs = st2.executeQuery(sql);
-			
-			while(rs.next()){
-				SMS r = new SMS();
-				r.setSmsclass(rs.getString("SCLASS"));
-				r.setPhoneno(rs.getString("SEND_NUMBER"));
-				r.setContent(processEncodeData(rs.getString("MSG"),"ISO-8859-1","BIG5"));
-				r.setSendTime(rs.getString("SENDTIME"));
-				result.add(r);
+			if(serviceId!=null){
+				sql = "SELECT A.FOLLOWMENUMBER FROM FOLLOWMEDATA A where A.SERVICEID = '"+serviceId+"' ";
+				rs = st2.executeQuery(sql);
+				
+				while(rs.next()){
+					result.setChtMsisdn(rs.getString("FOLLOWMENUMBER"));
+				}
+				
+				rs.close();
+				rs = null ;
+				
+				
+				sql = "SELECT A.SERVICECODE FROM SERVICE A WHERE A.SERVICEID = '"+serviceId+"'";
+				rs = st2.executeQuery(sql);
+				
+				while(rs.next()){
+					result.setS2tMsisdn(rs.getString("SERVICECODE"));
+				}
 			}
-		}finally{
+		} finally{
 			try {
 				if(rs!=null)
 					rs.close();
@@ -326,14 +330,7 @@ public class SubscriberDao extends CRMBaseDao{
 
 		closeConnection();
 		return result;
-		
 	}
-	
-	
-	
-	
-	
-	
 	//else tool
 	
 	

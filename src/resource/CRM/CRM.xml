@@ -9,35 +9,39 @@
 	<package name="CRM-tiles" extends="tiles-default">
 	</package>
 	<package name="CRM-ajax" extends="json-default">
-		<action name="queryListById" class="main.CRM.action.SubscriberAction" method="queryListById" >
-	        <result type="json">
+		<!-- 設定Interceptor -->
+		<interceptors>  
+			<!-- 單個 Interception 設定 -->
+            <interceptor name="jsonInterceptor" class="main.common.interception.JsonInterceptor"></interceptor>  
+            <!-- 多個連續 Interceptor 設定 -->
+            <interceptor-stack name="jsonInterceptStack">
+                <interceptor-ref name="jsonInterceptor"></interceptor-ref>
+                
+                <interceptor-ref name="defaultStack"></interceptor-ref>
+            </interceptor-stack>
+        </interceptors> 
+        <!-- 設定Default Interceptor -->
+        <default-interceptor-ref name="jsonInterceptStack"></default-interceptor-ref> 
+		
+		<global-results>
+			<result type="json">
 	        	<param name="root">result</param>
 	        </result>
-        </action>
-        <action name="queryListByName" class="main.CRM.action.SubscriberAction" method="queryListByName" >
-	        <result type="json">
-	        	<param name="root">result</param>
-	        </result>
-        </action>
-        <action name="queryDataById" class="main.CRM.action.SubscriberAction" method="queryDataById" >
-	        <result type="json">
-	        	<param name="root">result</param>
-	        </result>
-        </action>
-        <action name="querySMS" class="main.CRM.action.SubscriberAction" method="querySMS" >
-	        <result type="json">
-	        	<param name="root">result</param>
-	        </result>
-        </action>
-        <action name="queryListByS2tMisidn" class="main.CRM.action.SubscriberAction" method="queryListByS2tMisidn" >
-	        <result type="json">
-	        	<param name="root">result</param>
-	        </result>
-        </action>
-        <action name="queryListByChtMsisdn" class="main.CRM.action.SubscriberAction" method="queryListByChtMsisdn" >
-	        <result type="json">
-	        	<param name="root">result</param>
-	        </result>
-        </action>
+		</global-results>
+		
+		<action name="queryListById" class="main.CRM.action.SubscriberAction" method="queryListById"></action>
+        <action name="queryListByName" class="main.CRM.action.SubscriberAction" method="queryListByName"></action>
+        <action name="queryDataById" class="main.CRM.action.SubscriberAction" method="queryDataById"></action>
+        <action name="queryDataByServiceId" class="main.CRM.action.SubscriberAction" method="queryDataByServiceId"></action>
+        <action name="queryListByS2tMisidn" class="main.CRM.action.SubscriberAction" method="queryListByS2tMisidn"></action>
+		<action name="queryServiceIdList" class="main.CRM.action.SubscriberAction" method="queryServiceIdList"></action>
+
+        <action name="querySMS" class="main.CRM.action.SMSAction" method="querySMS"></action>
+
+        <action name="queryQos" class="main.CRM.action.QosAction" method="queryQos"></action>
+
+ 		<action name="queryByServiceId" class="main.CRM.action.ApplicationAction" method="queryByServiceId"></action>
+ 		<action name="insertNew" class="main.CRM.action.ApplicationAction" method="insertNew"></action>
+ 		
 	</package>
 </struts>

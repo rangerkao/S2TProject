@@ -1,6 +1,7 @@
 package main.CRM.service;
 
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.List;
 
 import main.CRM.bean.SMS;
@@ -47,10 +48,11 @@ public class SubscriberService extends BaseService {
 		return result;
 	}
 	
-	public List<SMS> querySMS(String s2tMsisdn ,String chtMsisdn,String startDate,String endDate) throws SQLException {
-		
-		List<SMS> result = null;
-		result = subscriberDao.querySMS(s2tMsisdn, chtMsisdn, startDate, endDate);
-		return result;
+	public List<String> queryServiceIdList(String id) throws SQLException{
+		return subscriberDao.queryServiceIdList(id);
+	}
+	
+	public Subscriber queryDataByServiceId(String id) throws SQLException{
+		return subscriberDao.queryDataByServiceId(id);
 	}
 }
