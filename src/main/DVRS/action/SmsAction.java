@@ -2,7 +2,7 @@ package main.DVRS.action;
 
 import java.sql.SQLException;
 
-import main.BaseAction;
+import main.common.action.BaseAction;
 
 public class SmsAction extends BaseAction{
 

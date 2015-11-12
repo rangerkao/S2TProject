@@ -98,37 +98,119 @@ angular.module('MainApp',['ngRoute','mService','ui.bootstrap','ngCookies'])
 	}])
 	.controller('SubscriberCtrl',['AjaxService','ActionService','$cookies',function(AjaxService,ActionService,$cookies){
 		var self=this;
-		self.selectedTab=0;
-		self.custInfo={				
-			'name':' ',
-			'birthday':' ',
-			'idTaxid':' ',
-			'phone':' ',
-			'email':' ',
-			'permanentAddress':' ',
-			'billingAddress':' ',
-			'agency':' ',
-			'remark':' ',
-			'type':' ',
-			'createtime':' ',
-			'updatetime':' '
+
+		//initial
+		self.init = function(){
+			//Customer Info
+			self.custInfo={				
+					'name':' ',
+					'birthday':' ',
+					'idTaxid':' ',
+					'phone':' ',
+					'email':' ',
+					'permanentAddress':' ',
+					'billingAddress':' ',
+					'agency':' ',
+					'remark':' ',
+					'type':' ',
+					'createtime':' ',
+					'updatetime':' ',
+					
+					'chair':' ',
+					'chairID':' '
+				};
+			//Customer column edit show control
+			self.showControl();
+			//Button control
+			self.showSave = false;
 		};
+		
+		self.showControl = function(){
+			self.show={				
+					'name':true,
+					'birthday':true,
+					'idTaxid':true,
+					'phone':true,
+					'email':true,
+					'permanentAddress':true,
+					'billingAddress':true,
+					'agency':true,
+					'remark':true,
+					'type':true,
+					'createtime':true,
+					'updatetime':true,
+					
+					'chair':true,
+					'chairID':true
+				};
+			//When change control
+			self.infoCahnge={				
+					'name':false,
+					'birthday':false,
+					'idTaxid':false,
+					'phone':false,
+					'email':false,
+					'permanentAddress':false,
+					'billingAddress':false,
+					'agency':false,
+					'remark':false,
+					'type':false,
+					'createtime':false,
+					'updatetime':false,
+					
+					'chair':false,
+					'chairID':false
+				};
+		};
+		
 		self.tabs=[
-	           //{url:'web/CRM/subscriber/addon.jsp',title:'供裝記錄',content:'供裝記錄',active:false,disabled:false},
-	           {url:'web/CRM/subscriber/QosProvision.jsp',title:'Qos查詢',content:'Qos查詢',active:false,disabled:false},
-	           {url:'web/CRM/subscriber/application.jsp',title:'申請書回收查詢',content:'申請書回收查詢',active:true,disabled:false},
-	           {url:'web/CRM/subscriber/sms.jsp',title:'系統簡訊(開通、落地、超量)',content:'系統簡訊(開通、落地、超量)',active:false,disabled:false},
-	           {url:'web/CRM/subscriber/bill.jsp',title:'月出帳記錄(含明細)',content:'月出帳記錄(含明細)',active:false,disabled:false},
-	           {url:'web/CRM/subscriber/using.jsp',title:'使用記錄',content:'使用記錄',active:false,disabled:false},
-	           {url:'web/CRM/subscriber/receive.jsp',title:'付款記錄',content:'付款記錄',active:false,disabled:false},
-	           {url:'web/CRM/subscriber/collection.jsp',title:'催收記錄',content:'催收記錄',active:false,disabled:false},
-	           {url:'web/CRM/subscriber/appeal.jsp',title:'申訴記錄',content:'申訴記錄',active:false,disabled:false}
-	           ];
+		           //{url:'web/CRM/subscriber/addon.jsp',title:'供裝記錄',content:'供裝記錄',active:false,disabled:false},
+		           {url:'web/CRM/subscriber/QosProvision.jsp',title:'Qos查詢',content:'Qos查詢',active:false,disabled:false},
+		           {url:'web/CRM/subscriber/application.jsp',title:'申請書回收查詢',content:'申請書回收查詢',active:true,disabled:false},
+		           {url:'web/CRM/subscriber/sms.jsp',title:'系統簡訊(開通、落地、超量)',content:'系統簡訊(開通、落地、超量)',active:false,disabled:false},
+		           {url:'web/CRM/subscriber/bill.jsp',title:'月出帳記錄(含明細)',content:'月出帳記錄(含明細)',active:false,disabled:false},
+		           {url:'web/CRM/subscriber/using.jsp',title:'使用記錄',content:'使用記錄',active:false,disabled:false},
+		           {url:'web/CRM/subscriber/receive.jsp',title:'付款記錄',content:'付款記錄',active:false,disabled:false},
+		           {url:'web/CRM/subscriber/collection.jsp',title:'催收記錄',content:'催收記錄',active:false,disabled:false},
+		           {url:'web/CRM/subscriber/appeal.jsp',title:'申訴記錄',content:'申訴記錄',active:false,disabled:false}
+		           ];
+		
+		self.radioList=[{id:"id",name:"ID"},
+		                {id:"name",name:"名稱"},
+		                {id:"s2tm",name:"香港號"},
+		                {id:"chtm",name:"中華號"}];
+		
+		self.selectedTab = 0;
+		self.infoEditable = false;
+		self.appEditable = false;
+		self.serviceIdList = [];
+		self.IDList = [];
+		
+		//Edit column control
+		self.infoEditMod = function(col){
+			if(self.infoEditable){
+				self.show[col]=!self.show[col];
+			};
+		};
+		self.whenInfoCahnge = function(col){
+			self.infoCahnge[col]=true;
+			self.showSave = true;
+		};
+		
 		self.selectTab=function(index){
 			self.selectedTab=index;
 		};
 		
+		//type選擇
+		self.selectType=function(){
+			//alert(self.selectedType);
+		};
 		
+		self.chooseId=function(id){
+			$(".modal").modal('hide');
+			self.selectedId=id;
+    		self.selectId();
+		};
 		
 		self.getSession = function(){
 			AjaxService.query("querySession",{})
@@ -144,6 +226,11 @@ angular.module('MainApp',['ngRoute','mService','ui.bootstrap','ngCookies'])
 						alert("查無資料");
 					}else{
 						self.role=self.session["s2t.role"];
+						if(self.role =='admin'){
+							self.infoEditable = true;
+							self.appEditable = true;
+						}
+							
 					}
 					//alert("success");
 				}
@@ -154,18 +241,10 @@ angular.module('MainApp',['ngRoute','mService','ui.bootstrap','ngCookies'])
 		    });
 		};
 		
-		$(document).ready(function () {
-			self.getSession();
-			
-		});
-		self.radioList=[{id:"id",name:"ID"},
-		                {id:"name",name:"名稱"},
-		                {id:"s2tm",name:"香港號"},
-		                {id:"chtm",name:"中華號"}];
-		
-		self.serviceIdList = [];
-		
 		self.ServiceIdList = function(id){
+			if(!id)
+				return;
+			
 			AjaxService.query("queryServiceIdList",{input:id})
 			.success(function(data, status, headers, config) {
 				if(data['error']){
@@ -178,10 +257,38 @@ angular.module('MainApp',['ngRoute','mService','ui.bootstrap','ngCookies'])
 		    });
 		};
 		
+		//帶入Info 資料
+		self.queryInfo=function(){
+			if(!self.custInfo.idTaxid || self.custInfo.idTaxid ==""){
+				alert("請輸入統編/證號");
+				return;
+			}
+			AjaxService.query('queryDataById',{input:self.custInfo.idTaxid})
+			.success(function(data, status, headers, config) {	
+				if(data['error']){
+					alert(data['error']);
+				}else{
+					alert(data['data'].name);
+					self.custInfo.name=data['data'].name;
+					self.custInfo.birthday=data['data'].birthday;
+					self.custInfo.phone=data['data'].phone;
+					self.custInfo.email=data['data'].email;
+					self.custInfo.permanentAddress=data['data'].permanentAddress;
+					self.custInfo.billingAddress=data['data'].billingAddress;
+					self.custInfo.agency=data['data'].agency;
+					self.custInfo.type=data['data'].type;
+				};
+		    }).error(function(data, status, headers, config) {   
+		           alert("error");
+		    }).then(function(){
+		    });
+		};
+		
 		//ID選擇
 		self.chooseServiceId=function(id){
+			self.init();
 			ActionService.block();
-			$("#serviceidModal").modal('hide');
+			$("#companyModal").modal('hide');
 			AjaxService.query('queryDataByServiceId',{input:id})
 			.success(function(data, status, headers, config) {	
 				if(data['error']){
@@ -206,8 +313,6 @@ angular.module('MainApp',['ngRoute','mService','ui.bootstrap','ngCookies'])
 		    });
 		};
 		
-		
-		self.IDList=[];
 		//查詢by id_taxid
 		self.queryList=function(){
 			self.IDList=[];
@@ -216,7 +321,6 @@ angular.module('MainApp',['ngRoute','mService','ui.bootstrap','ngCookies'])
 				return;
 			}
 			ActionService.block();
-			
 			var action ="";
 			if(self.selectedType=='id')
 				action='queryListById';
@@ -240,11 +344,16 @@ angular.module('MainApp',['ngRoute','mService','ui.bootstrap','ngCookies'])
 						alert("查無資料");
 					}else{
 						if(self.IDList.length==1){
-				    		self.selectedId=self.IDList[0].idTaxid;
-				    		self.selectId();
+							
+							alert(self.IDList[0].serviceId);
+							if(self.IDList[0].idTaxid){
+								//self.chooseServiceId(self.IDList[0].serviceId);
+								self.chooseId(self.IDList[0].idTaxid);
+							}else{
+								self.custInfo = self.IDList[0];
+							}
 				    	}else{
 				    		$("#companyModal").modal('show');
-				    		
 				    	}
 					}
 					//alert("success");
@@ -257,12 +366,11 @@ angular.module('MainApp',['ngRoute','mService','ui.bootstrap','ngCookies'])
 		    });
 		};
 		
-		
-		
 		//ID選擇
 		self.selectId=function(){
 			if(self.selectedId==null||self.selectedId=="")
 				return;
+			self.init();
 			ActionService.block();
 			AjaxService.query('queryDataById',{input:self.selectedId})
 			.success(function(data, status, headers, config) {	
@@ -270,7 +378,6 @@ angular.module('MainApp',['ngRoute','mService','ui.bootstrap','ngCookies'])
 					alert(data['error']);
 				}else{
 					self.custInfo=data['data'];
-					
 					//
 					self.querySMS(self.custInfo.s2tMsisdn, self.custInfo.chtMsisdn, null, null);
 					//
@@ -288,16 +395,39 @@ angular.module('MainApp',['ngRoute','mService','ui.bootstrap','ngCookies'])
 		    	ActionService.unblock();
 		    });
 		};
-		//type選擇
-		self.selectType=function(){
-			//alert(self.selectedType);
-		};
-		self.chooseId=function(id){
-			$(".modal").modal('hide');
-			self.selectedId=id;
-    		self.selectId();
+		
+		self.updateSubscriber = function(){
+			if(!self.custInfo.serviceId){
+				alert("請先進行查詢！");
+				return;
+			}
+			self.showControl();
+			self.showSave = false;
+			
+			if(self.custInfo.type == 'P'){
+				self.custInfo.chair = '';
+				self.custInfo.chairID = '';
+			}
+				
+			AjaxService.query('updateSubscriber',{input:angular.toJson(self.custInfo)})
+			.success(function(data, status, headers, config) {	
+				if(data['error']){
+					alert(data['error']);
+				}else{
+					alert("success!");
+				}
+					
+		    }).error(function(data, status, headers, config) {   
+		           alert("error");
+		    }).then(function(){
+		    });
 		};
 		
+		$(document).ready(function () {
+			self.getSession();
+			self.init();
+		});
+
 		//SMS Page ***************************************************************************************
 		//------------- date picker setting ----------
 		self.dateFrom = new Date();
@@ -390,9 +520,8 @@ angular.module('MainApp',['ngRoute','mService','ui.bootstrap','ngCookies'])
 		
 		self.queryQosList = function(msisdn){
 
-			if(!msisdn){
-				msisdn = "";
-			}
+			if(!msisdn)
+				return ;			
 
 			var numberSize = 8;
 			if(msisdn.length > numberSize){
@@ -419,16 +548,18 @@ angular.module('MainApp',['ngRoute','mService','ui.bootstrap','ngCookies'])
 		self.appHeader = [{name:"申請書類型",col:"type",_width:"50%"},
 		                  {name:"審定日",col:"applicationDate",_width:"50%"}];
 
-		self.appTypes = [	{name:"type0",value:0},
-		                 	{name:"type1",value:1},
-							{name:"type2",value:2}];
+		self.appTypes = [	{name:"供裝",value:"供裝"},
+		                 	{name:"異動",value:"異動"},
+							{name:"退租",value:"退租"}];
 			
 		self.appType = self.appTypes[0].value;
-		
-		self.queryAppList = function(serviceId){
 
+		self.queryAppList = function(serviceId){
+			if(!serviceId)
+				return ;
+			
 			self.appList = [];
-			AjaxService.query('queryByServiceId',{	serviceid:serviceId})				
+			AjaxService.query('queryAppByServiceId',{	serviceid:serviceId})				
 			.success(function(data, status, headers, config) {  
 				if(data['error']){
 					alert(data['error']);

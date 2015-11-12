@@ -18,8 +18,5 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="G:/MegaSync/download/poi-bin-3.10.1-20140818/poi-3.10.1/poi-3.10.1-20140818.jar"/>
-	<classpathentry kind="lib" path="G:/MegaSync/download/poi-bin-3.10.1-20140818/poi-3.10.1/poi-excelant-3.10.1-20140818.jar"/>
-	<classpathentry kind="lib" path="G:/MegaSync/download/poi-bin-3.10.1-20140818/poi-3.10.1/poi-ooxml-3.10.1-20140818.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

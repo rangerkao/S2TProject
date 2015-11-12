@@ -2,7 +2,6 @@ package main.common.action;
 
 import java.security.NoSuchAlgorithmException;
 
-import main.BaseAction;
 import main.common.service.LoginService;
 
 public class LoginAction extends BaseAction{
@@ -42,7 +41,7 @@ public class LoginAction extends BaseAction{
 		try {
 			loginService.checkAccount(session, account, password);
 				msg = "Welcome";
-				return setResult("Welcome",(String)session.get("user"));
+				return setSuccess((String)session.get("user"));
 		} catch (NoSuchAlgorithmException e) {
 			errorHandle(e);
 			msg = e.getMessage();

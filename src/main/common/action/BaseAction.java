@@ -1,4 +1,5 @@
-package main;
+package main.common.action;
+
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -23,10 +24,9 @@ public class BaseAction extends ActionSupport implements SessionAware{
 	protected static String result;
 	
 	
-	public static String setResult(String msg,Object data){
+	public static String setSuccess(Object data){
 		
 		Map<String,Object> map = new HashMap<String,Object>();
-		map.put("msg", msg);
 		map.put("data", data);
 		
 		result = beanToJSONObject(map);
@@ -34,18 +34,17 @@ public class BaseAction extends ActionSupport implements SessionAware{
 		return SUCCESS;
 	}
 	
-	public String errorHandle(Exception e){
+	public static String errorHandle(Exception e){
 		e.printStackTrace();
 		StringWriter s = new StringWriter();
 		e.printStackTrace(new PrintWriter(s));
-		return setFail("error", s.toString());
+		return setFail(s.toString());
 	}
 	
-	public static String setFail(String msg,String error){
+	public static String setFail(String msg){
 		
 		Map<String,String> map = new HashMap<String,String>();
-		map.put("msg", msg);
-		map.put("error", error);
+		map.put(ERROR, msg);
 		
 		result = beanToJSONObject(map);
 		
@@ -60,6 +59,10 @@ public class BaseAction extends ActionSupport implements SessionAware{
 		JSONObject jo = (JSONObject) JSONObject.wrap(object);
 		return jo.toString();
 	}
+	protected static JSONObject jsonToJSONObject(String json){
+		return new JSONObject(json);
+	}
+	
 	//------------------------------------//
 	@Override
 	public void setSession(Map<String, Object> session) {

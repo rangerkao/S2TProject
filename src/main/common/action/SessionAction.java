@@ -1,6 +1,5 @@
 package main.common.action;
 
-import main.BaseAction;
 
 public class SessionAction extends BaseAction{
 
@@ -16,6 +15,6 @@ public class SessionAction extends BaseAction{
 	public String querySession(){
 		
 		System.out.println(session.get("s2t.role"));
-		return setResult(SUCCESS, session);
+		return setSuccess(session);
 	}
 }

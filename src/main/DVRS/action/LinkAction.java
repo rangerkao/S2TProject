@@ -1,6 +1,6 @@
 package main.DVRS.action;
 
-import main.BaseAction;
+import main.common.action.BaseAction;
 
 public class LinkAction extends BaseAction {
 

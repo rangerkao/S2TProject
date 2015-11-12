@@ -2,7 +2,6 @@ package main.common.action;
 
 import java.util.List;
 
-import main.BaseAction;
 import main.common.bean.Link;
 import main.common.service.MenuService;
 
@@ -20,7 +19,7 @@ public class MenuAction extends BaseAction {
 	
 	public String queryMenu(){
 		List<Link> menu = menuService.queryManu(role,system);
-		return setResult(SUCCESS, menu);
+		return setSuccess(menu);
 	}
 
 	public String getRole() {

@@ -3,9 +3,9 @@ package main.CRM.action;
 import java.sql.SQLException;
 import java.util.List;
 
-import main.BaseAction;
 import main.CRM.bean.ApplicationData;
 import main.CRM.service.ApplicationService;
+import main.common.action.BaseAction;
 
 public class ApplicationAction extends BaseAction{
 
@@ -24,12 +24,12 @@ public class ApplicationAction extends BaseAction{
 	
 	ApplicationService applicationService = new ApplicationService();
 	
-	public String queryByServiceId(){
+	public String queryAppByServiceId(){
 		System.out.println("queryByServiceId");
 		System.out.println("serviceid="+serviceid);
 		try {
 			List<ApplicationData> aList = applicationService.queryByServiceId(serviceid);
-			setResult("success", aList);
+			setSuccess(aList);
 		} catch (SQLException e) {
 			errorHandle(e);
 		}
@@ -42,9 +42,9 @@ public class ApplicationAction extends BaseAction{
 		System.out.println("type:"+type+", serviceid:"+serviceid+", verifiedDate:"+verifiedDate);
 		try {
 			if(applicationService.insertNew(type, serviceid, verifiedDate)){
-				setResult(SUCCESS, SUCCESS);
+				setSuccess(SUCCESS);
 			}else{
-				setFail(ERROR, ERROR);
+				setFail(ERROR);
 			}
 			
 		} catch (SQLException e) {

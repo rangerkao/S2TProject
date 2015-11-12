@@ -5,10 +5,13 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.List;
 
-import main.BaseAction;
+import org.json.JSONObject;
+import org.json.JSONString;
+
 import main.CRM.bean.SMS;
 import main.CRM.bean.Subscriber;
 import main.CRM.service.SubscriberService;
+import main.common.action.BaseAction;
 
 public class SubscriberAction extends BaseAction{
 
@@ -24,17 +27,15 @@ public class SubscriberAction extends BaseAction{
 	}
 
 	public String input;
-	
-	
 
 	SubscriberService subscriberService = new SubscriberService();
 	
 	public String queryListById(){
-		
+		System.out.println("queryListById...");
 		System.out.println("input="+input);
 		try {
 			List<Subscriber> sList = subscriberService.queryListById(input);
-			setResult("success", sList);
+			setSuccess(sList);
 		} catch (SQLException e) {
 			errorHandle(e);
 		}
@@ -47,7 +48,7 @@ public class SubscriberAction extends BaseAction{
 		System.out.println("input="+input);
 		try {
 			List<Subscriber> sList = subscriberService.queryListByName(input);
-			setResult("success", sList);
+			setSuccess(sList);
 		} catch (SQLException e) {
 			errorHandle(e);
 		}
@@ -60,7 +61,7 @@ public class SubscriberAction extends BaseAction{
 		System.out.println("input="+input);
 		try {
 			List<Subscriber> sList = subscriberService.queryListByS2tMisidn(input);
-			setResult("success", sList);
+			setSuccess(sList);
 		} catch (SQLException e) {
 			errorHandle(e);
 		}
@@ -73,7 +74,7 @@ public class SubscriberAction extends BaseAction{
 		System.out.println("input="+input);
 		try {
 			List<Subscriber> sList = subscriberService.queryListByChtMsisdn(input);
-			setResult("success", sList);
+			setSuccess(sList);
 		} catch (SQLException e) {
 			errorHandle(e);
 		}
@@ -86,7 +87,7 @@ public class SubscriberAction extends BaseAction{
 		System.out.println("input="+input);
 		try {
 			Subscriber s = subscriberService.queryDataById(input);
-			setResult("success", s);
+			setSuccess(s);
 		} catch (SQLException e) {
 			errorHandle(e);
 		}
@@ -98,7 +99,7 @@ public class SubscriberAction extends BaseAction{
 		System.out.println("input="+input);
 		try {
 			List<String> s = subscriberService.queryServiceIdList(input);
-			setResult("success", s);
+			setSuccess(s);
 		} catch (SQLException e) {
 			errorHandle(e);
 		}
@@ -109,8 +110,23 @@ public class SubscriberAction extends BaseAction{
 		System.out.println("input="+input);
 		try {
 			Subscriber s = subscriberService.queryDataByServiceId(input);
-			setResult("success", s);
+			setSuccess(s);
 		} catch (SQLException e) {
+			errorHandle(e);
+		}
+		return SUCCESS;
+	}
+	
+	public String updateSubscriber(){
+		System.out.println("input="+input);
+		JSONObject j= jsonToJSONObject(input);
+		Subscriber s = new Subscriber(j);
+		try {
+			subscriberService.updateSubscriber(s);
+			setSuccess(s);
+		} catch (SQLException e) {
+			errorHandle(e);
+		} catch (Exception e) {
 			errorHandle(e);
 		}
 		return SUCCESS;
@@ -125,5 +141,4 @@ public class SubscriberAction extends BaseAction{
 	public void setInput(String input) {
 		this.input = input;
 	}	
-	
 }

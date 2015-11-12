@@ -1,26 +1,76 @@
 package main.CRM.bean;
 
+import org.json.JSONObject;
+
 public class Subscriber {
 
-	String name;
-	String birthday;
-	String idTaxid;
-	String phone;
-	String email;
-	String permanentAddress;
-	String billingAddress;
-	String agency;
-	String remark;
-	String type;
-	String createtime;
-	String updatetime;
+	String name = "";
+	String birthday = "";
+	String idTaxid = "";
+	String phone = "";
+	String email = "";
+	String permanentAddress = "";
+	String billingAddress = "";
+	String agency = "";
+	String remark = "";
+	String type = "";
+	String createtime = "";
+	String updatetime = "";
 	
-	String s2tMsisdn;
-	String chtMsisdn;
-	String serviceId;
+	String s2tMsisdn = "";
+	String chtMsisdn = "";
+	String serviceId = "";
 	
+	String chair = "";
+	String chairID = "";
 	
+	public Subscriber(){
+		
+	}
 	
+	public Subscriber(JSONObject j) {
+		super();
+		
+		for(String name:JSONObject.getNames(j)){
+			if("name".equalsIgnoreCase(name)){
+				this.name = j.getString(name);
+			}else if("birthday".equalsIgnoreCase(name)){
+				this.birthday = j.getString(name);
+			}else if("idTaxid".equalsIgnoreCase(name)){
+				this.idTaxid = j.getString(name);
+			}else if("phone".equalsIgnoreCase(name)){
+				this.phone = j.getString(name);
+			}else if("email".equalsIgnoreCase(name)){
+				this.email = j.getString(name);
+			}else if("permanentAddress".equalsIgnoreCase(name)){
+				this.permanentAddress = j.getString(name);
+			}else if("billingAddress".equalsIgnoreCase(name)){
+				this.billingAddress = j.getString(name);
+			}else if("agency".equalsIgnoreCase(name)){
+				this.agency = j.getString(name);
+			}else if("remark".equalsIgnoreCase(name)){
+				this.remark = j.getString(name);
+			}else if("type".equalsIgnoreCase(name)){
+				this.type = j.getString(name);
+			}else if("createtime".equalsIgnoreCase(name)){
+				this.createtime = j.getString(name);
+			}else if("updatetime".equalsIgnoreCase(name)){
+				this.updatetime = j.getString(name);
+			}else if("s2tMsisdn".equalsIgnoreCase(name)){
+				this.s2tMsisdn = j.getString(name);
+			}else if("chtMsisdn".equalsIgnoreCase(name)){
+				this.chtMsisdn = j.getString(name);
+			}else if("serviceId".equalsIgnoreCase(name)){
+				this.serviceId = j.getString(name);
+			}else if("chair".equalsIgnoreCase(name)){
+				this.chair = j.getString(name);
+			}else if("chairID".equalsIgnoreCase(name)){
+				this.chairID = j.getString(name);
+			}
+		};
+		
+		
+	}
 	public String getName() {
 		return name;
 	}
@@ -111,6 +161,23 @@ public class Subscriber {
 	public void setServiceId(String serviceId) {
 		this.serviceId = serviceId;
 	}
+
+	public String getChair() {
+		return chair;
+	}
+
+	public void setChair(String chair) {
+		this.chair = chair;
+	}
+
+	public String getChairID() {
+		return chairID;
+	}
+
+	public void setChairID(String chairID) {
+		this.chairID = chairID;
+	}
+	
 
 	
 }

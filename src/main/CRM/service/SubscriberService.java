@@ -55,4 +55,8 @@ public class SubscriberService extends BaseService {
 	public Subscriber queryDataByServiceId(String id) throws SQLException{
 		return subscriberDao.queryDataByServiceId(id);
 	}
+	
+	public boolean updateSubscriber(Subscriber s) throws Exception{
+		return subscriberDao.updateSubscriber(s);
+	}
 }

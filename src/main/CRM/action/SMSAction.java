@@ -4,9 +4,9 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.List;
 
-import main.BaseAction;
 import main.CRM.bean.SMS;
 import main.CRM.service.SMSService;
+import main.common.action.BaseAction;
 
 public class SMSAction extends BaseAction {
 
@@ -27,7 +27,7 @@ public class SMSAction extends BaseAction {
 		System.out.println(s2tMsisdn+", "+chtMsisdn+", "+startDate+", "+endDate);
 		try {
 			List<SMS> list = sMSService.querySMS(s2tMsisdn, chtMsisdn, startDate, endDate);
-			setResult("success", list);
+			setSuccess(list);
 		} catch (SQLException e) {
 			errorHandle(e);
 		} catch (ParseException e) {

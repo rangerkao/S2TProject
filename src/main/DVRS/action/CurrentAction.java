@@ -6,10 +6,10 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 
-import main.BaseAction;
 import main.DVRS.bean.CurrentDay;
 import main.DVRS.bean.CurrentMonth;
 import main.DVRS.service.CurrentService;
+import main.common.action.BaseAction;
 
 
 public class CurrentAction extends BaseAction {
@@ -37,7 +37,7 @@ public class CurrentAction extends BaseAction {
 		try {
 			System.out.println("imsi:"+imsi+",from:"+from+",to:"+to+",suspend:"+suspend+","+new Date());
 			List<CurrentMonth> list = currentControl.queryCurrentMonth(imsi,from.replace("-",""),to.replace("-",""),suspend);
-			return setResult(SUCCESS, list);
+			return setSuccess(list);
 		} catch (SQLException e) {
 			return errorHandle(e);
 		} catch (Exception e) {
@@ -50,7 +50,7 @@ public class CurrentAction extends BaseAction {
 		try {
 			System.out.println("imsi:"+imsi+",from:"+from+",to:"+to);
 			List<CurrentDay> list = currentControl.queryCurrentDay(imsi,from.replace("-",""),to.replace("-",""));
-			return setResult(SUCCESS, list);
+			return setSuccess(list);
 		} catch (SQLException e) {
 			return errorHandle(e);
 		} catch (Exception e) {

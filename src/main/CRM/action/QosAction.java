@@ -3,9 +3,9 @@ package main.CRM.action;
 import java.sql.SQLException;
 import java.util.List;
 
-import main.BaseAction;
 import main.CRM.bean.QosBean;
 import main.CRM.service.QosService;
+import main.common.action.BaseAction;
 
 
 public class QosAction extends BaseAction {
@@ -29,7 +29,7 @@ public class QosAction extends BaseAction {
 		System.out.println("msisdn="+msisdn+",imsi="+imsi);
 		try {
 			List<QosBean> qosList = qosService.queryQos(imsi, msisdn);
-			setResult("success", qosList);
+			setSuccess(qosList);
 		} catch (SQLException e) {
 			errorHandle(e);
 		} catch (Exception e) {

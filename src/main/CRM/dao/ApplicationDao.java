@@ -23,7 +23,7 @@ public class ApplicationDao extends CRMBaseDao {
 	
 	public List<ApplicationData> queryByS2tMsisdn(String s2tMsisdn) throws SQLException{
 		List<ApplicationData> result = new ArrayList<ApplicationData>();
-		String serviceId = queryServiceIdbyS2tMsisdn(s2tMsisdn);
+		String serviceId = queryServiceIdbyS2tMsisdn(s2tMsisdn).getServiceId();
 		result = queryApplication(serviceId);
 		closeConnection();
 		return result;
@@ -31,7 +31,7 @@ public class ApplicationDao extends CRMBaseDao {
 	
 	public List<ApplicationData> queryByChtMsisdn(String chtMsisdn) throws SQLException{
 		List<ApplicationData> result = new ArrayList<ApplicationData>();
-		String serviceId = queryServiceIdbyChtMsisdn(chtMsisdn);
+		String serviceId = queryServiceIdbyChtMsisdn(chtMsisdn).getServiceId();
 		result = queryApplication(serviceId);
 		closeConnection();
 		return result;

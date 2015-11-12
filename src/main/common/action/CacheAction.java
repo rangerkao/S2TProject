@@ -21,7 +21,7 @@ import java.util.TimerTask;
 
 
 
-import main.BaseAction;
+
 import main.common.dao.CacheDao;
 
 import org.apache.log4j.PropertyConfigurator;
@@ -94,17 +94,17 @@ public class CacheAction  extends BaseAction{
 			serviceIDtoIMSI = cacheDao.queryServiceIDtoIMSI();
 			imsitoServiceID = cacheDao.queryIMSItoServiceID();
 			sendMail("k1988242001@gmail.com","DVRS Cache Reload!","DVRS Cache Reload! At "+new Date());
-			return setResult(SUCCESS, null);
+			return setSuccess(SUCCESS);
 		} catch (SQLException e) {
 			StringWriter s = new StringWriter();
 			e.printStackTrace(new PrintWriter(s));
 			sendMail("k1988242001@gmail.com","DVRS Cache Reload Error!","DVRS Cache Reload Error! At "+new Date()+"\n"+s);
-			return setResult(ERROR, s.toString());
+			return errorHandle(e);
 		} catch (Exception e) {
 			StringWriter s = new StringWriter();
 			e.printStackTrace(new PrintWriter(s));
 			sendMail("k1988242001@gmail.com","DVRS Cache Reload Error!","DVRS Cache Reload Error! At "+new Date()+"\n"+s);
-			return setResult(ERROR, s.toString());
+			return errorHandle(e);
 		}
 	}
 		

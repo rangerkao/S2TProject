@@ -1,6 +1,5 @@
 package main.common.action;
 
-import main.BaseAction;
 
 public class LogoutAction extends BaseAction{
 

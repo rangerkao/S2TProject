@@ -2,7 +2,6 @@ package main.common.action;
 
 import java.util.List;
 
-import main.BaseAction;
 import main.common.bean.Link;
 import main.common.service.SystemMenuService;
 
@@ -16,7 +15,7 @@ public class SystemMenuAction extends BaseAction {
 	public String querySystemMenu(){
 		
 		List<Link> menuList = systemMenuService.querySystemMenu();
-		return setResult("success",menuList);
+		return setSuccess(menuList);
 	}
 	public String goSystemMenu(){
 		return SUCCESS;

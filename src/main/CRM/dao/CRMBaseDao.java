@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import main.CRM.bean.Subscriber;
 import main.common.dao.BaseDao;
 
 public class CRMBaseDao extends BaseDao{
@@ -14,24 +15,28 @@ public class CRMBaseDao extends BaseDao{
 		// TODO Auto-generated constructor stub
 	}
 	
-	public String queryServiceIdbyS2tMsisdn(String s2tMsisdn) throws SQLException{
+	public Subscriber queryServiceIdbyS2tMsisdn(String s2tMsisdn) throws SQLException{
 		
 		Statement st = null;
 		Statement st2 = null;
 		ResultSet rs = null ;
 		String sql = null;
-		String serviceId = null;
-
+		Subscriber s = new Subscriber();
 		try {
 			st = conn.createStatement();
 			st2 = conn2.createStatement();
 			
-			sql = "SELECT A.SERVICEID FROM SERVICE A WHERE A.SERVICECODE = '"+s2tMsisdn+"'";
+			sql = "SELECT A.SERVICEID,A.SERVICECODE S2TMSISDN,B.FOLLOWMENUMBER CHTMSISDN "
+				+ "FROM SERVICE A,FOLLOWMEDATA B "
+				+ "WHERE  A.SERVICEID= B.SERVICEID AND A.SERVICECODE = '"+s2tMsisdn+"'";
+
 			System.out.println("sql:"+sql);
 			rs = st2.executeQuery(sql);
 			
 			while(rs.next()){
-				serviceId = rs.getString("SERVICEID");
+				s.setServiceId(rs.getString("SERVICEID"));
+				s.setS2tMsisdn(rs.getString("S2TMSISDN"));
+				s.setChtMsisdn(rs.getString("CHTMSISDN"));
 			}
 
 		}finally{
@@ -46,7 +51,7 @@ public class CRMBaseDao extends BaseDao{
 			}
 		}
 		
-		return serviceId;
+		return s;
 	}
 	
 	public String queryServiceIdbyS2tImsi(String s2tImsi) throws SQLException{
@@ -84,24 +89,29 @@ public class CRMBaseDao extends BaseDao{
 		return serviceId;
 	}
 	
-	public String queryServiceIdbyChtMsisdn(String chtMsisdn) throws SQLException{
+	public Subscriber queryServiceIdbyChtMsisdn(String chtMsisdn) throws SQLException{
 		
 		Statement st = null;
 		Statement st2 = null;
 		ResultSet rs = null ;
 		String sql = null;
-		String serviceId = null;
-
+		Subscriber s = new Subscriber();
 		try {
 			st = conn.createStatement();
 			st2 = conn2.createStatement();
-			
-			sql = "SELECT A.SERVICEID FROM FOLLOWMEDATA A where A.FOLLOWMENUMBER = '"+chtMsisdn+"' ";
+
+
+			sql = "SELECT A.SERVICEID,A.SERVICECODE S2TMSISDN,B.FOLLOWMENUMBER CHTMSISDN "
+				+ "FROM SERVICE A,FOLLOWMEDATA B "
+				+ "WHERE  A.SERVICEID= B.SERVICEID AND A.FOLLOWMENUMBER = '"+chtMsisdn+"'";
+
 			System.out.println("sql:"+sql);
 			rs = st2.executeQuery(sql);
 			
 			while(rs.next()){
-				serviceId = rs.getString("SERVICEID");
+				s.setServiceId(rs.getString("SERVICEID"));
+				s.setS2tMsisdn(rs.getString("S2TMSISDN"));
+				s.setChtMsisdn(rs.getString("CHTMSISDN"));
 			}
 
 		}finally{
@@ -116,7 +126,7 @@ public class CRMBaseDao extends BaseDao{
 			}
 		}
 		
-		return serviceId;
+		return s;
 	}
 	
 	public String queryServiceIdbyChtImsi(String chtImsi) throws SQLException{
@@ -159,7 +169,7 @@ public class CRMBaseDao extends BaseDao{
 	}
 	public String processEncodeData(String data,String sCharSet,String dCharSet){
 		if(data==null)
-			data=" ";
+			return " ";
 		
 		try {
 			data = new String(data.getBytes(sCharSet),dCharSet);

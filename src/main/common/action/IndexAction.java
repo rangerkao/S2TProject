@@ -1,6 +1,5 @@
 package main.common.action;
 
-import main.BaseAction;
 
 public class IndexAction extends BaseAction{
 

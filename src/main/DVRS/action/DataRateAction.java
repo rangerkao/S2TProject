@@ -6,9 +6,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import main.BaseAction;
 import main.DVRS.bean.DataRate;
 import main.DVRS.service.DataRateService;
+import main.common.action.BaseAction;
 
 public class DataRateAction extends BaseAction{
 
@@ -28,7 +28,7 @@ public class DataRateAction extends BaseAction{
 	public String queryDataRate(){
 		try {
 			dataRateList=dataRateService.queryDataRateList();
-			return setResult(SUCCESS,dataRateList);
+			return setSuccess(dataRateList);
 		} catch (SQLException e) {
 			return errorHandle(e);
 		} catch (Exception e) {

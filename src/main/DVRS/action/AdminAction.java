@@ -3,9 +3,9 @@ package main.DVRS.action;
 import java.sql.SQLException;
 import java.util.List;
 
-import main.BaseAction;
 import main.DVRS.bean.Admin;
 import main.DVRS.service.AdminService;
+import main.common.action.BaseAction;
 
 public class AdminAction extends BaseAction{
 
@@ -28,7 +28,7 @@ public class AdminAction extends BaseAction{
 	
 	public String queryAdmin() throws SQLException{
 		List<Admin> adminList=adminService.queryAdminList();
-		return setResult(SUCCESS, adminList);
+		return setSuccess(adminList);
 	}
 	/*
 	public String updateAdmin() {

@@ -4,9 +4,9 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 
-import main.BaseAction;
 import main.DVRS.bean.CardChange;
 import main.DVRS.service.HistoryService;
+import main.common.action.BaseAction;
 
 public class HistoryAction extends BaseAction {
 	/**
@@ -28,7 +28,7 @@ public class HistoryAction extends BaseAction {
 		try{
 			System.out.println("imsi:"+imsi+","+new Date());
 			List<CardChange> list = historyService.queryCardChangeHistory(imsi);
-			return setResult(SUCCESS, list);
+			return setSuccess(list);
 		} catch (SQLException e) {
 			return errorHandle(e);
 		} catch (Exception e) {
@@ -40,7 +40,7 @@ public class HistoryAction extends BaseAction {
 		try{
 			System.out.println("imsi:"+imsi+","+new Date());
 			List<CardChange> list = historyService.queryNumberChangeHistory(imsi);
-			return setResult(SUCCESS, list);
+			return setSuccess(list);
 		} catch (SQLException e) {
 			return errorHandle(e);
 		} catch (Exception e) {
