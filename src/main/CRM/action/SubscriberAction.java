@@ -8,6 +8,7 @@ import java.util.List;
 import org.json.JSONObject;
 import org.json.JSONString;
 
+import main.CRM.bean.AddonService;
 import main.CRM.bean.SMS;
 import main.CRM.bean.Subscriber;
 import main.CRM.service.SubscriberService;
@@ -44,7 +45,7 @@ public class SubscriberAction extends BaseAction{
 	}
 	
 	public String queryListByName(){
-		System.out.println("queryListByName");
+		System.out.println("queryListByName...");
 		System.out.println("input="+input);
 		try {
 			List<Subscriber> sList = subscriberService.queryListByName(input);
@@ -57,7 +58,7 @@ public class SubscriberAction extends BaseAction{
 	}
 	
 	public String queryListByS2tMisidn(){
-		
+		System.out.println("queryListByS2tMisidn...");
 		System.out.println("input="+input);
 		try {
 			List<Subscriber> sList = subscriberService.queryListByS2tMisidn(input);
@@ -70,7 +71,7 @@ public class SubscriberAction extends BaseAction{
 	}
 
 	public String queryListByChtMsisdn(){
-		
+		System.out.println("queryListByChtMsisdn...");
 		System.out.println("input="+input);
 		try {
 			List<Subscriber> sList = subscriberService.queryListByChtMsisdn(input);
@@ -83,7 +84,7 @@ public class SubscriberAction extends BaseAction{
 	}
 	
 	public String queryDataById(){
-		System.out.println("queryDataById");
+		System.out.println("queryDataById...");
 		System.out.println("input="+input);
 		try {
 			Subscriber s = subscriberService.queryDataById(input);
@@ -95,7 +96,7 @@ public class SubscriberAction extends BaseAction{
 	}
 	
 	public String queryServiceIdList(){
-		System.out.println("queryServiceIdList");
+		System.out.println("queryServiceIdList...");
 		System.out.println("input="+input);
 		try {
 			List<String> s = subscriberService.queryServiceIdList(input);
@@ -107,6 +108,7 @@ public class SubscriberAction extends BaseAction{
 	}
 	
 	public String queryDataByServiceId(){
+		System.out.println("queryDataByServiceId...");
 		System.out.println("input="+input);
 		try {
 			Subscriber s = subscriberService.queryDataByServiceId(input);
@@ -118,12 +120,41 @@ public class SubscriberAction extends BaseAction{
 	}
 	
 	public String updateSubscriber(){
+		System.out.println("updateSubscriber...");
 		System.out.println("input="+input);
 		JSONObject j= jsonToJSONObject(input);
 		Subscriber s = new Subscriber(j);
 		try {
 			subscriberService.updateSubscriber(s);
 			setSuccess(s);
+		} catch (SQLException e) {
+			errorHandle(e);
+		} catch (Exception e) {
+			errorHandle(e);
+		}
+		return SUCCESS;
+	}
+	
+	public String queryVLN(){
+		System.out.println("queryVLN...");
+		System.out.println("input="+input);
+		try {
+			List<String> vlns = subscriberService.queryVLN(input);
+			setSuccess(vlns);
+		} catch (SQLException e) {
+			errorHandle(e);
+		} catch (Exception e) {
+			errorHandle(e);
+		}
+		return SUCCESS;
+	}
+	
+	public String queryAddonService(){
+		System.out.println("queryAddonService...");
+		System.out.println("input="+input);
+		try {
+			List<AddonService> addons = subscriberService.queryAddonService(input);
+			setSuccess(addons);
 		} catch (SQLException e) {
 			errorHandle(e);
 		} catch (Exception e) {

@@ -42,7 +42,7 @@
 	</div>
 </div>
 
-<script>
+<!-- <script>
 	$(document).ready(function(){
 		if(!document.getElementById("CRM")){
 			/* $("#sc").append("<div id='DVRS'>"+
@@ -66,4 +66,4 @@
 				$("#sc").append(directive);  
 		} 
 	});
-</script> 
+</script>  -->

@@ -144,4 +144,68 @@ angular.module('MainApp')
 	          });*/
 	        }
 	    };
-	});
+	}).directive('datepickerDirective',[function(){
+		return {
+			templateUrl:'web/directive/datePicker.jsp',
+			restrict: 'AE',
+			scope:{
+				selectedValue:'='
+			},
+			link:function($scope,$element,$attrs){
+				/*$scope.dt = new Date();
+				$scope.format = 'yyyy/MM/dd';
+				$scope.status = {
+						opened: false
+				};
+				$scope.open = function($event) {
+					$scope.status.opened = true;
+				};
+				$scope.maxDate = new Date(2020, 5, 22);
+				$scope.minDate = new Date(1911, 1, 1);
+				$scope.dateOptions = {
+						formatYear: 'yy',
+						startingDay: 1
+				};
+				$scope.disabled = function(date, mode) {
+					return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
+				};			
+				 $scope.today = function() {
+					 $scope.dt = new Date();
+				 };
+				 $scope.today();*/
+
+				
+				$scope.dateOpened = false;
+
+				$scope.maxDate = new Date();
+				  
+				$scope.disabled = function(date, mode) {
+					 //Disable 週末
+					 //return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
+					return false;
+				};
+				
+				function dateFormatString(dayTime){
+					var year=dayTime.getFullYear();
+					var month=dayTime.getMonth()+1;
+					var day=dayTime.getDate();
+					
+					if(month<10){
+						month = '0'+month;
+					}
+					
+					if(day<10){
+						day = '0'+day;
+					}
+					return year+""+month+""+day;
+				};
+				
+				//---------------------------------------------------------
+				  
+				$scope.dateOptions = {
+						formatYear: 'yy',
+						startingDay: 1
+				};
+			}
+		};
+	}]);

@@ -1,4 +1,4 @@
-angular.module('MainApp',['mService'])
+angular.module('MainApp',['ngRoute','mService','ui.bootstrap','ngCookies'])
 	.controller('MainCtrl',[function(){
 		var self=this;
 		

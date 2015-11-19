@@ -49,4 +49,20 @@ angular.module('mService',[])
 				$.unblockUI();
 			}
 		};
-	}]);
+	}]).service('DateFormatString', function(){
+		this.Format = function (dayTime){
+			var year=dayTime.getFullYear();
+			var month=dayTime.getMonth()+1;
+			var day=dayTime.getDate();
+					
+			if(month<10){
+				month = '0'+month;
+			}
+					
+			if(day<10){
+				day = '0'+day;
+			}
+			
+			return year+""+month+""+day;
+		};
+	});

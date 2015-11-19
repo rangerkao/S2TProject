@@ -79,13 +79,19 @@
     		</definition>
     	</put-attribute>
     </definition>
-    <definition name="CRM_welcome" extends="baseLayout">
+    <!-- <definition name="CRM_welcome" extends="baseLayout">
     	<put-attribute name="page">
     		<definition template="/web/tiles/base2.jsp">
-    			<put-attribute name="top" value="/web/tiles/top.jsp" />
-       	 		<put-attribute name="menu" value="/web/CRM/menu.jsp" />
-    			<put-attribute name="middle" value="/web/CRM/welcome.jsp" />
+    			<<put-attribute name="top" value="/web/tiles/top.jsp" />
+       	 		<put-attribute name="menu" value="/web/CRM/menu.jsp" /> 
+       	 		<put-attribute name="middle" value="/web/CRM/welcome.jsp" />
     		</definition>
     	</put-attribute>
+    </definition> -->
+
+    <definition name="CRM_welcome" extends="baseLayout">
+    	<!-- <put-attribute name="page" value="/web/CRM/welcome.jsp"/> -->
+    	<put-attribute name="page" value="/web/CRM/subscriber.jsp"/>
     </definition>
+    
 </tiles-definitions>

@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<div ng-controller="SubscriberCtrl as sCtrl" class="container-fluid max_height" style="vertical-align: middle;">
+<div ng-controller="SubscriberCtrl as sCtrl" class="container-fluid max_height" style="vertical-align: middle; background-color: rgba(45, 41, 41, 0.36);">
 	<div class="row max_height" align="center">
 		<div class="info">
 			<label>使用者資訊</label>
@@ -23,8 +23,8 @@
 							<td align="center" width="25%">{{item.chtMsisdn}}</td>
 					  	</tr>
 					</table>
-				</modal>		
-				<button class="btn btn-success btn-xs">download excel</button>		
+				</modal>	
+				<a class="btn btn-success btn-xs" href="createSubscribersExcel">download excel</a>	
 			<!-- 	<button data-toggle="modal" data-target="#serviceidModal" class="btn btn-success btn-xs" >choose serviceId</button>
 				<modal title="Choose a serviceid" id="serviceidModal">
 					<table class="dataTable">
@@ -133,3 +133,38 @@
 		</div>
 	</div>
 </div>
+<!-- <script>
+	$(document).ready(function(){
+		if(!document.getElementById("CRM")){
+			/* $("#sc").append("<div id='DVRS'>"+
+					"<script src='js/DVRS/DVRS_menu.js' \x3C/script>"+
+				"</div>"); */
+				
+			var CRM = document.createElement("div");
+				CRM.setAttribute("id", "CRM");
+			$("#sc").after(CRM);
+			
+			var Menu = document.createElement("script");
+			//DVRS_menu.setAttribute("type","text/javascript");
+			Menu.setAttribute("src", "js/CRM/Menu.js");
+			$("#CRM").append(Menu);  
+			
+			/* var SMS = document.createElement("script");
+			//DVRS_menu.setAttribute("type","text/javascript");
+			SMS.setAttribute("src", "js/CRM/SMS.js");
+			$("#CRM").append(SMS);  */
+			
+			/* var Subscriber = document.createElement("script");
+			//DVRS_menu.setAttribute("type","text/javascript");
+			Subscriber.setAttribute("src", "js/CRM/Subscriber.js");
+			$("#CRM").append(Subscriber);  */
+		}
+		
+		if(!document.getElementById("directive")){
+			 var directive = document.createElement("script");
+				directive.setAttribute("id","directive");
+				directive.setAttribute("src", "js/directive.js");
+				$("#sc").append(directive);  
+		} 
+	});
+</script>  -->

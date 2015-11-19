@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.List;
 
+import main.CRM.bean.AddonService;
 import main.CRM.bean.SMS;
 import main.CRM.bean.Subscriber;
 import main.CRM.dao.SubscriberDao;
@@ -58,5 +59,13 @@ public class SubscriberService extends BaseService {
 	
 	public boolean updateSubscriber(Subscriber s) throws Exception{
 		return subscriberDao.updateSubscriber(s);
+	}
+	
+	public List<String> queryVLN(String s2tMSISDN) throws Exception{
+		return subscriberDao.queryVLN(s2tMSISDN);
+	}
+	
+	public List<AddonService> queryAddonService(String serviceId) throws Exception{
+		return subscriberDao.queryAddonService(serviceId);
 	}
 }

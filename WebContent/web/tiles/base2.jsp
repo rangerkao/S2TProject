@@ -12,7 +12,7 @@
 				</td>
 			</tr>
 		</table> --%>
-		<table class="col-md-12 max_height" style="height: 99%;background: rgba(51, 51, 51, 0.36);">
+		<table class="col-md-12 max_height" style="height: 99%;">
 			<tr>
 				<td width="10%">
 					<table style="height: 100%;width: 100%; bgcolor=#404040; ">

@@ -122,37 +122,5 @@ public class SMSDao extends CRMBaseDao{
 		return result;
 		
 	}
-	
-	
-	public long getTimeValue(String s) throws ParseException{
-		Long value = null;
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
-		value=sdf.parse(s).getTime();
-		return value;
-	}
-	
-	
-	public void sort(List<SMS> l) throws ParseException{
-		
-		int size = l.size();
-		
-		for(int i = 0 ; i<size;i++){
-			for(int j = 1 ;j<size;j++){
-				swap(l,j-1,getTimeValue(l.get(j-1).getSendTime()),j,getTimeValue(l.get(j).getSendTime()));
-			}
-		}
-		
-	}
-	
-	
-	public void swap(List<SMS> l,int i ,long vi,int j,long vj){
-		
-		if(vi<vj){
-			SMS io = l.get(i);
-			SMS jo = l.get(j);
-			l.set(i, jo);
-			l.set(j, io);
-		}
-	}
 
 }
