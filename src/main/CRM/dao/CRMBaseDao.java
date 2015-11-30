@@ -23,27 +23,10 @@ public class CRMBaseDao extends BaseDao{
 		Subscriber s = new Subscriber();
 		try {
 			st2 = conn2.createStatement();
-			/*
-			sql = "SELECT A.SERVICEID,A.SERVICECODE S2TMSISDN,B.FOLLOWMENUMBER CHTMSISDN "
-				+ "FROM SERVICE A,FOLLOWMEDATA B "
-				+ "WHERE  A.SERVICEID= B.SERVICEID AND A.SERVICECODE = '"+s2tMsisdn+"'";
-
-			System.out.println("sql:"+sql);
-			rs = st2.executeQuery(sql);
-			
-			while(rs.next()){
-				s.setServiceId(rs.getString("SERVICEID"));
-				s.setS2tMsisdn(rs.getString("S2TMSISDN"));
-				s.setChtMsisdn(rs.getString("CHTMSISDN"));
-			}*/
-			
-			sql = "SELECT A.PRICEPLANID,B.IMSI,A.SERVICECODE,A.PRICEPLANID,A.SUBSIDIARYID,A.SERVICEID,"
-					+ "(CASE A. STATUS 	WHEN '1' then to_char(C.value) "
-					+ "					when '3' then to_char( C.value) "
-					+ "					when '10' then to_char(C.value) else null end) NCODE "
-					+ "FROM SERVICE A,IMSI B,PARAMETERVALUE C "
+			sql = "SELECT A.PRICEPLANID,B.IMSI,A.SERVICECODE,A.PRICEPLANID,A.SUBSIDIARYID,A.SERVICEID,C.FOLLOWMENUMBER MSISDN "
+					+ "FROM SERVICE A,IMSI B,FOLLOWMEDATA C "
 					+ "WHERE A.SERVICEID=B.SERVICEID AND A.SERVICECODE IS NOT NULL "
-					+ "AND B.SERVICEID=C.SERVICEID(+) AND C.PARAMETERVALUEID(+)=3748 "
+					+ "AND B.SERVICEID=C.SERVICEID(+) AND C.FOLLOWMENUMBER LIKE '886%' "
 					+ "AND A.SERVICECODE = '"+s2tMsisdn+"'";
 			System.out.println("sql:"+sql);
 			rs = st2.executeQuery(sql);
@@ -52,7 +35,7 @@ public class CRMBaseDao extends BaseDao{
 				s.setS2tIMSI(rs.getString("IMSI"));
 				s.setServiceId(rs.getString("SERVICEID"));
 				s.setS2tMsisdn(rs.getString("SERVICECODE"));
-				s.setChtMsisdn(rs.getString("NCODE"));
+				s.setChtMsisdn(rs.getString("MSISDN"));
 				s.setPrivePlanId(rs.getString("PRICEPLANID"));
 			}
 
@@ -82,13 +65,10 @@ public class CRMBaseDao extends BaseDao{
 		try {
 			st2 = conn2.createStatement();
 			
-			sql = "SELECT A.PRICEPLANID,B.IMSI,A.SERVICECODE,A.PRICEPLANID,A.SUBSIDIARYID,A.SERVICEID,"
-					+ "(CASE A. STATUS 	WHEN '1' then to_char(C.value) "
-					+ "					when '3' then to_char( C.value) "
-					+ "					when '10' then to_char(C.value) else null end) NCODE "
-					+ "FROM SERVICE A,IMSI B,PARAMETERVALUE C "
+			sql = "SELECT A.PRICEPLANID,B.IMSI,A.SERVICECODE,A.PRICEPLANID,A.SUBSIDIARYID,A.SERVICEID,C.FOLLOWMENUMBER MSISDN "
+					+ "FROM SERVICE A,IMSI B,FOLLOWMEDATA C "
 					+ "WHERE A.SERVICEID=B.SERVICEID AND A.SERVICECODE IS NOT NULL "
-					+ "AND B.SERVICEID=C.SERVICEID(+) AND C.PARAMETERVALUEID(+)=3748 "
+					+ "AND B.SERVICEID=C.SERVICEID(+) AND C.FOLLOWMENUMBER LIKE '886%' "
 					+ "AND B.IMSI = '"+s2tImsi+"'";
 			System.out.println("sql:"+sql);
 			rs = st2.executeQuery(sql);
@@ -97,7 +77,7 @@ public class CRMBaseDao extends BaseDao{
 				s.setS2tIMSI(rs.getString("IMSI"));
 				s.setServiceId(rs.getString("SERVICEID"));
 				s.setS2tMsisdn(rs.getString("SERVICECODE"));
-				s.setChtMsisdn(rs.getString("NCODE"));
+				s.setChtMsisdn(rs.getString("MSISDN"));
 				s.setPrivePlanId(rs.getString("PRICEPLANID"));
 			}
 
@@ -127,28 +107,11 @@ public class CRMBaseDao extends BaseDao{
 			
 			st2 = conn2.createStatement();
 
-
-			/*sql = "SELECT A.SERVICEID,A.SERVICECODE S2TMSISDN,B.FOLLOWMENUMBER CHTMSISDN "
-				+ "FROM SERVICE A,FOLLOWMEDATA B "
-				+ "WHERE  A.SERVICEID= B.SERVICEID AND A.FOLLOWMENUMBER = '"+chtMsisdn+"'";
-
-			System.out.println("sql:"+sql);
-			rs = st2.executeQuery(sql);
-			
-			while(rs.next()){
-				s.setServiceId(rs.getString("SERVICEID"));
-				s.setS2tMsisdn(rs.getString("S2TMSISDN"));
-				s.setChtMsisdn(rs.getString("CHTMSISDN"));
-			}*/
-			
-			sql = "SELECT A.PRICEPLANID,B.IMSI,A.SERVICECODE,A.PRICEPLANID,A.SUBSIDIARYID,A.SERVICEID,"
-					+ "(CASE A. STATUS 	WHEN '1' then to_char(C.value) "
-					+ "					when '3' then to_char( C.value) "
-					+ "					when '10' then to_char(C.value) else null end) NCODE "
-					+ "FROM SERVICE A,IMSI B,PARAMETERVALUE C "
+			sql = "SELECT A.PRICEPLANID,B.IMSI,A.SERVICECODE,A.PRICEPLANID,A.SUBSIDIARYID,A.SERVICEID,C.FOLLOWMENUMBER MSISDN "
+					+ "FROM SERVICE A,IMSI B,FOLLOWMEDATA C "
 					+ "WHERE A.SERVICEID=B.SERVICEID AND A.SERVICECODE IS NOT NULL "
-					+ "AND B.SERVICEID=C.SERVICEID(+) AND C.PARAMETERVALUEID(+)=3748 "
-					+ "AND C.value = '"+chtMsisdn+"'";
+					+ "AND B.SERVICEID=C.SERVICEID(+) AND C.FOLLOWMENUMBER LIKE '886%' "
+					+ "AND C.FOLLOWMENUMBER = '"+chtMsisdn+"'";
 			System.out.println("sql:"+sql);
 			rs = st2.executeQuery(sql);
 			
@@ -156,10 +119,12 @@ public class CRMBaseDao extends BaseDao{
 				s.setS2tIMSI(rs.getString("IMSI"));
 				s.setServiceId(rs.getString("SERVICEID"));
 				s.setS2tMsisdn(rs.getString("SERVICECODE"));
-				s.setChtMsisdn(rs.getString("NCODE"));
+				s.setChtMsisdn(rs.getString("MSISDN"));
 				s.setPrivePlanId(rs.getString("PRICEPLANID"));
 			}
-
+		}
+		catch(Exception e){
+			e.printStackTrace();
 		}finally{
 			try {
 				if(rs!=null)

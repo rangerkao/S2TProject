@@ -1,7 +1,7 @@
 angular.module('MainApp')
 	.controller('SubscriberCtrl',['AjaxService','ActionService','$scope',function(AjaxService,ActionService,$scope){
 		var self=this;
-
+		self.testMode = false;
 		//initial
 		self.init = function(){
 			//Customer Info
@@ -71,11 +71,11 @@ angular.module('MainApp')
 		           {url:'web/CRM/subscriber/QosProvision.jsp',title:'Qos查詢',content:'Qos查詢',active:false,disabled:false},
 		           {url:'web/CRM/subscriber/application.jsp',title:'申請書回收查詢',content:'申請書回收查詢',active:true,disabled:false},
 		           {url:'web/CRM/subscriber/sms.jsp',title:'系統簡訊(開通、落地、超量)',content:'系統簡訊(開通、落地、超量)',active:false,disabled:false},
-		           {url:'web/CRM/subscriber/bill.jsp',title:'月出帳記錄(含明細)',content:'月出帳記錄(含明細)',active:false,disabled:false},
-		           {url:'web/CRM/subscriber/using.jsp',title:'使用記錄',content:'使用記錄',active:false,disabled:false},
-		           {url:'web/CRM/subscriber/receive.jsp',title:'付款記錄',content:'付款記錄',active:false,disabled:false},
-		           {url:'web/CRM/subscriber/collection.jsp',title:'催收記錄',content:'催收記錄',active:false,disabled:false},
-		           {url:'web/CRM/subscriber/appeal.jsp',title:'申訴記錄',content:'申訴記錄',active:false,disabled:false},
+		           //{url:'web/CRM/subscriber/bill.jsp',title:'月出帳記錄(含明細)',content:'月出帳記錄(含明細)',active:false,disabled:false},
+		           //{url:'web/CRM/subscriber/using.jsp',title:'使用記錄',content:'使用記錄',active:false,disabled:false},
+		           //{url:'web/CRM/subscriber/receive.jsp',title:'付款記錄',content:'付款記錄',active:false,disabled:false},
+		           //{url:'web/CRM/subscriber/collection.jsp',title:'催收記錄',content:'催收記錄',active:false,disabled:false},
+		           //{url:'web/CRM/subscriber/appeal.jsp',title:'申訴記錄',content:'申訴記錄',active:false,disabled:false},
 		           {url:'web/CRM/subscriber/currentMonth.jsp',title:'月累計',content:'月累計',active:false,disabled:false},
 		           {url:'web/CRM/subscriber/currentDay.jsp',title:'日累計',content:'日累計',active:false,disabled:false},
 		           {url:'web/CRM/subscriber/dataRate.jsp',title:'費率表',content:'費率表',active:false,disabled:false},
@@ -85,11 +85,9 @@ angular.module('MainApp')
 		self.radioList=[{id:"id",name:"ID"},
 		                {id:"name",name:"名稱"},
 		                {id:"s2tm",name:"香港號"},
-		                {id:"chtm",name:"中華號"}];
-		
-		self.testMode = true;
-		
-		
+		                {id:"main",name:"主號"},
+		                {id:"vln",name:"VLN"}];
+				
 		self.selectedTab = 0;
 		self.infoEditable = false;
 		self.appEditable = false;
@@ -132,16 +130,15 @@ angular.module('MainApp')
 						self.IDList.push(obj);
 					});*/
 					if(self.session.length==0){
-						alert("查無資料");
+						alert("查無Session資料");
 					}else{
 						self.role=self.session["s2t.role"];
 						if(self.role =='admin'){
 							self.infoEditable = true;
 							self.appEditable = true;
 						}
-							
 					}
-					//alert("success");
+					//console.log("success");
 				}
 		    }).error(function(data, status, headers, config) {   
 		           alert("error");
@@ -177,7 +174,6 @@ angular.module('MainApp')
 				if(data['error']){
 					alert(data['error']);
 				}else{
-					alert(data['data'].name);
 					self.custInfo.name=data['data'].name;
 					self.custInfo.birthday=data['data'].birthday;
 					self.custInfo.phone=data['data'].phone;
@@ -210,9 +206,13 @@ angular.module('MainApp')
 				action='queryListByName';
 			else if(self.selectedType=='s2tm')
 				action='queryListByS2tMisidn';
-			else if(self.selectedType=='chtm')
+			else if(self.selectedType=='main')
 				action='queryListByChtMsisdn';
+			else if(self.selectedType=='vln')
+				action='queryListByVLN';
 			
+			self.custInfo = [];
+			self.IDList=[];
 			AjaxService.query(action,{input:self.input})
 			.success(function(data, status, headers, config) {
 				if(data['error']){
@@ -224,26 +224,28 @@ angular.module('MainApp')
 					});*/
 					if(self.IDList.length==0){
 						alert("查無資料");
+						ActionService.unblock();
 					}else{
 						if(self.IDList.length==1){
-							
-							alert(self.IDList[0].serviceId);
+							console.log(self.IDList[0].serviceId);
 							if(self.IDList[0].serviceId && self.IDList[0].serviceId != ''){
 								self.chooseServiceId(self.IDList[0].serviceId);
 							}else{
-								alert("查無ServiceId");
+								alert("客戶已退租");
+								ActionService.unblock();
 							}
 				    	}else{
 				    		$("#companyModal").modal('show');
+				    		ActionService.unblock();
 				    	}
 					}
-					//alert("success");
+					//console.log("success");
 				}
 		    }).error(function(data, status, headers, config) {   
 		           alert("error");
 		           ActionService.unblock();
 		    }).then(function(){
-		    	ActionService.unblock();
+		    	
 		    });
 		};
 		//ID選擇
@@ -256,19 +258,24 @@ angular.module('MainApp')
 				if(data['error']){
 					alert(data['error']);
 				}else{
-					self.custInfo=data['data'];
-					//
-					self.querySMS(self.custInfo.s2tMsisdn, self.custInfo.chtMsisdn);
-					//
-					self.queryQosList(self.custInfo.s2tMsisdn);
-					//
-					self.queryAppList(self.custInfo.serviceId);
-					//
-					self.queryMonth(self.custInfo.s2tIMSI);
-					//
-					self.queryDay(self.custInfo.s2tIMSI);
-					//
-					self.queryElse(self.custInfo.s2tMsisdn, self.custInfo.serviceId, self.custInfo.s2tIMSI, self.custInfo.privePlanId);
+					console.log(data['data']);
+					if(data['data'].length==0)
+						alert("無此客戶！");
+					else{
+						self.custInfo=data['data'];
+						//
+						self.querySMS(self.custInfo.s2tMsisdn, self.custInfo.chtMsisdn);
+						//
+						self.queryQosList(self.custInfo.s2tMsisdn);
+						//
+						self.queryAppList(self.custInfo.serviceId);
+						//
+						self.queryMonth(self.custInfo.s2tIMSI);
+						//
+						self.queryDay(self.custInfo.s2tIMSI);
+						//
+						self.queryElse(self.custInfo.s2tMsisdn, self.custInfo.serviceId, self.custInfo.s2tIMSI, self.custInfo.privePlanId, self.custInfo.activatedDate, self.custInfo.canceledDate);
+					}
 				}
 					
 		    }).error(function(data, status, headers, config) {   
@@ -294,8 +301,8 @@ angular.module('MainApp')
 		self.queryDay = function(s2tIMSI){
 			$scope.$broadcast('queryDay',{s2tIMSI:s2tIMSI});
 		};
-		self.queryElse = function(s2tMsisdn,serviceid,s2tIMSI,privePlanId){
-			$scope.$broadcast('queryElse',{s2tMsisdn:s2tMsisdn,serviceid:serviceid,s2tIMSI:s2tIMSI,privePlanId:privePlanId});
+		self.queryElse = function(s2tMsisdn,serviceid,s2tIMSI,privePlanId,activatedDate,canceledDate){
+			$scope.$broadcast('queryElse',{s2tMsisdn:s2tMsisdn,serviceid:serviceid,s2tIMSI:s2tIMSI,privePlanId:privePlanId,activatedDate:activatedDate,canceledDate:canceledDate});
 		};
 		
 

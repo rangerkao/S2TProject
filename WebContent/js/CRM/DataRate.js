@@ -28,6 +28,8 @@ angular.module('MainApp')
 
 		$(document).ready(function () {
 			self.query();
+			/*if(!self.role && self.role != null && self.role!='' && self.role != 'undefined'){
+				self.query();
+			}*/
 		});		
-		
 	}]);

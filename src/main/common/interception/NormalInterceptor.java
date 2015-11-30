@@ -1,27 +1,21 @@
 package main.common.interception;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts2.StrutsStatics;
-import org.json.JSONObject;
 
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.interceptor.AbstractInterceptor;
 
-public class JsonInterceptor extends AbstractInterceptor {
+public class NormalInterceptor extends AbstractInterceptor  {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
-	public JsonInterceptor() {
-
-	}
 
 	@Override  
     public String intercept(ActionInvocation invocation) throws Exception{
@@ -39,5 +33,4 @@ public class JsonInterceptor extends AbstractInterceptor {
 
 		return "login";
 	}
-		
 }

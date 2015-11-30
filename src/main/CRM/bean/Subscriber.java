@@ -27,6 +27,12 @@ public class Subscriber {
 	String s2tIMSI = "";
 	String privePlanId = "";
 	
+	String status = "";
+	
+	String activatedDate = "";
+	String canceledDate = "";
+	
+	
 	public Subscriber(){
 		
 	}
@@ -196,6 +202,33 @@ public class Subscriber {
 	public void setPrivePlanId(String privePlanId) {
 		this.privePlanId = privePlanId;
 	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public String getActivatedDate() {
+		return activatedDate;
+	}
+
+	public void setActivatedDate(String activatedDate) {
+		this.activatedDate = activatedDate;
+	}
+
+	public String getCanceledDate() {
+		return canceledDate;
+	}
+
+	public void setCanceledDate(String canceledDate) {
+		this.canceledDate = canceledDate;
+	}
+
+	
+	
 	
 	
 

@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<div>		
+<div ng-model="tablePage" >		
 	<div class="col-xs-12" align="center"> 
 		<button type="button" name="Previous"  class="pagination btn btn-warning" ng-click='changePage("before")' style="width: 100px;">
 			<span class="glyphicon glyphicon-chevron-left"></span> Previous
@@ -14,12 +14,15 @@
 		<label>每頁筆數</label>
 		<input ng-model='onePage' type="text" value="10" style="width: 50px;">
 	</div>
-	<table class="table-bordered table-hover" style="width:{{tableWidth}}" id="PageTable">
-		<tr class="even_columm" >
-			<td ng-repeat="head in tableHeader" align="center" style="width: {{head._width}}">{{head.name}}</td>
-		</tr>
-		<tr ng-repeat="data in dataList" class="{{($odd?'even_columm':'odd_columm')}}" ng-click='onSelect(data)'>
-			<td ng-repeat="head in tableHeader" align="center" style="width: ={{head._width}}">{{data[head.col]}}</td>
-		</tr>
-	</table>
+	<div class="col-xs-12" style="height: {{tableHeight}}; overflow: auto; ">
+		<table class="table-bordered table-hover" style="width:{{tableWidth}};" id="PageTable" >
+			<tr class="even_columm" >
+				<td ng-repeat="head in tableHeader" align="center" style="width: {{head._width}}">{{head.name}}</td>
+			</tr>
+			<tr ng-repeat="data in dataList" class="{{($odd?'even_columm':'odd_columm')}}" ng-click='onSelect(data)'>
+				<td ng-repeat="head in tableHeader" align="center" style="width: ={{head._width}}">{{data[head.col]}}</td>
+			</tr>
+		</table>
+	</div>
+	
 </div>

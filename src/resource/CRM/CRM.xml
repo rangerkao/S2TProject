@@ -4,56 +4,28 @@
    "http://struts.apache.org/dtds/struts-2.0.dtd">
 <struts>
 	<package name="CRM-default" extends="struts-default">
-		
 	</package>
 	<package name="CRM-tiles" extends="tiles-default">
-	</package>
-	<package name="CRM-ajax" extends="json-default">
+	
+		
 		<!-- 設定Interceptor -->
 		<interceptors>  
 			<!-- 單個 Interception 設定 -->
-            <interceptor name="jsonInterceptor" class="main.common.interception.JsonInterceptor"></interceptor>  
+            <interceptor name="NormalInterceptor" class="main.common.interception.NormalInterceptor"/>
             <!-- 多個連續 Interceptor 設定 -->
-            <interceptor-stack name="jsonInterceptStack">
-                <interceptor-ref name="jsonInterceptor"></interceptor-ref>
+            <interceptor-stack name="NormalInterceptStack">
                 <interceptor-ref name="defaultStack"></interceptor-ref>
+                <interceptor-ref name="NormalInterceptor" />
             </interceptor-stack>
         </interceptors> 
         <!-- 設定Default Interceptor -->
-       <default-interceptor-ref name="jsonInterceptStack"></default-interceptor-ref>
-		
-		<global-results>
-			<result type="json" name="success">
-	        	<param name="root">result</param>
-	        </result>
-		</global-results>
-		
-		<action name="queryListById" class="main.CRM.action.SubscriberAction" method="queryListById"></action>
-        <action name="queryListByName" class="main.CRM.action.SubscriberAction" method="queryListByName"></action>
-        <action name="queryListByS2tMisidn" class="main.CRM.action.SubscriberAction" method="queryListByS2tMisidn"></action>
-        <action name="queryListByChtMsisdn" class="main.CRM.action.SubscriberAction" method="queryListByChtMsisdn"></action>
+       <default-interceptor-ref name="NormalInterceptStack"></default-interceptor-ref>
+	
+		<global-results>  
+            <result name="login" type="tiles">login</result>  
+        </global-results>
         
-        <action name="queryDataById" class="main.CRM.action.SubscriberAction" method="queryDataById"></action>
-        <action name="queryDataByServiceId" class="main.CRM.action.SubscriberAction" method="queryDataByServiceId"></action>
-        <action name="queryVLN" class="main.CRM.action.SubscriberAction" method="queryVLN"></action>
-        <action name="queryAddonService" class="main.CRM.action.SubscriberAction" method="queryAddonService"></action>
-
-        <action name="updateSubscriber" class="main.CRM.action.SubscriberAction" method="updateSubscriber"></action>
-        
-		<action name="queryServiceIdList" class="main.CRM.action.SubscriberAction" method="queryServiceIdList"></action>
-
-        <action name="querySMS" class="main.CRM.action.SMSAction" method="querySMS"></action>
-
-        <action name="queryQos" class="main.CRM.action.QosAction" method="queryQos"></action>
-        
- 		<action name="insertNew" class="main.CRM.action.ApplicationAction" method="insertNew"></action>
- 		<action name="queryAppByServiceId" class="main.CRM.action.ApplicationAction" method="queryAppByServiceId"></action>
- 		
- 		<action name="NeedLogin" class="main.common.action.NeedLoginAction" method="NeedLogin"></action>
- 		
- 		
- 		
- 		<!-- Escel 下載 -->
+		<!-- Escel 下載 -->
 		<action name="createSubscribersExcel"  method="createSubscribersExcel" class="main.CRM.action.ExcelAction">  
             <result name="success" type="stream">  
                 <!-- 下载文件的类型，如果你不知道是什么格式，可以去 tomcat\conf\web.xml下找   -->
@@ -71,5 +43,52 @@
                 <param name="bufferSize">1024</param>  
             </result>  
         </action>
+	</package>
+	<package name="CRM-ajax" extends="json-default">
+		<!-- 設定Interceptor -->
+		<interceptors>  
+			<!-- 單個 Interception 設定 -->
+            <interceptor name="jsonInterceptor" class="main.common.interception.JsonInterceptor"/>
+            <!-- 多個連續 Interceptor 設定 -->
+            <interceptor-stack name="jsonInterceptStack">
+                <interceptor-ref name="defaultStack"></interceptor-ref>
+                <interceptor-ref name="jsonInterceptor" >
+                	<param name="root">result</param>
+                </interceptor-ref>
+            </interceptor-stack>
+        </interceptors> 
+        <!-- 設定Default Interceptor -->
+       <default-interceptor-ref name="jsonInterceptStack"></default-interceptor-ref>
+		
+		<global-results>
+			<result type="json" name="success"><param name="root">result</param></result>
+	        <result name="login">/web/login.jsp</result>  
+		</global-results>
+		
+		<action name="queryListById" class="main.CRM.action.SubscriberAction" method="queryListById"></action>
+        <action name="queryListByName" class="main.CRM.action.SubscriberAction" method="queryListByName"></action>
+        <action name="queryListByVLN" class="main.CRM.action.SubscriberAction" method="queryListByVLN"></action>
+        <action name="queryListByS2tMisidn" class="main.CRM.action.SubscriberAction" method="queryListByS2tMisidn"></action>
+        <action name="queryListByChtMsisdn" class="main.CRM.action.SubscriberAction" method="queryListByChtMsisdn"></action>
+        
+        <action name="queryDataById" class="main.CRM.action.SubscriberAction" method="queryDataById"></action>
+        <action name="queryDataByServiceId" class="main.CRM.action.SubscriberAction" method="queryDataByServiceId"></action>
+        <action name="queryVLN" class="main.CRM.action.SubscriberAction" method="queryVLN"></action>
+        <action name="queryAddonService" class="main.CRM.action.SubscriberAction" method="queryAddonService"></action>
+        <action name="getGPRSStatus" class="main.CRM.action.SubscriberAction" method="getGPRSStatus"></action>
+
+        <action name="updateSubscriber" class="main.CRM.action.SubscriberAction" method="updateSubscriber"></action>
+        
+		<action name="queryServiceIdList" class="main.CRM.action.SubscriberAction" method="queryServiceIdList"></action>
+
+        <action name="querySMS" class="main.CRM.action.SMSAction" method="querySMS"></action>
+
+        <action name="queryQos" class="main.CRM.action.QosAction" method="queryQos"></action>
+        
+ 		<action name="insertNew" class="main.CRM.action.ApplicationAction" method="insertNew"></action>
+ 		<action name="queryAppByServiceId" class="main.CRM.action.ApplicationAction" method="queryAppByServiceId"></action>
+ 		
+ 		<action name="NeedLogin" class="main.common.action.NeedLoginAction" method="NeedLogin"></action>
+
 	</package>
 </struts>

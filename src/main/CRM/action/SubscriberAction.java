@@ -57,6 +57,22 @@ public class SubscriberAction extends BaseAction{
 		return SUCCESS;
 	}
 	
+	public String queryListByVLN(){
+		System.out.println("queryListByVLN...");
+		System.out.println("input="+input);
+		try {
+			List<Subscriber> sList = subscriberService.queryListByVLN(input);
+			setSuccess(sList);
+		} catch (SQLException e) {
+			errorHandle(e);
+		}
+		catch (Exception e) {
+			errorHandle(e);
+		}
+		
+		return SUCCESS;
+	}
+	
 	public String queryListByS2tMisidn(){
 		System.out.println("queryListByS2tMisidn...");
 		System.out.println("input="+input);
@@ -155,6 +171,20 @@ public class SubscriberAction extends BaseAction{
 		try {
 			List<AddonService> addons = subscriberService.queryAddonService(input);
 			setSuccess(addons);
+		} catch (SQLException e) {
+			errorHandle(e);
+		} catch (Exception e) {
+			errorHandle(e);
+		}
+		return SUCCESS;
+	}
+	
+	public String getGPRSStatus(){
+		System.out.println("getGPRSStatus...");
+		System.out.println("input="+input);
+		try {
+			String status = subscriberService.getGPRSStatus(input);
+			setSuccess(status);
 		} catch (SQLException e) {
 			errorHandle(e);
 		} catch (Exception e) {

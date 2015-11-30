@@ -31,6 +31,13 @@ public class SubscriberService extends BaseService {
 		result = subscriberDao.queryListByName(name);
 		return result;
 	}
+	
+	public List<Subscriber> queryListByVLN(String VLN) throws SQLException{
+		List<Subscriber> result = null;
+		result = subscriberDao.queryListByVLN(VLN);
+		return result;
+	}
+	
 	public List<Subscriber> queryListByS2tMisidn(String s2tMsisdn) throws SQLException{
 		List<Subscriber> result = null;
 		result = subscriberDao.queryListByS2tMisidn(s2tMsisdn);
@@ -61,11 +68,15 @@ public class SubscriberService extends BaseService {
 		return subscriberDao.updateSubscriber(s);
 	}
 	
-	public List<String> queryVLN(String s2tMSISDN) throws Exception{
-		return subscriberDao.queryVLN(s2tMSISDN);
+	public List<String> queryVLN(String serviceId) throws Exception{
+		return subscriberDao.queryVLN(serviceId);
 	}
 	
 	public List<AddonService> queryAddonService(String serviceId) throws Exception{
 		return subscriberDao.queryAddonService(serviceId);
+	}
+	
+	public String getGPRSStatus(String msisdn) throws SQLException{
+		return subscriberDao.getGPRSStatus(msisdn);
 	}
 }

@@ -3,23 +3,26 @@ angular.module('MainApp')
 		var self = this;
 		
 		$scope.$on('queryElse',function(event,data){
-			alert(data['s2tIMSI']);
-			self.s2tMsisdn=data['s2tMsisdn'];
-			self.serviceid=data['serviceid'];
-			self.s2tIMSI=data['s2tIMSI'];
-			self.privePlanId=data['privePlanId'];
+			console.log(data['s2tIMSI']);
+			self.s2tMsisdn = data['s2tMsisdn'];
+			self.serviceid = data['serviceid'];
+			self.s2tIMSI = data['s2tIMSI'];
+			self.privePlanId = data['privePlanId'];
+			self.activatedDate = data['activatedDate'];
+			self.canceledDate = data['canceledDate'];
 			
-			self.queryVLN(self.s2tMsisdn);
+			self.queryVLN(self.serviceid);
 			self.queryAddons(self.serviceid);
+			self.queryGPRS(self.s2tMsisdn);
 		});
 		
 		self.VLNs = [];
 		
-		self.queryVLN = function(s2tMsisdn){
-			if(!s2tMsisdn || s2tMsisdn == '')
+		self.queryVLN = function(serviceId){
+			if(!serviceId || serviceId == '')
 				return;
 			self.elseMsg = "";
-			AjaxService.query("queryVLN",{input:s2tMsisdn})
+			AjaxService.query("queryVLN",{input:serviceId})
 			.success(function(data, status, headers, config) {
 				if(data['error']){
 					alert(data['error']);
@@ -37,7 +40,7 @@ angular.module('MainApp')
 		self.addons = [];
 		
 		self.queryAddons = function(serviceid){
-			alert("serviceid:"+serviceid);
+			console.log("serviceid:"+serviceid);
 			if(!serviceid || serviceid == '')
 				return;
 			self.elseMsg = "";
@@ -51,6 +54,26 @@ angular.module('MainApp')
 					/*angular.forEach(data['data'][0],function(obj,key){
 						alert(obj+","+key);
 					});*/
+				}
+		    }).error(function(data, status, headers, config) {   
+		           alert("error");
+		    }).then(function(){
+		    	self.elseMsg = "finished!";
+		    });
+			
+		};
+		
+		self.queryGPRS = function(s2tMsisdn){
+			console.log("msisdn:"+s2tMsisdn);
+			if(!s2tMsisdn || s2tMsisdn == '')
+				return;
+			self.elseMsg = "";
+			AjaxService.query("getGPRSStatus",{input:s2tMsisdn})
+			.success(function(data, status, headers, config) {
+				if(data['error']){
+					alert(data['error']);
+				}else{
+					self.gprsStatus=data['data'];
 				}
 		    }).error(function(data, status, headers, config) {   
 		           alert("error");

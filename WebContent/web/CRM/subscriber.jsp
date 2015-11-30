@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <div ng-controller="SubscriberCtrl as sCtrl" class="container-fluid max_height" style="vertical-align: middle; background-color: rgba(45, 41, 41, 0.36);">
-	<div class="row max_height" align="center">
+	<div class="row max_height subPage" align="center">
 		<div class="info">
 			<label>使用者資訊</label>
 			<div>
@@ -14,13 +14,25 @@
 					<option ng-repeat="item in sCtrl.IDList" value="{{item.idTaxid}}">{{item.name}}</option>
 				</select> -->
 				<button data-toggle="modal" data-target="#companyModal" class="btn btn-warning btn-xs">choose company</button>
-				<modal title="Choose a company" id="companyModal" width="50%">
+				<modal title="Choose a company" id="companyModal" modal-width="80%">
 					<table class="dataTable" >
+						<tr>
+							<td align="center" width="10%">Id</td>
+							<td align="center" width="20%">名稱</td>
+							<td align="center" width="10%">香港主號</td>
+							<td align="center" width="10%">主號</td>
+							<td align="center" width="10%">狀態</td>
+							<td align="center" width="20%">啟用時間</td>
+							<td align="center" width="20%">退租時間</td>
+						</tr>
 						<tr ng-repeat="item in sCtrl.IDList" ng-click="sCtrl.chooseServiceId(item.serviceId)">
-							<td align="center" width="25%">{{item.idTaxid}}</td>
-							<td align="center" width="25%">{{item.name}}</td>
-							<td align="center" width="25%">{{item.s2tMsisdn}}</td>
-							<td align="center" width="25%">{{item.chtMsisdn}}</td>
+							<td align="center">{{item.idTaxid}}</td>
+							<td align="center">{{item.name}}</td>
+							<td align="center">{{item.s2tMsisdn}}</td>
+							<td align="center">{{item.chtMsisdn}}</td>
+							<td align="center">{{item.status}}</td>
+							<td align="center">{{item.activatedDate}}</td>
+							<td align="center">{{item.canceledDate}}</td>
 					  	</tr>
 					</table>
 				</modal>	
@@ -58,7 +70,7 @@
 			</div>
 			<div class="col-xs-12">
 				<div class="col-xs-3" align="left">
-					<label>CHT MSISDN:</label>
+					<label>Home MSISDN:</label>
 					<span ng-bind="sCtrl.custInfo.chtMsisdn"></span>
 				</div>
 				<div class="col-xs-3" align="left" ng-dblclick="sCtrl.infoEditMod('email')">
@@ -89,7 +101,11 @@
 				</div>
 			</div>
 			<div class="col-xs-12">
-				<div class="col-xs-6" align="left" ng-dblclick="sCtrl.infoEditMod('agency')">
+				<div class="col-xs-3" align="left">
+					<label>狀態：</label>
+					<span ng-bind="sCtrl.custInfo.status" ></span>
+				</div>
+				<div class="col-xs-3" align="left" ng-dblclick="sCtrl.infoEditMod('agency')">
 					<label>代辦處代號：</label>
 					<span ng-bind="sCtrl.custInfo.agency" ng-show="sCtrl.show.agency"></span>
 					<input type="text" ng-model = "sCtrl.custInfo.agency" ng-show="!sCtrl.show.agency" ng-change="sCtrl.whenInfoCahnge('agency')">

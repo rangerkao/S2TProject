@@ -34,7 +34,7 @@ angular.module('MainApp')
 			if(self.dateTo && self.dateTo != '')
 				dt=DateFormatString.Format(self.dateTo);
 			
-			alert(imsi);
+			console.log(imsi);
 			self.dayMsg = "";
 			self.dataList =[];
 			AjaxService.query('queryCurrentDay',

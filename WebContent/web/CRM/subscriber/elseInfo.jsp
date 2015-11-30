@@ -16,5 +16,9 @@
 			</tr>
 		</table>
 	</div>
-	<div class="col-xs-12"><label>數據:</label></div>
+	<div class="col-xs-12"><label>數據狀態:</label><label ng-bind="eCtrl.gprsStatus"></label> </div>
+	<div class="col-xs-12">
+		<div><label>啟用時間：</label><label ng-bind="eCtrl.activatedDate"></label></div>
+		<div><label>退租時間：</label><label ng-bind="eCtrl.canceledDate"></label></div>
+	</div>
 </div>

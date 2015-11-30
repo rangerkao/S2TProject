@@ -14,6 +14,10 @@ angular.module('MainApp')
 				
 			},
 			link:function($scope,$element,$attrs){
+				$scope.tableHeight = ($("body").height()-400)+"px";
+				if(!$scope.tableWidth)
+					$scope.tableWidth = '50%';
+				
 				if(!$scope.pageNum){
 					$scope.pageNum=Number(1);
 				}else{
@@ -120,10 +124,15 @@ angular.module('MainApp')
 	        restrict: 'E',
 	        transclude: true,
 	        replace:true,
-	        scope:true,
+	        scope:{
+	        	modalWidth:'@'
+	        },
 	        link: function postLink(scope, element, attrs) {
 	          scope.title = attrs.title;
 
+	          if(!scope.modalWidth){
+	        	  scpoe.modalWidth = '50%';
+	          }
 	        /*  scope.$watch(attrs.visible, function(value){
 	            if(value == true)
 	              $(element).modal('show');
