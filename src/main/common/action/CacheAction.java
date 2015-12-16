@@ -42,8 +42,10 @@ public class CacheAction  extends BaseAction{
 	static Thread reloadThread;
 		
 	static{
+		System.out.println("loadPropertiesing...!");
 		try {
 			loadProperties(CacheAction.class.getClassLoader().getResource("").toString().replace("file:", "").replace("%20", " "));
+			
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

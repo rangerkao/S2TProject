@@ -36,10 +36,10 @@ public class ExcelDao extends CRMBaseDao{
 				+ "					FROM SERVICE B GROUP BY SERVICEID) B "
 				+ "					WHERE A.SERVICEID = B.SERVICEID AND A.DATEACTIVATED = B.DATEACTIVATED) E, "
 				+ "		AVAILABLEMSISDN F "
-				+ "WHERE A.SUBS_ID_TAXID = B.SUBS_ID_TAXID "
-				+ "AND A.SUBS_ID_TAXID = C.SUBS_ID_TAXID(+) "
+				+ "WHERE A.SEQ = B.SEQ "
+				+ "AND A.SEQ = C.SEQ(+) "
 				+ "AND B.SERVICEID = D.SERVICEID(+) "
-				+ "AND B.SERVICEID = E.SERVICEID "
+				+ "AND B.SERVICEID =  to_char(E.SERVICEID) "
 				+ "AND E.SERVICECODE = F.S2TMSISDN(+) ";
 		
 		Statement st = null;

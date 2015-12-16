@@ -32,6 +32,7 @@ public class Subscriber {
 	String activatedDate = "";
 	String canceledDate = "";
 	
+	String seq="";
 	
 	public Subscriber(){
 		
@@ -225,6 +226,14 @@ public class Subscriber {
 
 	public void setCanceledDate(String canceledDate) {
 		this.canceledDate = canceledDate;
+	}
+
+	public String getSeq() {
+		return seq;
+	}
+
+	public void setSeq(String seq) {
+		this.seq = seq;
 	}
 
 	

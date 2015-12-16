@@ -182,8 +182,12 @@ public class CRMBaseDao extends BaseDao{
 		if(data==null)
 			return " ";
 		
+		
 		try {
-			data = new String(data.getBytes(sCharSet),dCharSet);
+			if(sCharSet==null || "".equals(sCharSet))
+				data = new String(data.getBytes(),dCharSet);
+			else
+				data = new String(data.getBytes(sCharSet),dCharSet);
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}

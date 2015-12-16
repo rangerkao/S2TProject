@@ -117,8 +117,10 @@ public class SubscriberDao extends CRMBaseDao{
 				+ "(CASE C.STATUS WHEN '1' THEN 'normal'  WHEN '3' THEN 'suspended' WHEN '4' THEN 'terminated' WHEN '10' THEN 'waiting' ELSE 'else' END) STAUS, "
 				+ "B. SERVICEID,C. SERVICECODE S2TMSISDN,C.PRICEPLANID,D.FOLLOWMENUMBER CHTMSISDN,C.DATEACTIVATED,C.DATECANCELED  "
 				+ "FROM CRM_SUBSCRIBERS A,CRM_SUBSCRIPTION B ,SERVICE C,FOLLOWMEDATA D "
-				+ "WHERE A.SUBS_ID_TAXID = B.SUBS_ID_TAXID AND C.SERVICEID= B.SERVICEID "
-				+ "AND B.SERVICEID = D.SERVICEID AND D.FOLLOWMENUMBER LIKE '886%' "
+				+ "WHERE A.SUBS_ID_TAXID = B.SUBS_ID_TAXID "
+				+ "AND B.SERVICEID= TO_CHAR(C.SERVICEID) " 
+				+ "AND B.SERVICEID = TO_CHAR(D.SERVICEID) " 
+				+ "AND D.FOLLOWMENUMBER LIKE '886%' "
 				+ " "+condition+" " ;
 		
 		Statement st = null ;
@@ -188,14 +190,16 @@ public class SubscriberDao extends CRMBaseDao{
 	public Subscriber queryDataById(String id) throws SQLException{
 		Subscriber result = new Subscriber(); 
 		
-		String sql = "SELECT A.SUBS_ID_TAXID ID,A.SUBS_NAME,A.SUBS_BIRTHDAY,A.SUBS_PHONE,A.SUBS_EMAIL,"
+		String sql = "SELECT A.SUBS_ID_TAXID ID,A.SUBS_NAME,A.SUBS_BIRTHDAY,A.SUBS_PHONE,A.SUBS_EMAIL,A.SEQ "
 				+ "(CASE C.STATUS WHEN '1' THEN 'normal'  WHEN '3' THEN 'suspended' WHEN '4' THEN 'terminated' WHEN '10' THEN 'waiting' ELSE 'else' END) STAUS, "
 				+ "A.SUBS_PERMANENT_ADDRESS,A.SUBS_BILLING_ADDRESS,A.AGENCY_ID,A.REMARK,C.DATEACTIVATED,C.DATECANCELED, "
 				+ "to_char(A.CREATETIME,'yyy/MM/dd hh24:mi:ss') CREATETIME,to_char(A.UPDATETIME,'yyy/MM/dd hh24:mi:ss') UPDATETIME, "
 				+ "A.SUBS_TYPE,B. SERVICEID,C. SERVICECODE S2TMSISDN,C.PRICEPLANID,F.IMSI,D.FOLLOWMENUMBER CHTMSISDN,E.CHAIRMAN,E.CHAIRMAN_ID "
 				+ "FROM CRM_SUBSCRIBERS A,CRM_SUBSCRIPTION B ,SERVICE C,FOLLOWMEDATA  D,CRM_CHAIRMAN E,IMSI F "
-				+ "WHERE A.SUBS_ID_TAXID = B.SUBS_ID_TAXID AND B.SERVICEID = C.SERVICEID "
-				+ "AND C.SERVICEID= D.SERVICEID(+)  AND A.SUBS_ID_TAXID = E.SUBS_ID_TAXID(+) AND C.SERVICEID = F.SERVICEID(+) "
+				+ "WHERE A.SEQ = B.SEQ "
+				+ "AND B.SERVICEID = TO_CHAR(C.SERVICEID) "
+				+ "AND C.SERVICEID= D.SERVICEID(+) "
+				+ "AND A.SEQ = E.SEQ(+) AND C.SERVICEID = F.SERVICEID(+) "
 				+ "AND D.FOLLOWMENUMBER LIKE '886%' "
 				+ "AND A.SUBS_ID_TAXID='"+id+"' ";
 		
@@ -237,6 +241,7 @@ public class SubscriberDao extends CRMBaseDao{
 				
 				result.setActivatedDate(rs.getString("DATEACTIVATED"));
 				result.setCanceledDate(rs.getString("DATECANCELED"));
+				result.setSeq(rs.getString("SEQ"));
 			}
 		} finally{
 			try {
@@ -256,18 +261,18 @@ public class SubscriberDao extends CRMBaseDao{
 	public Subscriber queryDataByServiceId(String id) throws SQLException{
 		Subscriber result = new Subscriber(); 
 
-		String sql = "SELECT A.SERVICEID,A. SERVICECODE S2TMSISDN,A.PRICEPLANID, "
-				+ "(CASE A.STATUS "
-				+ "					WHEN '1' THEN 'normal'  WHEN '3' THEN 'suspended' WHEN '4' THEN 'terminated' WHEN '10' THEN 'waiting' "
-				+ "					ELSE 'else' END) STAUS, "
-				+ "C.SUBS_ID_TAXID ID,C.SUBS_NAME,C.SUBS_BIRTHDAY,C.SUBS_PHONE,C.SUBS_EMAIL,C.SUBS_PERMANENT_ADDRESS,C.SUBS_BILLING_ADDRESS,C.AGENCY_ID, "
-				+ "C.REMARK, TO_CHAR(C.CREATETIME,'yyy/MM/dd hh24:mi:ss') CREATETIME,TO_CHAR(C.UPDATETIME,'yyy/MM/dd hh24:mi:ss') UPDATETIME, C.SUBS_TYPE, "
-				+ "D.FOLLOWMENUMBER CHTMSISDN,E.CHAIRMAN,E.CHAIRMAN_ID ,F.IMSI,A.DATEACTIVATED,A.DATECANCELED "
-				+ "FROM SERVICE A , CRM_SUBSCRIPTION B,CRM_SUBSCRIBERS C,FOLLOWMEDATA  D,CRM_CHAIRMAN E,IMSI F "
-				+ "WHERE A.SERVICEID = B. SERVICEID (+) AND B.SUBS_ID_TAXID = C.SUBS_ID_TAXID(+) "
-				+ "AND A.SERVICEID= D.SERVICEID(+) AND D.FOLLOWMENUMBER(+) LIKE '886%' "
-				+ "AND C.SUBS_ID_TAXID = E.SUBS_ID_TAXID(+) AND B.SERVICEID = F.SERVICEID(+) "
-				+ "AND A.SERVICEID="+id+"";
+		String sql = "SELECT A.SUBS_ID_TAXID ID,A.SUBS_NAME,A.SUBS_BIRTHDAY,A.SUBS_PHONE,A.SUBS_EMAIL,A.SEQ "
+				+ "(CASE C.STATUS WHEN '1' THEN 'normal'  WHEN '3' THEN 'suspended' WHEN '4' THEN 'terminated' WHEN '10' THEN 'waiting' ELSE 'else' END) STAUS, "
+				+ "A.SUBS_PERMANENT_ADDRESS,A.SUBS_BILLING_ADDRESS,A.AGENCY_ID,A.REMARK,C.DATEACTIVATED,C.DATECANCELED, "
+				+ "to_char(A.CREATETIME,'yyy/MM/dd hh24:mi:ss') CREATETIME,to_char(A.UPDATETIME,'yyy/MM/dd hh24:mi:ss') UPDATETIME, "
+				+ "A.SUBS_TYPE,B. SERVICEID,C. SERVICECODE S2TMSISDN,C.PRICEPLANID,F.IMSI,D.FOLLOWMENUMBER CHTMSISDN,E.CHAIRMAN,E.CHAIRMAN_ID "
+				+ "FROM CRM_SUBSCRIBERS A,CRM_SUBSCRIPTION B ,SERVICE C,FOLLOWMEDATA  D,CRM_CHAIRMAN E,IMSI F "
+				+ "WHERE A.SEQ = B.SEQ "
+				+ "AND B.SERVICEID = TO_CHAR(C.SERVICEID) "
+				+ "AND C.SERVICEID= D.SERVICEID(+) "
+				+ "AND A.SEQ = E.SEQ(+) AND C.SERVICEID = F.SERVICEID(+) "
+				+ "AND D.FOLLOWMENUMBER LIKE '886%' "
+				+ "AND B.SERVICEID='"+id+"' ";
 				
 		Statement st = null;
 		Statement st2 = null;
@@ -307,6 +312,7 @@ public class SubscriberDao extends CRMBaseDao{
 				
 				result.setActivatedDate(rs.getString("DATEACTIVATED"));
 				result.setCanceledDate(rs.getString("DATECANCELED"));
+				result.setSeq(rs.getString("SEQ"));
 			}
 		} finally{
 			try {
@@ -325,26 +331,41 @@ public class SubscriberDao extends CRMBaseDao{
 	
 	public boolean insertSubscriber(Subscriber s) throws Exception{
 		boolean result = false;
-		String sql = "INSERT INTO "
-				+ "CRM_SUBSCRIBERS("
-				+ "SUBS_NAME, SUBS_BIRTHDAY, SUBS_ID_TAXID, SUBS_PHONE, SUBS_EMAIL,"
-				+ "SUBS_PERMANENT_ADDRESS,SUBS_BILLING_ADDRESS,AGENCY_ID,REMARK,"
-				+ "CREATETIME,SUBS_TYPE) "
-				+ "VALUES("
-				+ "'"+s.getName()+"','"+s.getBirthday()+"','"+s.getIdTaxid()+"','"+s.getPhone()+"','"+s.getEmail()+"',"
-				+ "'"+s.getPermanentAddress()+"','"+s.getBillingAddress()+"','"+s.getAgency()+"','"+s.getRemark()+"',"
-				+ "sysdate,'"+s.getType()+"') ";
 		
-		String sql2 = "INSERT INTO "
-				+ "CRM_SUBSCRIPTION("
-				+ "SERVICEID,SUBS_ID_TAXID,CREATETIME) "
-				+ "VALUES("
-				+ "'"+s.getServiceId()+"','"+s.getIdTaxid()+"',sysdate) ";
 		
 		Statement st = null;
 		
 		try {
+
 			st = conn.createStatement();
+			
+			String sql3 = "SELECT CRM_SEQ.NEXVAL SEQ "
+					+ "FROM DUAL ";
+			System.out.println("sql3:"+sql3);
+			ResultSet rs = st.executeQuery(sql3);
+			String seq = null;
+			
+			while(rs.next()){
+				seq = rs.getString("SEQ");
+			}
+
+			String sql = "INSERT INTO "
+					+ "CRM_SUBSCRIBERS("
+					+ "SUBS_NAME, SUBS_BIRTHDAY, SUBS_ID_TAXID, SUBS_PHONE, SUBS_EMAIL,"
+					+ "SUBS_PERMANENT_ADDRESS,SUBS_BILLING_ADDRESS,AGENCY_ID,REMARK,"
+					+ "CREATETIME,SUBS_TYPE,SEQ) "
+					+ "VALUES("
+					+ "'"+s.getName()+"','"+s.getBirthday()+"','"+s.getIdTaxid()+"','"+s.getPhone()+"','"+s.getEmail()+"',"
+					+ "'"+s.getPermanentAddress()+"','"+s.getBillingAddress()+"','"+s.getAgency()+"','"+s.getRemark()+"',"
+					+ "sysdate,'"+s.getType()+"','"+seq+"') ";
+			
+			String sql2 = "INSERT INTO "
+					+ "CRM_SUBSCRIPTION("
+					+ "SERVICEID,SEQ,CREATETIME) "
+					+ "VALUES("
+					+ "'"+s.getServiceId()+"','"+seq+"',sysdate) ";
+			
+			
 			System.out.println("sql:"+sql);
 			int eRow1 = st.executeUpdate(sql);
 			System.out.println("sql2:"+sql2);
@@ -374,8 +395,8 @@ public class SubscriberDao extends CRMBaseDao{
 		int result = 0;
 		
 		
-		String sql = "INSERT INTO CRM_CHAIRMAN(SUBS_ID_TAXID,CHAIRMAN,CHAIRMAN_ID,CREATETIME) "
-				+ "VALUES('"+s.getIdTaxid()+"','"+s.getChair()+"','"+s.getChairID()+"',sysdate)";
+		String sql = "INSERT INTO CRM_CHAIRMAN(SEQ,CHAIRMAN,CHAIRMAN_ID,CREATETIME) "
+				+ "VALUES('"+s.getSeq()+"','"+s.getChair()+"','"+s.getChairID()+"',sysdate)";
 		
 		
 		Statement st = null;
@@ -400,7 +421,7 @@ public class SubscriberDao extends CRMBaseDao{
 		
 		
 		String sql = "DELETE CRM_CHAIRMAN A "
-				+ "WHERE A.SUBS_ID_TAXID = '"+s.getIdTaxid()+"' ";
+				+ "WHERE A.SEQ = '"+s.getSeq()+"' ";
 		
 		
 		Statement st = null;
@@ -427,11 +448,11 @@ public class SubscriberDao extends CRMBaseDao{
 				+ "A.SUBS_PHONE='"+s.getPhone()+"',A.SUBS_EMAIL='"+s.getEmail()+"',"
 				+ "A.SUBS_PERMANENT_ADDRESS='"+s.getPermanentAddress()+"',A.SUBS_BILLING_ADDRESS='"+s.getBillingAddress()+"',"
 				+ "A.AGENCY_ID='"+s.getAgency()+"',A.REMARK='"+s.getRemark()+"',A.UPDATETIME=SYSDATE ,A.SUBS_TYPE = '"+s.getType()+"'"
-				+ "WHERE A.SUBS_ID_TAXID ='"+s.getIdTaxid()+"'";
+				+ "WHERE A.SEQ ='"+s.getSeq()+"'";
 		
 		String sql2 = "UPDATE CRM_CHAIRMAN A "
 				+ "SET A.CHAIRMAN = '"+s.getChair()+"', A.CHAIRMAN_ID = '"+s.getChairID()+"' "
-				+ "WHERE A.SUBS_ID_TAXID = '"+s.getIdTaxid()+"'";
+				+ "WHERE A.SEQ = '"+s.getSeq()+"'";
 		
 		Statement st = null;
 		
