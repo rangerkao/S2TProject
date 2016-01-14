@@ -2,12 +2,13 @@ package main.CRM.dao;
 
 import java.io.UnsupportedEncodingException;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
+
+import org.springframework.stereotype.Repository;
 
 import main.CRM.bean.Subscriber;
 import main.common.dao.BaseDao;
-
+@Repository
 public class CRMBaseDao extends BaseDao{
 
 	public CRMBaseDao() throws Exception {
@@ -15,14 +16,14 @@ public class CRMBaseDao extends BaseDao{
 		// TODO Auto-generated constructor stub
 	}
 	
-	public Subscriber queryServiceIdbyS2tMsisdn(String s2tMsisdn) throws SQLException{
+	public Subscriber queryServiceIdbyS2tMsisdn(String s2tMsisdn) throws Exception{
 		
 		Statement st2 = null;
 		ResultSet rs = null ;
 		String sql = null;
 		Subscriber s = new Subscriber();
 		try {
-			st2 = conn2.createStatement();
+			st2 = getConn2().createStatement();
 			sql = "SELECT A.PRICEPLANID,B.IMSI,A.SERVICECODE,A.PRICEPLANID,A.SUBSIDIARYID,A.SERVICEID,C.FOLLOWMENUMBER MSISDN "
 					+ "FROM SERVICE A,IMSI B,FOLLOWMEDATA C "
 					+ "WHERE A.SERVICEID=B.SERVICEID AND A.SERVICECODE IS NOT NULL "
@@ -52,7 +53,7 @@ public class CRMBaseDao extends BaseDao{
 		return s;
 	}
 	
-	public Subscriber queryServiceIdbyS2tImsi(String s2tImsi) throws SQLException{
+	public Subscriber queryServiceIdbyS2tImsi(String s2tImsi) throws Exception{
 		
 		Statement st = null;
 		Statement st2 = null;
@@ -63,7 +64,7 @@ public class CRMBaseDao extends BaseDao{
 		Subscriber s = new Subscriber();
 
 		try {
-			st2 = conn2.createStatement();
+			st2 = getConn2().createStatement();
 			
 			sql = "SELECT A.PRICEPLANID,B.IMSI,A.SERVICECODE,A.PRICEPLANID,A.SUBSIDIARYID,A.SERVICEID,C.FOLLOWMENUMBER MSISDN "
 					+ "FROM SERVICE A,IMSI B,FOLLOWMEDATA C "
@@ -96,7 +97,7 @@ public class CRMBaseDao extends BaseDao{
 		return s;
 	}
 	
-	public Subscriber queryServiceIdbyChtMsisdn(String chtMsisdn) throws SQLException{
+	public Subscriber queryServiceIdbyChtMsisdn(String chtMsisdn) throws Exception{
 		
 		Statement st = null;
 		Statement st2 = null;
@@ -105,7 +106,7 @@ public class CRMBaseDao extends BaseDao{
 		Subscriber s = new Subscriber();
 		try {
 			
-			st2 = conn2.createStatement();
+			st2 = getConn2().createStatement();
 
 			sql = "SELECT A.PRICEPLANID,B.IMSI,A.SERVICECODE,A.PRICEPLANID,A.SUBSIDIARYID,A.SERVICEID,C.FOLLOWMENUMBER MSISDN "
 					+ "FROM SERVICE A,IMSI B,FOLLOWMEDATA C "
@@ -140,7 +141,7 @@ public class CRMBaseDao extends BaseDao{
 		return s;
 	}
 	
-	public String queryServiceIdbyChtImsi(String chtImsi) throws SQLException{
+	public String queryServiceIdbyChtImsi(String chtImsi) throws Exception{
 		
 		Statement st = null;
 		Statement st2 = null;
@@ -149,8 +150,8 @@ public class CRMBaseDao extends BaseDao{
 		String serviceId = null;
 
 		try {
-			st = conn.createStatement();
-			st2 = conn2.createStatement();
+			st = getConn1().createStatement();
+			st2 = getConn2().createStatement();
 			
 			sql = "SELECT A.SERVICEID FROM IMSI A where A.HOMEIMSI='"+chtImsi+"'";
 			System.out.println("sql:"+sql);

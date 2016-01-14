@@ -26,7 +26,7 @@ import main.common.dao.CacheDao;
 
 import org.apache.log4j.PropertyConfigurator;
 
-public class CacheAction  extends BaseAction{
+public class CacheAction  extends BaseAction{ 
 
 	/**
 	 * 
@@ -95,17 +95,17 @@ public class CacheAction  extends BaseAction{
 			CacheDao cacheDao = new CacheDao();
 			serviceIDtoIMSI = cacheDao.queryServiceIDtoIMSI();
 			imsitoServiceID = cacheDao.queryIMSItoServiceID();
-			sendMail("k1988242001@gmail.com","DVRS Cache Reload!","DVRS Cache Reload! At "+new Date());
+			sendMail("k1988242001@gmail.com","DVRS Cache Reload!","S2T Cache Reload! At "+new Date());
 			return setSuccess(SUCCESS);
 		} catch (SQLException e) {
 			StringWriter s = new StringWriter();
 			e.printStackTrace(new PrintWriter(s));
-			sendMail("k1988242001@gmail.com","DVRS Cache Reload Error!","DVRS Cache Reload Error! At "+new Date()+"\n"+s);
+			sendMail("k1988242001@gmail.com","DVRS Cache Reload Error!","S2T Cache Reload Error! At "+new Date()+"\n"+s);
 			return errorHandle(e);
 		} catch (Exception e) {
 			StringWriter s = new StringWriter();
 			e.printStackTrace(new PrintWriter(s));
-			sendMail("k1988242001@gmail.com","DVRS Cache Reload Error!","DVRS Cache Reload Error! At "+new Date()+"\n"+s);
+			sendMail("k1988242001@gmail.com","DVRS Cache Reload Error!","S2T Cache Reload Error! At "+new Date()+"\n"+s);
 			return errorHandle(e);
 		}
 	}

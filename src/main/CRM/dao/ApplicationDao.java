@@ -1,13 +1,14 @@
 package main.CRM.dao;
 
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import main.CRM.bean.ApplicationData;
+import org.springframework.stereotype.Repository;
 
+import main.CRM.bean.ApplicationData;
+@Repository
 public class ApplicationDao extends CRMBaseDao {
 
 	public ApplicationDao() throws Exception {
@@ -15,35 +16,35 @@ public class ApplicationDao extends CRMBaseDao {
 		// TODO Auto-generated constructor stub
 	}
 
-	public List<ApplicationData> queryByS2tIMSI(String imsi) throws SQLException{
+	public List<ApplicationData> queryByS2tIMSI(String imsi) throws Exception{
 		String serviceId = null;
 		
 		return queryApplication(serviceId);
 	}
 	
-	public List<ApplicationData> queryByS2tMsisdn(String s2tMsisdn) throws SQLException{
+	public List<ApplicationData> queryByS2tMsisdn(String s2tMsisdn) throws Exception{
 		List<ApplicationData> result = new ArrayList<ApplicationData>();
 		String serviceId = queryServiceIdbyS2tMsisdn(s2tMsisdn).getServiceId();
 		result = queryApplication(serviceId);
-		closeConnection();
+		//closeConnection();
 		return result;
 	}
 	
-	public List<ApplicationData> queryByChtMsisdn(String chtMsisdn) throws SQLException{
+	public List<ApplicationData> queryByChtMsisdn(String chtMsisdn) throws Exception{
 		List<ApplicationData> result = new ArrayList<ApplicationData>();
 		String serviceId = queryServiceIdbyChtMsisdn(chtMsisdn).getServiceId();
 		result = queryApplication(serviceId);
-		closeConnection();
+		//closeConnection();
 		return result;
 	}
 	
-	public List<ApplicationData> queryByServiceId(String serviceId) throws SQLException{
+	public List<ApplicationData> queryByServiceId(String serviceId) throws Exception{
 		List<ApplicationData> result = new ArrayList<ApplicationData>();
 		result = queryApplication(serviceId);
-		closeConnection();
+		//closeConnection();
 		return result;
 	}
-	public List<ApplicationData> queryApplication(String serviceId) throws SQLException{
+	public List<ApplicationData> queryApplication(String serviceId) throws Exception{
 		List<ApplicationData> result = new ArrayList<ApplicationData>();
 		String sql = "SELECT A.TYPE,to_char(A.VERIFIED_DATE,'yyyy/MM/dd hh24:mi:ss') VERIFIED_DATE "
 				+ "FROM CRM_APPLICATION A WHERE A.SERVICEID = '"+serviceId+"' ";
@@ -51,7 +52,7 @@ public class ApplicationDao extends CRMBaseDao {
 		ResultSet rs = null;
 		
 		try{
-			st = conn.createStatement();
+			st = getConn1().createStatement();
 			rs = st.executeQuery(sql);
 			System.out.println("sql:"+sql);
 			while(rs.next()){
@@ -67,14 +68,14 @@ public class ApplicationDao extends CRMBaseDao {
 		return result;
 	}
 	
-	public boolean insertNew(String type,String serviceid,String verifiedDate) throws SQLException{
+	public boolean insertNew(String type,String serviceid,String verifiedDate) throws Exception{
 		boolean result = false;
 		String sql = "INSERT INTO CRM_APPLICATION(SERVICEID,VERIFIED_DATE,CREATETIME,TYPE) "
-				+ "VALUES("+serviceid+",sysdate,sysdate,"+type+")";
+				+ "VALUES("+serviceid+",sysdate,sysdate,'"+type+"')";
 		Statement st = null;
 		
 		try{
-			st = conn.createStatement();
+			st = getConn1().createStatement();
 			int r = st.executeUpdate(sql);
 			if(r==1){
 				result = true;

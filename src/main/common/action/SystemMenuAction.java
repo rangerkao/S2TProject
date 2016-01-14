@@ -2,6 +2,8 @@ package main.common.action;
 
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import main.common.bean.Link;
 import main.common.service.SystemMenuService;
 
@@ -11,7 +13,9 @@ public class SystemMenuAction extends BaseAction {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	SystemMenuService systemMenuService = new SystemMenuService();
+	
+	@Resource
+	SystemMenuService systemMenuService;
 	public String querySystemMenu(){
 		
 		List<Link> menuList = systemMenuService.querySystemMenu();
@@ -27,6 +31,12 @@ public class SystemMenuAction extends BaseAction {
 	 */
 	public String DVRS(){return "DVRS";}
 	public String CRM(){return "CRM";}
+	public SystemMenuService getSystemMenuService() {
+		return systemMenuService;
+	}
+	public void setSystemMenuService(SystemMenuService systemMenuService) {
+		this.systemMenuService = systemMenuService;
+	}
 	
 	
 }

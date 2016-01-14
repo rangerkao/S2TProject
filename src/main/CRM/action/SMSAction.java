@@ -1,8 +1,9 @@
 package main.CRM.action;
 
-import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.List;
+
+import javax.annotation.Resource;
 
 import main.CRM.bean.SMS;
 import main.CRM.service.SMSService;
@@ -20,7 +21,8 @@ public class SMSAction extends BaseAction {
 	public String startDate;
 	public String endDate;
 	
-	SMSService sMSService = new SMSService();
+	@Resource
+	SMSService sMSService;
 	
 	public String querySMS(){
 		System.out.println("querySMS");
@@ -28,11 +30,9 @@ public class SMSAction extends BaseAction {
 		try {
 			List<SMS> list = sMSService.querySMS(s2tMsisdn, chtMsisdn, startDate, endDate);
 			setSuccess(list);
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			errorHandle(e);
-		} catch (ParseException e) {
-			errorHandle(e);
-		}
+		} 
 		return SUCCESS;
 	}
 

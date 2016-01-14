@@ -1,8 +1,9 @@
 package main.CRM.action;
 
 import java.io.InputStream;
-import java.sql.SQLException;
 import java.util.Date;
+
+import javax.annotation.Resource;
 
 import main.CRM.service.ExcelService;
 import main.common.action.BaseAction;
@@ -21,9 +22,10 @@ public class ExcelAction extends BaseAction{
 	private InputStream excelStream;  //輸出變量
 	private static String excelFileName; //下載文件名稱
 
-	ExcelService excelService = new ExcelService();
+	@Resource
+	ExcelService excelService;
 	
-	public String createSubscribersExcel() throws SQLException{
+	public String createSubscribersExcel() throws Exception{
 
 		excelFileName = "customer"+new Date()+".xls";
 		
@@ -50,6 +52,16 @@ public class ExcelAction extends BaseAction{
 
 	public void setExcelStream(InputStream excelStream) {
 		this.excelStream = excelStream;
+	}
+
+
+	public ExcelService getExcelService() {
+		return excelService;
+	}
+
+
+	public void setExcelService(ExcelService excelService) {
+		this.excelService = excelService;
 	}
 	
 	

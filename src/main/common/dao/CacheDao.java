@@ -6,6 +6,9 @@ import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.derby.iapi.store.raw.FetchDescriptor;
+import org.springframework.stereotype.Repository;
+@Repository
 public class CacheDao extends BaseDao{
 
 	public CacheDao() throws Exception {
@@ -36,11 +39,8 @@ public class CacheDao extends BaseDao{
 				+ "     	            WHERE A.ORDERID =B.ORDERID AND   B.FIELDID=3713)"
 				+ "     	  GROUP BY IMSI )B "
 				+ " WHERE A.IMSI=B.IMSI AND A.COMPLETEDATE =B.COMPLETEDATE ";
-		
-	    
-		Connection subConn2 = connectDB2();
 
-		Statement st = subConn2.createStatement();
+		Statement st = getConn2().createStatement();
 		
 		ResultSet rs=st.executeQuery(sql);
 		
@@ -86,7 +86,7 @@ public class CacheDao extends BaseDao{
 		}
 		rs.close();
 		st.close();
-		closeConnection();
+		//closeConnection();
 		return serviceIDtoIMSI;
 	}
 	

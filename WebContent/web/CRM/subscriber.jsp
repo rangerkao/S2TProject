@@ -2,7 +2,8 @@
 <div ng-controller="SubscriberCtrl as sCtrl" class="container-fluid max_height" style="vertical-align: middle; background-color: rgba(45, 41, 41, 0.36);">
 	<div class="row max_height subPage" align="center">
 		<div class="info">
-			<label>使用者資訊</label>
+			<label>使用者資訊{{sCtrl.custInfo.seq}}</label>
+			<a ng-href="logout"><font color="red" >登出</font></a>
 			<div>
 				<label ng-repeat="item in sCtrl.radioList">
 					<input type="radio" ng-model="sCtrl.selectedType"  value="{{item.id}}" ng-change="sCtrl.selectType()" ng-init="sCtrl.selectedType='id'">{{item.name}}
@@ -36,7 +37,7 @@
 					  	</tr>
 					</table>
 				</modal>	
-				<a class="btn btn-success btn-xs" href="createSubscribersExcel">download excel</a>	
+				<a class="btn btn-success btn-xs"  ng-click="sCtrl.downExcel()" ng-disabled="sCtrl.buttonDis">download excel</a>	
 			<!-- 	<button data-toggle="modal" data-target="#serviceidModal" class="btn btn-success btn-xs" >choose serviceId</button>
 				<modal title="Choose a serviceid" id="serviceidModal">
 					<table class="dataTable">
@@ -63,7 +64,7 @@
 					<input type="button" value="帶入資料" ng-click="sCtrl.queryInfo()" class="btn btn-danger btn-xs" ng-show="!sCtrl.show.idTaxid">
 				</div>
 				<div class="col-xs-3" align="left" ng-dblclick="sCtrl.infoEditMod('birthday')">
-					<label>生日:</label>
+					<label>生日(民國):</label>
 					<span ng-bind="sCtrl.custInfo.birthday" ng-show="sCtrl.show.birthday"></span>
 					<input type="text" ng-model = "sCtrl.custInfo.birthday" ng-show="!sCtrl.show.birthday" ng-change="sCtrl.whenInfoCahnge('birthday')">
 				</div>

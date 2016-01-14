@@ -5,7 +5,7 @@
 	<br>
 		<label>新增項目</label>
 		<select ng-model="appCtrl.appType" ng-options="type.value as type.name for type in appCtrl.appTypes"></select>
-		<button ng-disabled="appCtrl.custInfo.serviceId==null" class="btn btn-info btn-xs" 
+		<button ng-disabled="appCtrl.serviceId==null || appCtrl.buttonDis==true" class="btn btn-info btn-xs" 
 				ng-click="appCtrl.insertApp(appCtrl.appType)" >新增</button>
 	</div>
 	<page-table 

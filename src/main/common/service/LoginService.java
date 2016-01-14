@@ -9,12 +9,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Service;
+
 import main.common.bean.Link;
 import main.common.bean.User;
 import main.common.dao.LoginDao;
 
 
-
+@Service
 public class LoginService extends BaseService{
 
 	
@@ -25,8 +29,8 @@ public class LoginService extends BaseService{
 	}
 
 	String SUCCESS = "success";
-	
-	LoginDao loginDao = new LoginDao();
+	@Resource
+	LoginDao loginDao ;
 	
 	public void checkAccount(Map<String, Object> session,String account,String password) throws Exception{
 
@@ -67,5 +71,13 @@ public class LoginService extends BaseService{
         }
         return hashtext;
 	}
+	public LoginDao getLoginDao() {
+		return loginDao;
+	}
+	public void setLoginDao(LoginDao loginDao) {
+		this.loginDao = loginDao;
+	}
+	
+	
 
 }

@@ -1,7 +1,7 @@
 package main.common.action;
 
 
-public class IndexAction extends BaseAction{
+public class IndexAction extends BaseAction{ 
 
 	/**
 	 * 

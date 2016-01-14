@@ -24,12 +24,12 @@ angular.module('MainApp',['ngRoute','mService','ui.bootstrap','ngCookies'])
 	.factory('LoginService',['$http',function($http){
 		return{
 			login:function(data){
-				$http.post('login',data)
+				/*$http.post('login',data)
 				.then(
 						function(response){
 							alert(response.data);
 						}
-				);
+				);*/
 				/*$http.post('login',data)
 				.success(function(data, status, headers, config) {
 				      alert(data);
@@ -51,6 +51,7 @@ angular.module('MainApp',['ngRoute','mService','ui.bootstrap','ngCookies'])
 	.controller('SystemMenuCtrl',['AjaxService',function(AjaxService){
 		var self=this;
 		self.systemList=[];
+		/*
 		$(document).ready(function () {
 			self.query();
 		});
@@ -65,5 +66,5 @@ angular.module('MainApp',['ngRoute','mService','ui.bootstrap','ngCookies'])
 		    }).then(function(){
 
 		    });
-		};
+		};*/
 	}]);

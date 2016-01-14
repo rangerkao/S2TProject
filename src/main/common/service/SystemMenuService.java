@@ -3,8 +3,11 @@ package main.common.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
 import main.common.bean.Link;
 
+@Service
 public class SystemMenuService {
 
 	public List<Link> querySystemMenu(){

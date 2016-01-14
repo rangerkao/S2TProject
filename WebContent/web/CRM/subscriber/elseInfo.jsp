@@ -1,7 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <div ng-controller="CRMElseCtrl as eCtrl">
 	<h4>{{tab.title}}({{eCtrl.elseMsg}})</h4>
-	<div class="col-xs-12" ><label>IMSI:</label><label ng-bind="eCtrl.s2tIMSI"></label></div>
+	<div class="col-xs-12" ><label>s2tIMSI:</label><label ng-bind="eCtrl.s2tIMSI"></label></div>
+	<div class="col-xs-12" ><label>homeIMSI:</label><label ng-bind="eCtrl.homeIMSI"></label></div>
 	<div class="col-xs-12" ng-show="sCtrl.testMode"><input type="text" ng-model="eCtrl.vlntest"><input type="button" value="vlntest" ng-click="eCtrl.queryVLN(eCtrl.vlntest)"></div>
 	<div class="col-xs-12" ><label>VLN:</label><label ng-repeat="vln in eCtrl.VLNs">{{vln}},</label></div>
 	<div class="col-xs-12" ><label>資費:</label><label ng-bind="eCtrl.privePlanId"></label></div>

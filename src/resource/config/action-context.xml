@@ -11,5 +11,23 @@
         http://www.springframework.org/schema/tx
         http://www.springframework.org/schema/tx/spring-tx-3.1.xsd
         http://www.springframework.org/schema/aop
-        http://www.springframework.org/schema/aop/spring-aop-3.1.xsd"/>
+        http://www.springframework.org/schema/aop/spring-aop-3.1.xsd"
+        >
+        
+        <aop:aspectj-autoproxy proxy-target-class="true"/>
+        <!-- <bean id="aspect" class="main.common.aop.AOPtest" />  -->
+        <!-- <bean id="sessionCheckAspect" class="main.common.aop.sessionCheckAOP" />
+        <bean id="sactionLogAspect" class="main.common.aop.ActionLogAOP" /> -->
 
+
+		<!-- <context:annotation-config/>
+		<bean id="subscriberService" class="main.CRM.service.SubscriberService"> 
+		</bean>   -->
+
+    	<context:component-scan base-package="main.CRM.service" />
+    	<context:component-scan base-package="main.CRM.dao" />
+    	<context:component-scan base-package="main.common.aop" />
+    	<context:component-scan base-package="main.common.service" />
+    	<context:component-scan base-package="main.common.dao" />
+  
+</beans>

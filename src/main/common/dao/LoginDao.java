@@ -4,8 +4,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import main.common.bean.User;
+import org.springframework.stereotype.Repository;
 
+import main.common.bean.User;
+@Repository
 public class LoginDao extends BaseDao{
 
 	public LoginDao() throws Exception{
@@ -13,14 +15,14 @@ public class LoginDao extends BaseDao{
 	}
 
 	
-	public User queryUser(String account) throws SQLException{
+	public User queryUser(String account) throws Exception{
 		
 		User user = null;
 		Statement st = null;
 		ResultSet rs = null;
 		
 		try {
-			st = conn.createStatement();
+			st = getConn1().createStatement();
 			
 			String sql = "SELECT A.ACCOUNT,A.PASSWORD,A.ROLE FROM CRM_USER A WHERE A.ACCOUNT = '"+account+"' ";
 			
@@ -43,7 +45,7 @@ public class LoginDao extends BaseDao{
 			}
 		}
 		
-		closeConnection();
+		//closeConnection();
 		return user;
 	}
 }

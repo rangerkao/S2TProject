@@ -2,9 +2,11 @@ package main.common.action;
 
 import java.security.NoSuchAlgorithmException;
 
+import javax.annotation.Resource;
+
 import main.common.service.LoginService;
 
-public class LoginAction extends BaseAction{
+public class LoginAction extends BaseAction{ 
 
 	/**
 	 * 
@@ -18,8 +20,8 @@ public class LoginAction extends BaseAction{
 		super();
 	}
 
-
-	LoginService loginService = new LoginService();
+	@Resource
+	LoginService loginService;
 
 	
 	String account;
@@ -79,6 +81,14 @@ public class LoginAction extends BaseAction{
 
 	public void setMsg(String msg) {
 		this.msg = msg;
+	}
+
+	public LoginService getLoginService() {
+		return loginService;
+	}
+
+	public void setLoginService(LoginService loginService) {
+		this.loginService = loginService;
 	}
 	
 	

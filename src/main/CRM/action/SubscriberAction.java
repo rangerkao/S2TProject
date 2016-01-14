@@ -1,15 +1,12 @@
 package main.CRM.action;
 
-
-import java.sql.SQLException;
-import java.text.ParseException;
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import org.json.JSONObject;
-import org.json.JSONString;
 
 import main.CRM.bean.AddonService;
-import main.CRM.bean.SMS;
 import main.CRM.bean.Subscriber;
 import main.CRM.service.SubscriberService;
 import main.common.action.BaseAction;
@@ -23,13 +20,14 @@ public class SubscriberAction extends BaseAction{
 	
 	
 	
-	public SubscriberAction() throws Exception{
+	public SubscriberAction() throws Exception{ 
 		super();
 	}
 
 	public String input;
-
-	SubscriberService subscriberService = new SubscriberService();
+	
+	@Resource
+	SubscriberService subscriberService;
 	
 	public String queryListById(){
 		System.out.println("queryListById...");
@@ -37,7 +35,7 @@ public class SubscriberAction extends BaseAction{
 		try {
 			List<Subscriber> sList = subscriberService.queryListById(input);
 			setSuccess(sList);
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			errorHandle(e);
 		}
 		
@@ -50,7 +48,7 @@ public class SubscriberAction extends BaseAction{
 		try {
 			List<Subscriber> sList = subscriberService.queryListByName(input);
 			setSuccess(sList);
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			errorHandle(e);
 		}
 		
@@ -63,13 +61,9 @@ public class SubscriberAction extends BaseAction{
 		try {
 			List<Subscriber> sList = subscriberService.queryListByVLN(input);
 			setSuccess(sList);
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			errorHandle(e);
 		}
-		catch (Exception e) {
-			errorHandle(e);
-		}
-		
 		return SUCCESS;
 	}
 	
@@ -79,7 +73,7 @@ public class SubscriberAction extends BaseAction{
 		try {
 			List<Subscriber> sList = subscriberService.queryListByS2tMisidn(input);
 			setSuccess(sList);
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			errorHandle(e);
 		}
 		
@@ -92,7 +86,20 @@ public class SubscriberAction extends BaseAction{
 		try {
 			List<Subscriber> sList = subscriberService.queryListByChtMsisdn(input);
 			setSuccess(sList);
-		} catch (SQLException e) {
+		} catch (Exception e) {
+			errorHandle(e);
+		}
+		
+		return SUCCESS;
+	}
+	
+	public String queryListByMainMsisdn(){
+		System.out.println("queryListByChtMsisdn...");
+		System.out.println("input="+input);
+		try {
+			List<Subscriber> sList = subscriberService.queryListByChtMsisdn(input);
+			setSuccess(sList);
+		} catch (Exception e) {
 			errorHandle(e);
 		}
 		
@@ -105,7 +112,7 @@ public class SubscriberAction extends BaseAction{
 		try {
 			Subscriber s = subscriberService.queryDataById(input);
 			setSuccess(s);
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			errorHandle(e);
 		}
 		return SUCCESS;
@@ -117,7 +124,7 @@ public class SubscriberAction extends BaseAction{
 		try {
 			List<String> s = subscriberService.queryServiceIdList(input);
 			setSuccess(s);
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			errorHandle(e);
 		}
 		return SUCCESS;
@@ -129,7 +136,7 @@ public class SubscriberAction extends BaseAction{
 		try {
 			Subscriber s = subscriberService.queryDataByServiceId(input);
 			setSuccess(s);
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			errorHandle(e);
 		}
 		return SUCCESS;
@@ -143,11 +150,9 @@ public class SubscriberAction extends BaseAction{
 		try {
 			subscriberService.updateSubscriber(s);
 			setSuccess(s);
-		} catch (SQLException e) {
-			errorHandle(e);
 		} catch (Exception e) {
 			errorHandle(e);
-		}
+		} 
 		return SUCCESS;
 	}
 	
@@ -157,11 +162,9 @@ public class SubscriberAction extends BaseAction{
 		try {
 			List<String> vlns = subscriberService.queryVLN(input);
 			setSuccess(vlns);
-		} catch (SQLException e) {
-			errorHandle(e);
 		} catch (Exception e) {
 			errorHandle(e);
-		}
+		} 
 		return SUCCESS;
 	}
 	
@@ -171,11 +174,9 @@ public class SubscriberAction extends BaseAction{
 		try {
 			List<AddonService> addons = subscriberService.queryAddonService(input);
 			setSuccess(addons);
-		} catch (SQLException e) {
-			errorHandle(e);
 		} catch (Exception e) {
 			errorHandle(e);
-		}
+		} 
 		return SUCCESS;
 	}
 	
@@ -185,8 +186,6 @@ public class SubscriberAction extends BaseAction{
 		try {
 			String status = subscriberService.getGPRSStatus(input);
 			setSuccess(status);
-		} catch (SQLException e) {
-			errorHandle(e);
 		} catch (Exception e) {
 			errorHandle(e);
 		}
@@ -201,5 +200,15 @@ public class SubscriberAction extends BaseAction{
 
 	public void setInput(String input) {
 		this.input = input;
+	}
+
+	public SubscriberService getSubscriberService() {
+		return subscriberService;
+	}
+
+	public void setSubscriberService(SubscriberService subscriberService) {
+		this.subscriberService = subscriberService;
 	}	
+	
+	
 }

@@ -12,6 +12,9 @@
 			<input type="button" class="btn btn-primary btn-sm" ng-click="sCtrl.queryQos()" value="查詢">
 		</div>
 	</div> -->
+	<div>
+		<font color="red">Plan 1：一般用戶(舊) 2：一般用戶 3：華人上網包(香港) 4：華人上網包(香港+大陸)</font>
+	</div>
 	<page-table 
 		tableWidth = "80%" 
 		table-header="qosCtrl.qosHeader" 

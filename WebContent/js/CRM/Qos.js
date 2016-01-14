@@ -23,7 +23,7 @@ angular.module('MainApp')
 		};
 		
 		self.queryQosList = function(msisdn){
-
+			self.qosList = [];
 			if(!msisdn)
 				return ;			
 
@@ -32,7 +32,7 @@ angular.module('MainApp')
 				msisdn = msisdn.substring(msisdn.length-numberSize,msisdn.length);
 			}
 	
-			self.qosMsg = "";
+			self.qosMsg = "查詢中...";
 			AjaxService.query('queryQos',{msisdn:msisdn})
 											
 			.success(function(data, status, headers, config) {  
@@ -42,11 +42,10 @@ angular.module('MainApp')
 					self.qosList=data['data'];
 					//alert("success");
 				}
-				self.qosMsg = "finished!";
 		    }).error(function(data, status, headers, config) {   
 		    	alert("error");
 		    }).then(function(){
-		    	self.qosMsg="finished";
+		    	self.qosMsg="完成!";
 			});
 		};
 		

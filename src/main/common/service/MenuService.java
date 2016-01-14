@@ -5,8 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import main.common.bean.Link;
+import org.springframework.stereotype.Service;
 
+import main.common.bean.Link;
+@Service
 public class MenuService extends BaseService {
 
 	public List<Link> queryManu(String role,String system){

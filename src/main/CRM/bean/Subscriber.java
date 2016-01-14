@@ -34,6 +34,8 @@ public class Subscriber {
 	
 	String seq="";
 	
+	String homeIMSI="";
+	
 	public Subscriber(){
 		
 	}
@@ -76,6 +78,10 @@ public class Subscriber {
 				this.chair = j.getString(name);
 			}else if("chairID".equalsIgnoreCase(name)){
 				this.chairID = j.getString(name);
+			}else if("seq".equalsIgnoreCase(name)){
+				this.seq = j.getString(name);
+			}else if("homeIMSI".equalsIgnoreCase(name)){
+				this.homeIMSI = j.getString(name);
 			}
 		};
 		
@@ -234,6 +240,14 @@ public class Subscriber {
 
 	public void setSeq(String seq) {
 		this.seq = seq;
+	}
+
+	public String getHomeIMSI() {
+		return homeIMSI;
+	}
+
+	public void setHomeIMSI(String homeIMSI) {
+		this.homeIMSI = homeIMSI;
 	}
 
 	

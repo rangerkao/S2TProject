@@ -1,16 +1,17 @@
 package main.CRM.dao;
 
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.stereotype.Repository;
+
 import main.CRM.bean.SubscriberExcel;
 import main.common.dao.BaseDao;
-
+@Repository
 public class ExcelDao extends CRMBaseDao{
 
 	public ExcelDao() throws Exception {
@@ -18,7 +19,7 @@ public class ExcelDao extends CRMBaseDao{
 	}
 
 	//查詢列表
-	public List<Map<String,Object>>  querySubscribers() throws SQLException{
+	public List<Map<String,Object>>  querySubscribers() throws Exception{
 		
 		List<Map<String,Object>> result = new ArrayList<Map<String,Object>>();
 		String sql=
@@ -48,7 +49,7 @@ public class ExcelDao extends CRMBaseDao{
 		SubscriberExcel se = new SubscriberExcel();
 		se.getClass().getFields();
 		try {
-			st = conn.createStatement();
+			st = getConn1().createStatement();
 			rs = st.executeQuery(sql);
 			System.out.println("Execute SQL :"+sql);
 			while(rs.next()){
@@ -81,7 +82,7 @@ public class ExcelDao extends CRMBaseDao{
 			} catch (Exception e) {
 			}
 		}
-		closeConnection();
+		//closeConnection();
 			
 		return result;
 		

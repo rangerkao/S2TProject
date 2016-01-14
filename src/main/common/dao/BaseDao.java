@@ -14,17 +14,32 @@ import main.common.action.CacheAction;
 public class BaseDao {
 
 	protected static Properties props =null;
-	protected Connection conn=null;
-	protected Connection conn2=null;
+	protected static Connection conn=null;
+	protected static Connection conn2=null;
 
 	public BaseDao() throws Exception{
 		props=CacheAction.props;
-		createConnection();
+	}
+	
+	protected Connection getConn1() throws Exception{
+		
+		if(conn==null||conn.isClosed())
+			createConnection();
+		return conn;
+	}
+	protected Connection getConn2() throws Exception{
+		
+		if(conn2==null||conn2.isClosed())
+			createConnection2();
+		return conn2;
 	}
 	protected void createConnection() throws Exception{
 		conn=connectDB();
+		System.out.println("Create connect1!");
+	}
+	protected void createConnection2() throws Exception{
 		conn2=connectDB2();
-		System.out.println("Create connect!");
+		System.out.println("Create connect2!");
 	}
 	protected void closeConnection() throws SQLException{
 		if(conn!=null)

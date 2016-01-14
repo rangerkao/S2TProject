@@ -17,7 +17,7 @@
 		<datepicker-directive selected-value = "smsCtrl.dateTo" ></datepicker-directive> 
 	</div>
 	<div class="col-xs-2" align="right">
-		<button type="button" class="btn btn-primary" ng-click="smsCtrl.querySMSwithTime()">查詢簡訊</button>
+		<button type="button" class="btn btn-primary" ng-click="smsCtrl.querySMSwithTime()" ng-disabled="smsCtrl.buttonDis">查詢簡訊</button>
 	</div>
 	<page-table 
 		table-width = "100%" 

@@ -4,6 +4,8 @@ angular.module('MainApp')
 		
 		$scope.$on('queryDay',function(event,data){
 			self.s2tIMSI=data['s2tIMSI'];
+			self.dataList=[];
+			self.dayMsg="";
 		});
 
 		//-------------data head ---------------------
@@ -21,6 +23,7 @@ angular.module('MainApp')
 		self.dataList=[];
 		
 		self.query = function(imsi){
+			self.dataList =[];
 			if(!imsi){
 				alert("No IMSI!");
 				return;
@@ -35,8 +38,8 @@ angular.module('MainApp')
 				dt=DateFormatString.Format(self.dateTo);
 			
 			console.log(imsi);
-			self.dayMsg = "";
-			self.dataList =[];
+			self.dayMsg = "查詢中...";
+			self.buttonDis = true;
 			AjaxService.query('queryCurrentDay',
 					{	"imsi" : imsi,
 						"from":df,
@@ -50,7 +53,8 @@ angular.module('MainApp')
 		    }).error(function(data, status, headers, config) {   
 		    	alert("Error:");
 		    }).then(function(){
-		    	self.dayMsg = "finished!";
+		    	self.buttonDis = false;
+		    	self.dayMsg = "完成!";
 		    });
 		};
 		

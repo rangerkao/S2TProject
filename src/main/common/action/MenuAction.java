@@ -2,6 +2,8 @@ package main.common.action;
 
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import main.common.bean.Link;
 import main.common.service.MenuService;
 
@@ -12,7 +14,8 @@ public class MenuAction extends BaseAction {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	MenuService menuService = new MenuService();
+	@Resource
+	MenuService menuService;
 	
 	String role;
 	String system;
@@ -37,7 +40,16 @@ public class MenuAction extends BaseAction {
 	public void setSystem(String system) {
 		this.system = system;
 	}
+
+	public MenuService getMenuService() {
+		return menuService;
+	}
+
+	public void setMenuService(MenuService menuService) {
+		this.menuService = menuService;
+	}
 	
 
+	
 	
 }

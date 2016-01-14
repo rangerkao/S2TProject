@@ -22,7 +22,10 @@ public class BaseAction extends ActionSupport implements SessionAware{
 
 	protected static Map<String, Object> session;
 	protected static String result;
+	protected static String needLogin= "{\"error\":\"Please Login First!\"}";
 	
+	public BaseAction(){
+	}
 	
 	public static String setSuccess(Object data){
 		
@@ -78,4 +81,14 @@ public class BaseAction extends ActionSupport implements SessionAware{
 	public void setResult(String result) {
 		this.result = result;
 	}
+
+	public String getNeedLogin() {
+		return needLogin;
+	}
+
+	public void setNeedLogin(String needLogin) {
+		this.needLogin = needLogin;
+	}
+	
+	
 }

@@ -3,6 +3,8 @@ package main.CRM.action;
 import java.sql.SQLException;
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import main.CRM.bean.QosBean;
 import main.CRM.service.QosService;
 import main.common.action.BaseAction;
@@ -21,8 +23,8 @@ public class QosAction extends BaseAction {
 	
 	String imsi;
 	String msisdn;
-	
-	QosService qosService = new QosService();
+	@Resource
+	QosService qosService;
 	
 	public String queryQos(){
 		System.out.println("queryQos");
@@ -38,6 +40,7 @@ public class QosAction extends BaseAction {
 		
 		return SUCCESS;
 	}
+	
 
 	
 	//********************************************************//
@@ -60,5 +63,19 @@ public class QosAction extends BaseAction {
 	public void setMsisdn(String msisdn) {
 		this.msisdn = msisdn;
 	}
+
+
+
+	public QosService getQosService() {
+		return qosService;
+	}
+
+
+
+	public void setQosService(QosService qosService) {
+		this.qosService = qosService;
+	}
+	
+	
 	
 }

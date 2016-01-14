@@ -1,14 +1,15 @@
 package main.CRM.dao;
 
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Repository;
+
 import main.CRM.bean.QosBean;
 
-
+@Repository
 public class QosDao extends CRMBaseDao {
 
 	public QosDao() throws Exception {
@@ -16,7 +17,7 @@ public class QosDao extends CRMBaseDao {
 	}
 
 	//查詢列表
-	public List<QosBean> queryQosList() throws SQLException{
+	public List<QosBean> queryQosList() throws Exception{
 		String sql=
 				"SELECT A.PROVISIONID,A.IMSI,A.MSISDN,A.PLAN,A.ACTION,A.RESPONSE_CODE,A.RESULT_CODE,to_char(A.CERATE_TIME,'yyyyMMdd hh24:mi:ss') ctime "
 				+ "FROM QOS_PROVISION_LOG A ";
@@ -26,7 +27,7 @@ public class QosDao extends CRMBaseDao {
 		Statement st = null;
 		ResultSet rs = null;
 		try {
-			st = conn.createStatement();
+			st = getConn1().createStatement();
 			rs = st.executeQuery(sql);
 			System.out.println("Execute SQL :"+sql);
 			while(rs.next()){
@@ -63,14 +64,14 @@ public class QosDao extends CRMBaseDao {
 			} catch (Exception e) {
 			}
 		}
-		closeConnection();
+		//closeConnection();
 			
 		return list;
 		
 	}
 	
 	//查詢列表
-	public List<QosBean> queryQosList(String imsi,String msisdn) throws SQLException{
+	public List<QosBean> queryQosList(String imsi,String msisdn) throws Exception{
 		String sql=
 				"SELECT A.PROVISIONID,A.IMSI,A.MSISDN,A.PLAN,A.ACTION,A.RESPONSE_CODE,A.RESULT_CODE,to_char(A.CERATE_TIME,'yyyyMMdd hh24:mi:ss') ctime "
 				+ "FROM QOS_PROVISION_LOG A "
@@ -80,7 +81,7 @@ public class QosDao extends CRMBaseDao {
 
 		List<QosBean> list=new ArrayList<QosBean>();
 		
-		Statement st = conn.createStatement();
+		Statement st = getConn1().createStatement();
 		ResultSet rs=st.executeQuery(sql);
 		System.out.println("Execute SQL :"+sql);
 		while(rs.next()){
@@ -112,7 +113,7 @@ public class QosDao extends CRMBaseDao {
 		}
 		st.close();
 		rs.close();
-		closeConnection();
+		//closeConnection();
 		return list;
 		
 	}

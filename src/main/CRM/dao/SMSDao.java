@@ -1,16 +1,17 @@
 package main.CRM.dao;
 
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Repository;
+
 import main.CRM.bean.SMS;
 import main.common.dao.BaseDao;
-
+@Repository
 public class SMSDao extends CRMBaseDao{
 
 	public SMSDao() throws Exception {
@@ -18,7 +19,7 @@ public class SMSDao extends CRMBaseDao{
 	}
 	
 	
-	public List<SMS> querySMS(String S2TMSISDN,String CHTMSISDN,String startDate,String endDate) throws SQLException, ParseException{
+	public List<SMS> querySMS(String S2TMSISDN,String CHTMSISDN,String startDate,String endDate) throws Exception, ParseException{
 		
 		
 		
@@ -35,8 +36,8 @@ public class SMSDao extends CRMBaseDao{
 		ResultSet rs = null;
 
 		try {
-			st = conn.createStatement();
-			st2 = conn2.createStatement();
+			st = getConn1().createStatement();
+			st2 = getConn2().createStatement();
 			
 			String sql = "SELECT SCLASS,SEND_NUMBER,MSG,TO_CHAR(SENDTIME,'yyyyMMddhh24miss') SENDTIME "
 					+ "FROM( "
@@ -48,7 +49,7 @@ public class SMSDao extends CRMBaseDao{
 					+ "		FROM S2T_BL_SMS_LOG A "
 					+ "		WHERE A.PHONENUMBER = '"+CHTMSISDN+"' "
 					+ "		UNION "
-					+ "		SELECT 'ARRIVED' SCLASS,A.PHONENUMBER SEND_NUMBER,A.CONTENT MSG,A.CREATETIME SENDTIME "
+					+ "		SELECT 'Landing' SCLASS,A.PHONENUMBER SEND_NUMBER,A.CONTENT MSG,A.CREATETIME SENDTIME "
 					+ "		FROM S2T_BL_SMS_LOG A "
 					+ "		WHERE A.PHONENUMBER = '"+S2TMSISDN+"' "
 					+ ") "
@@ -72,19 +73,19 @@ public class SMSDao extends CRMBaseDao{
 			
 			sql = "SELECT SCLASS,SEND_NUMBER,MSG,TO_CHAR(SENDTIME,'yyyyMMddhh24miss') SENDTIME "
 					+ "FROM( "
-					+ "		SELECT 'MSSENDINGTASK' SCLASS,A.SERVICECODE SEND_NUMBER,A.MSGCONTENT MSG,A.LASTSUCCESSTIME SENDTIME "
+					+ "		SELECT 'LocalNumber' SCLASS,A.SERVICECODE SEND_NUMBER,A.MSGCONTENT MSG,A.LASTSUCCESSTIME SENDTIME "
 					+ "		FROM MSSENDINGTASK A "
 					+ "		WHERE A.SERVICECODE = '"+S2TMSISDN+"' "
 					+ "		UNION "
-					+ "		SELECT 'MSSENDINGTASK' SCLASS,A.SERVICECODE SEND_NUMBER,A.MSGCONTENT MSG,A.LASTSUCCESSTIME SENDTIME "
+					+ "		SELECT 'LocalNumber' SCLASS,A.SERVICECODE SEND_NUMBER,A.MSGCONTENT MSG,A.LASTSUCCESSTIME SENDTIME "
 					+ "		FROM MSSENDINGTASK A "
 					+ "		WHERE A.SERVICECODE = '"+CHTMSISDN+"' "
 					+ "		UNION "
-					+ "		SELECT 'MESSAGETASK' SCLASS,A.SERVICECODE SEND_NUMBER,A.MSGCONTENT MSG,A.LASTSUCCESSTIME SENDTIME "
+					+ "		SELECT 'LocalNumber' SCLASS,A.SERVICECODE SEND_NUMBER,A.MSGCONTENT MSG,A.LASTSUCCESSTIME SENDTIME "
 					+ "		FROM MESSAGETASK A "
 					+ "		WHERE A.SERVICECODE = '"+S2TMSISDN+"' "
 					+ "		UNION "
-					+ "		SELECT 'MESSAGETASK' SCLASS,A.SERVICECODE SEND_NUMBER,A.MSGCONTENT MSG,A.LASTSUCCESSTIME SENDTIME "
+					+ "		SELECT 'LocalNumber' SCLASS,A.SERVICECODE SEND_NUMBER,A.MSGCONTENT MSG,A.LASTSUCCESSTIME SENDTIME "
 					+ "		FROM MESSAGETASK A "
 					+ "		WHERE A.SERVICECODE = '"+CHTMSISDN+"' "
 					+ ") "
@@ -118,7 +119,7 @@ public class SMSDao extends CRMBaseDao{
 			}
 		}
 
-		closeConnection();
+		//closeConnection();
 		return result;
 		
 	}

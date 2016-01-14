@@ -25,6 +25,8 @@
 		<input type="text" name="reportColHead">
 		<input type="text" name="reportName">
 	</form>
+	<form action="createSubscribersExcel" method="post" target="sub_iframe" id="reportFrom2" style="display: none;">
+	</form>
 	<iframe name="sub_iframe" width="0" height="0" style="display: none;"></iframe>
 
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
@@ -67,6 +69,9 @@
 			$("[name='reportColHead']").val(encodeURI(JSON.stringify(head)));
 			$("[name='reportName']").val(encodeURI(JSON.stringify(name)));
 			$("#reportFrom").submit();	
+		}
+		function createExcel2(){
+			$("#reportFrom2").submit();	
 		}
 	</script>
 	

@@ -3,7 +3,7 @@
 	<div class="row max_height" align="center">
 		<h4>{{tab.title}}({{dCtrl.rateMsg}})</h4>
 		<div class="col-xs-12"> 
-			<a class="btn btn-success btn-xs" ng-click="dCtrl.downLoadExcel()">download excel</a>
+			<button class="btn btn-success btn-xs" ng-click="dCtrl.downLoadExcel()" ng-disabled="dCtrl.buttonDis">download exce</button>
 		</div>
 		<page-table 
 			table-header="dCtrl.dataHeader" 

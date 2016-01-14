@@ -1,16 +1,18 @@
 package main.CRM.service;
 
-import java.sql.SQLException;
-import java.text.ParseException;
 import java.util.List;
 
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
+
 import main.CRM.bean.AddonService;
-import main.CRM.bean.SMS;
 import main.CRM.bean.Subscriber;
 import main.CRM.dao.SubscriberDao;
 import main.common.service.BaseService;
-
-public class SubscriberService extends BaseService {
+@Service
+public class SubscriberService extends BaseService{
 	
 	
 	public SubscriberService() throws Exception {
@@ -18,49 +20,57 @@ public class SubscriberService extends BaseService {
 		// TODO Auto-generated constructor stub
 	}
 
-	SubscriberDao subscriberDao = new SubscriberDao();
+	@Resource
+	SubscriberDao subscriberDao ;
 	
-	public List<Subscriber> queryListById(String id) throws SQLException{
+	
+	public List<Subscriber> queryListById(String id) throws Exception{
 		List<Subscriber> result = null;
 		result = subscriberDao.queryListById(id);
 		return result;
 	}
 	
-	public List<Subscriber> queryListByName(String name) throws SQLException{
+	public List<Subscriber> queryListByName(String name) throws Exception{
 		List<Subscriber> result = null;
 		result = subscriberDao.queryListByName(name);
 		return result;
 	}
 	
-	public List<Subscriber> queryListByVLN(String VLN) throws SQLException{
+	public List<Subscriber> queryListByVLN(String VLN) throws Exception{
 		List<Subscriber> result = null;
 		result = subscriberDao.queryListByVLN(VLN);
 		return result;
 	}
 	
-	public List<Subscriber> queryListByS2tMisidn(String s2tMsisdn) throws SQLException{
+	public List<Subscriber> queryListByS2tMisidn(String s2tMsisdn) throws Exception{
 		List<Subscriber> result = null;
 		result = subscriberDao.queryListByS2tMisidn(s2tMsisdn);
 		return result;
 	}
 	
-	public List<Subscriber> queryListByChtMsisdn(String chtMsisdn) throws SQLException{
+	public List<Subscriber> queryListByChtMsisdn(String chtMsisdn) throws Exception{
 		List<Subscriber> result = null;
 		result = subscriberDao.queryListByChtMsisdn(chtMsisdn);
 		return result;
 	}
 	
-	public Subscriber queryDataById(String id) throws SQLException{
+	public List<Subscriber> queryListByMainMsisdn(String chtMsisdn) throws Exception{
+		List<Subscriber> result = null;
+		result = subscriberDao.queryListByChtMsisdn(chtMsisdn);
+		return result;
+	}
+	
+	public Subscriber queryDataById(String id) throws Exception{
 		Subscriber result = null;
 		result = subscriberDao.queryDataById(id);
 		return result;
 	}
 	
-	public List<String> queryServiceIdList(String id) throws SQLException{
+	public List<String> queryServiceIdList(String id) throws Exception{
 		return subscriberDao.queryServiceIdList(id);
 	}
 	
-	public Subscriber queryDataByServiceId(String id) throws SQLException{
+	public Subscriber queryDataByServiceId(String id) throws Exception{
 		return subscriberDao.queryDataByServiceId(id);
 	}
 	
@@ -76,7 +86,17 @@ public class SubscriberService extends BaseService {
 		return subscriberDao.queryAddonService(serviceId);
 	}
 	
-	public String getGPRSStatus(String msisdn) throws SQLException{
+	public String getGPRSStatus(String msisdn) throws Exception{
 		return subscriberDao.getGPRSStatus(msisdn);
 	}
+
+	
+	
+	protected SubscriberDao getSubscriberDao() {
+		return subscriberDao;
+	}
+	protected void setSubscriberDao(SubscriberDao subscriberDao) {
+		this.subscriberDao = subscriberDao;
+	}	
+	
 }

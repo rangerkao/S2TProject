@@ -40,8 +40,8 @@
             <result name="success" type="tiles">login</result>
 		</action>
 		<action name="login" class="main.common.action.LoginAction" method="login">
-            <!-- <result name="success" type="tiles">systemMenu</result> -->
-            <result name="success" type="tiles">CRM_welcome</result>
+            <result name="success" type="tiles">systemMenu</result>
+            <!-- <result name="success" type="tiles">CRM_welcome</result> -->
             <result name="error" type="tiles">login</result>
 		</action>
 		<action name="*System" class="main.common.action.SystemMenuAction" method="{1}" >

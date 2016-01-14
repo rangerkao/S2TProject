@@ -29,7 +29,8 @@ angular.module('MainApp')
 			
 			if(!s2tMsisdn && !chtMsisdn)
 				return;
-			
+			self.smsMsg = "查詢中...";
+			self.buttonDis = true;
 			//alert("s2tMsisdn:"+s2tMsisdn+",chtMsisdn:"+chtMsisdn+",startDate:"+startDate+",endDate:"+endDate);
 			AjaxService.query('querySMS',{	s2tMsisdn:s2tMsisdn,
 											chtMsisdn:chtMsisdn,
@@ -46,7 +47,8 @@ angular.module('MainApp')
 		    }).error(function(data, status, headers, config) {   
 		    	alert("error");
 		    }).then(function(){
-		    	self.smsMsg = "finished!";
+		    	self.buttonDis = false;
+		    	self.smsMsg = "完成!";
 			});;
 		};
 	}]);

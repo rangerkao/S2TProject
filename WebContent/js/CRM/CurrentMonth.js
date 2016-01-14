@@ -4,6 +4,7 @@ angular.module('MainApp')
 		
 		$scope.$on('queryMonth',function(event,data){
 			self.s2tIMSI=data['s2tIMSI'];
+			self.dataList=[];
 		});
 		
 		var now = new Date();
@@ -42,10 +43,11 @@ angular.module('MainApp')
 		                  	{name:"最後警示額度",col:"lastAlertThreshold",_width:"8%"},
 		                  	{name:"最後警示流量(byte)",col:"lastAlertVolume",_width:"8%"}];
 		self.queryCurrentMonth = function(imsi){
+			self.monthDataList =[];
 			if(!imsi || imsi=='')
 				return;
-			self.monMsg = "";
-			self.monthDataList =[];
+			self.monMsg = "查詢中...";
+			self.buttonDis = true;
 			AjaxService.query('queryCurrentMonth',
 					{	"from":self.fy+""+self.fm,
 						"to":self.ty+""+self.tm,
@@ -61,7 +63,8 @@ angular.module('MainApp')
 		    }).error(function(data, status, headers, config) {   
 		    	alert("Error:");
 		    }).then(function(){
-		    	self.monMsg = "finished!"
+		    	self.buttonDis = false;
+		    	self.monMsg = "完成!"
 		    });
 		};
 		

@@ -19,7 +19,7 @@ angular.module('MainApp')
 		self.queryAppList = function(serviceId){
 			if(!serviceId)
 				return ;
-			
+			self.appMsg = "查詢中...";
 			self.appList = [];
 			AjaxService.query('queryAppByServiceId',{	serviceid:serviceId})				
 			.success(function(data, status, headers, config) {  
@@ -29,18 +29,17 @@ angular.module('MainApp')
 					self.appList=data['data'];
 					//alert("success");
 				}
-				self.appMsg = "finished!";
 		    }).error(function(data, status, headers, config) {   
 		    	alert("error");
 		    }).then(function(){
-		    	self.appMsg = "finished!";
+		    	self.appMsg = "完成!";
 		    });
 		};
 		
 		self.insertApp = function(type){
 			if(!self.serviceId)
 				return;
-			
+			self.buttonDis = true;
 			AjaxService.query('insertNew',{	serviceid:self.serviceId,type:type})				
 			.success(function(data, status, headers, config) {  
 				if(data['error']){
@@ -53,7 +52,7 @@ angular.module('MainApp')
 		    }).error(function(data, status, headers, config) {   
 		    	alert("error");
 		    }).then(function(){
-		    	self.appMsg = "finished!";
+		    	self.buttonDis = false;
 		    });
 		};	
 	}]);

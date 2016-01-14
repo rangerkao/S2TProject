@@ -1,14 +1,17 @@
 package main.CRM.dao;
 
+import java.io.UnsupportedEncodingException;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Repository;
+
 import main.CRM.bean.AddonService;
 import main.CRM.bean.Subscriber;
 
+@Repository
 public class SubscriberDao extends CRMBaseDao{
 
 	public SubscriberDao() throws Exception {
@@ -16,40 +19,46 @@ public class SubscriberDao extends CRMBaseDao{
 	}
 
 	//select ID and data
-	public List<Subscriber> queryListById(String id) throws SQLException{
+	public List<Subscriber> queryListById(String id) throws Exception{
 		List<Subscriber> result = new ArrayList<Subscriber>();
 		try{
 			result = queryList("AND A.SUBS_ID_TAXID='"+id+"' ");
 		}finally{
-			closeConnection();
+			//closeConnection();
 		}
 		return result;
 	}
 	
-	public List<Subscriber> queryListByName(String name) throws SQLException{
+	public List<Subscriber> queryListByName(String name) throws Exception{
 		List<Subscriber> result = new ArrayList<Subscriber>();
+		try {
+			System.out.println(name+";"+new String(name.getBytes("BIG5"),"ISO-8859-1")+";"+new String("迷稱".getBytes("BIG5"),"ISO-8859-1"));
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		try{
 			result = queryList("AND A.SUBS_NAME Like '%"+processEncodeData(name,"BIG5","ISO-8859-1")+"%' ");
 		}finally{
-			closeConnection();
+			//closeConnection();
 		}
 		return result;
 	}
 	
-	public List<Subscriber> queryListByVLN(String VLN) throws SQLException{
+	public List<Subscriber> queryListByVLN(String VLN) throws Exception{
 		List<Subscriber> result = new ArrayList<Subscriber>();
 		
 		ResultSet rs = null;
 		Statement st = null;
 		
-		String sql = "SELECT A.SERVICEID, A.FOLLOWMENUMBER "
-				+ "FROM FOLLOWMEDATA A "
-				+ "WHERE A.FOLLOWMENUMBER = '"+VLN+"' ";
+		String sql = "SELECT A.SERVICEID, A.VLN "
+				+ "FROM VLNNUMBER A "
+				+ "WHERE A.VLN = '"+VLN+"' ";
 		String serviceId = null;
 
 		try{
 
-			st = conn.createStatement();
+			st = getConn1().createStatement();
 			System.out.println("query List:"+sql);
 			rs = st.executeQuery(sql);
 			
@@ -69,14 +78,14 @@ public class SubscriberDao extends CRMBaseDao{
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			closeConnection();
+			//closeConnection();
 		}
 		
 		
 		return result;
 	}
 	
-	public List<Subscriber> queryListByS2tMisidn(String s2tMsisdn) throws SQLException{
+	public List<Subscriber> queryListByS2tMisidn(String s2tMsisdn) throws Exception{
 		List<Subscriber> result = new ArrayList<Subscriber>();
 
 		try{
@@ -87,12 +96,12 @@ public class SubscriberDao extends CRMBaseDao{
 				result.add(s);
 			}
 		}finally{
-			closeConnection();
+			//closeConnection();
 		}
 		return result;
 	}
 	
-	public List<Subscriber> queryListByChtMsisdn(String chtMsisdn) throws SQLException{
+	public List<Subscriber> queryListByChtMsisdn(String chtMsisdn) throws Exception{
 		List<Subscriber> result = new ArrayList<Subscriber>();
 		
 		try{
@@ -103,31 +112,71 @@ public class SubscriberDao extends CRMBaseDao{
 				result.add(s);
 			}
 		}finally{
-			closeConnection();
+			//closeConnection();
 		}
+		return result;
+	}
+	
+	public List<Subscriber> queryListByMainMsisdn(String mainMsisdn) throws Exception{
+		List<Subscriber> result = new ArrayList<Subscriber>();
+		
+		ResultSet rs = null;
+		Statement st = null;
+		
+		String sql = "SELECT A.SERVICEID,A.VALUE "
+				+ "FROM PARAMETERVALUE A "
+				+ "WHERE A.VALUE = '"+mainMsisdn+"' ";
+		String serviceId = null;
+
+		try{
+
+			st = getConn1().createStatement();
+			System.out.println("query List:"+sql);
+			rs = st.executeQuery(sql);
+			
+			while(rs.next()){
+				serviceId = rs.getString("SERVICEID");
+			}
+			
+			if(serviceId != null)
+				result = queryList("AND B.SERVICEID = '"+serviceId+"' ");
+
+		}finally{
+			try {
+				if(st!=null)
+					st.close();
+				if(rs!=null)
+					rs.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			//closeConnection();
+		}
+		
+		
 		return result;
 	}
 	
 	
 	
-	private List<Subscriber> queryList(String condition) throws SQLException{
+	private List<Subscriber> queryList(String condition) throws Exception{
 		List<Subscriber> result = new ArrayList<Subscriber>();
 
 		String sql = "SELECT A.SUBS_ID_TAXID ID,A.SUBS_NAME,A.SUBS_PERMANENT_ADDRESS, "
 				+ "(CASE C.STATUS WHEN '1' THEN 'normal'  WHEN '3' THEN 'suspended' WHEN '4' THEN 'terminated' WHEN '10' THEN 'waiting' ELSE 'else' END) STAUS, "
 				+ "B. SERVICEID,C. SERVICECODE S2TMSISDN,C.PRICEPLANID,D.FOLLOWMENUMBER CHTMSISDN,C.DATEACTIVATED,C.DATECANCELED  "
 				+ "FROM CRM_SUBSCRIBERS A,CRM_SUBSCRIPTION B ,SERVICE C,FOLLOWMEDATA D "
-				+ "WHERE A.SUBS_ID_TAXID = B.SUBS_ID_TAXID "
-				+ "AND B.SERVICEID= TO_CHAR(C.SERVICEID) " 
-				+ "AND B.SERVICEID = TO_CHAR(D.SERVICEID) " 
-				+ "AND D.FOLLOWMENUMBER LIKE '886%' "
+				+ "WHERE A.SEQ = B.SEQ(+) "
+				+ "AND B.SERVICEID= C.SERVICEID(+) "
+				+ "AND B.SERVICEID = D.SERVICEID(+) "
+				+ "AND D.FOLLOWMENUMBER(+)  LIKE '886%' "
 				+ " "+condition+" " ;
 		
 		Statement st = null ;
 		ResultSet rs = null ;
 		
 		try{
-			st = conn.createStatement();
+			st = getConn1().createStatement();
 			System.out.println("query List:"+sql);
 			rs = st.executeQuery(sql);
 			
@@ -157,16 +206,16 @@ public class SubscriberDao extends CRMBaseDao{
 		return result;
 	}
 	
-	public List<String> queryServiceIdList(String id) throws SQLException{
+	public List<String> queryServiceIdList(String id) throws Exception{
 		List<String> result = new ArrayList<String>();
 		
-		String sql = "SELECT A.SERVICEID,A.SUBS_ID_TAXID FROM CRM_SUBSCRIPTION A WHERE A.SUBS_ID_TAXID = '"+id+"'";
+		String sql = "SELECT A.SERVICEID,A.SEQ FROM CRM_SUBSCRIPTION A WHERE A.SEQ = '"+id+"'";
 		
 		Statement st = null ;
 		ResultSet rs = null ;
 		
 		try{
-			st = conn.createStatement();
+			st = getConn1().createStatement();
 			rs = st.executeQuery(sql);
 			
 			while(rs.next()){
@@ -181,23 +230,23 @@ public class SubscriberDao extends CRMBaseDao{
 					st.close();
 			} catch (Exception e) {
 			}
-			closeConnection();
+			//closeConnection();
 		}
 		return result;
 	}
 	
 	//select all data
-	public Subscriber queryDataById(String id) throws SQLException{
+	public Subscriber queryDataById(String id) throws Exception{
 		Subscriber result = new Subscriber(); 
-		
-		String sql = "SELECT A.SUBS_ID_TAXID ID,A.SUBS_NAME,A.SUBS_BIRTHDAY,A.SUBS_PHONE,A.SUBS_EMAIL,A.SEQ "
+		//Main by customer data
+		String sql = "SELECT A.SUBS_ID_TAXID ID,A.SUBS_NAME,A.SUBS_BIRTHDAY,A.SUBS_PHONE,A.SUBS_EMAIL,A.SEQ,F.HOMEIMSI, "
 				+ "(CASE C.STATUS WHEN '1' THEN 'normal'  WHEN '3' THEN 'suspended' WHEN '4' THEN 'terminated' WHEN '10' THEN 'waiting' ELSE 'else' END) STAUS, "
 				+ "A.SUBS_PERMANENT_ADDRESS,A.SUBS_BILLING_ADDRESS,A.AGENCY_ID,A.REMARK,C.DATEACTIVATED,C.DATECANCELED, "
 				+ "to_char(A.CREATETIME,'yyy/MM/dd hh24:mi:ss') CREATETIME,to_char(A.UPDATETIME,'yyy/MM/dd hh24:mi:ss') UPDATETIME, "
 				+ "A.SUBS_TYPE,B. SERVICEID,C. SERVICECODE S2TMSISDN,C.PRICEPLANID,F.IMSI,D.FOLLOWMENUMBER CHTMSISDN,E.CHAIRMAN,E.CHAIRMAN_ID "
 				+ "FROM CRM_SUBSCRIBERS A,CRM_SUBSCRIPTION B ,SERVICE C,FOLLOWMEDATA  D,CRM_CHAIRMAN E,IMSI F "
 				+ "WHERE A.SEQ = B.SEQ "
-				+ "AND B.SERVICEID = TO_CHAR(C.SERVICEID) "
+				+ "AND B.SERVICEID = C.SERVICEID "
 				+ "AND C.SERVICEID= D.SERVICEID(+) "
 				+ "AND A.SEQ = E.SEQ(+) AND C.SERVICEID = F.SERVICEID(+) "
 				+ "AND D.FOLLOWMENUMBER LIKE '886%' "
@@ -209,8 +258,8 @@ public class SubscriberDao extends CRMBaseDao{
 		
 		try {
 			
-			st = conn.createStatement();
-			st2 = conn2.createStatement();
+			st = getConn1().createStatement();
+			st2 = getConn2().createStatement();
 			System.out.println("query data by id:"+sql);
 			rs = st.executeQuery(sql);
 			
@@ -242,6 +291,8 @@ public class SubscriberDao extends CRMBaseDao{
 				result.setActivatedDate(rs.getString("DATEACTIVATED"));
 				result.setCanceledDate(rs.getString("DATECANCELED"));
 				result.setSeq(rs.getString("SEQ"));
+				
+				result.setHomeIMSI(rs.getString("HOMEIMSI"));
 			}
 		} finally{
 			try {
@@ -253,26 +304,29 @@ public class SubscriberDao extends CRMBaseDao{
 					st2.close();
 			} catch (Exception e) {
 			}
-			closeConnection();
+			//closeConnection();
 		}
 		return result;
 	}
 	
-	public Subscriber queryDataByServiceId(String id) throws SQLException{
+	public Subscriber queryDataByServiceId(String id) throws Exception{
 		Subscriber result = new Subscriber(); 
 
-		String sql = "SELECT A.SUBS_ID_TAXID ID,A.SUBS_NAME,A.SUBS_BIRTHDAY,A.SUBS_PHONE,A.SUBS_EMAIL,A.SEQ "
+		//main by serviceid s2tnumber followNumber
+		String sql = "SELECT A.SUBS_ID_TAXID ID,A.SUBS_NAME,A.SUBS_BIRTHDAY,A.SUBS_PHONE,A.SUBS_EMAIL,A.SEQ,F.HOMEIMSI, "
 				+ "(CASE C.STATUS WHEN '1' THEN 'normal'  WHEN '3' THEN 'suspended' WHEN '4' THEN 'terminated' WHEN '10' THEN 'waiting' ELSE 'else' END) STAUS, "
 				+ "A.SUBS_PERMANENT_ADDRESS,A.SUBS_BILLING_ADDRESS,A.AGENCY_ID,A.REMARK,C.DATEACTIVATED,C.DATECANCELED, "
 				+ "to_char(A.CREATETIME,'yyy/MM/dd hh24:mi:ss') CREATETIME,to_char(A.UPDATETIME,'yyy/MM/dd hh24:mi:ss') UPDATETIME, "
-				+ "A.SUBS_TYPE,B. SERVICEID,C. SERVICECODE S2TMSISDN,C.PRICEPLANID,F.IMSI,D.FOLLOWMENUMBER CHTMSISDN,E.CHAIRMAN,E.CHAIRMAN_ID "
+				+ "A.SUBS_TYPE,C. SERVICEID,C. SERVICECODE S2TMSISDN,C.PRICEPLANID,F.IMSI,D.FOLLOWMENUMBER CHTMSISDN,E.CHAIRMAN,E.CHAIRMAN_ID "
 				+ "FROM CRM_SUBSCRIBERS A,CRM_SUBSCRIPTION B ,SERVICE C,FOLLOWMEDATA  D,CRM_CHAIRMAN E,IMSI F "
-				+ "WHERE A.SEQ = B.SEQ "
-				+ "AND B.SERVICEID = TO_CHAR(C.SERVICEID) "
+				+ "WHERE A.SEQ(+) = B.SEQ "
+				+ "AND B.SERVICEID(+) = C.SERVICEID "
+				+ "AND A.SEQ = E.SEQ(+) "
 				+ "AND C.SERVICEID= D.SERVICEID(+) "
-				+ "AND A.SEQ = E.SEQ(+) AND C.SERVICEID = F.SERVICEID(+) "
-				+ "AND D.FOLLOWMENUMBER LIKE '886%' "
-				+ "AND B.SERVICEID='"+id+"' ";
+				+ "AND D.FOLLOWMENUMBER(+) LIKE '886%'  "
+				+ "AND C.SERVICEID = F.SERVICEID(+) "
+				+ "AND C.SERVICEID='"+id+"' "; 
+
 				
 		Statement st = null;
 		Statement st2 = null;
@@ -280,8 +334,8 @@ public class SubscriberDao extends CRMBaseDao{
 		
 		try {
 			
-			st = conn.createStatement();
-			st2 = conn2.createStatement();
+			st = getConn1().createStatement();
+			st2 = getConn2().createStatement();
 			System.out.println("query data by service id:"+sql);
 			rs = st.executeQuery(sql);
 			
@@ -313,6 +367,8 @@ public class SubscriberDao extends CRMBaseDao{
 				result.setActivatedDate(rs.getString("DATEACTIVATED"));
 				result.setCanceledDate(rs.getString("DATECANCELED"));
 				result.setSeq(rs.getString("SEQ"));
+				
+				result.setHomeIMSI(rs.getString("HOMEIMSI"));
 			}
 		} finally{
 			try {
@@ -324,7 +380,7 @@ public class SubscriberDao extends CRMBaseDao{
 					st2.close();
 			} catch (Exception e) {
 			}
-			closeConnection();
+			//closeConnection();
 		}
 		return result;
 	}
@@ -332,21 +388,19 @@ public class SubscriberDao extends CRMBaseDao{
 	public boolean insertSubscriber(Subscriber s) throws Exception{
 		boolean result = false;
 		
-		
 		Statement st = null;
 		
 		try {
 
-			st = conn.createStatement();
+			st = getConn1().createStatement();
 			
-			String sql3 = "SELECT CRM_SEQ.NEXVAL SEQ "
+			String sql3 = "SELECT CRM_SEQ.NEXTVAL SEQ "
 					+ "FROM DUAL ";
 			System.out.println("sql3:"+sql3);
 			ResultSet rs = st.executeQuery(sql3);
-			String seq = null;
 			
 			while(rs.next()){
-				seq = rs.getString("SEQ");
+				s.setSeq(rs.getString("SEQ"));
 			}
 
 			String sql = "INSERT INTO "
@@ -357,29 +411,13 @@ public class SubscriberDao extends CRMBaseDao{
 					+ "VALUES("
 					+ "'"+s.getName()+"','"+s.getBirthday()+"','"+s.getIdTaxid()+"','"+s.getPhone()+"','"+s.getEmail()+"',"
 					+ "'"+s.getPermanentAddress()+"','"+s.getBillingAddress()+"','"+s.getAgency()+"','"+s.getRemark()+"',"
-					+ "sysdate,'"+s.getType()+"','"+seq+"') ";
-			
-			String sql2 = "INSERT INTO "
-					+ "CRM_SUBSCRIPTION("
-					+ "SERVICEID,SEQ,CREATETIME) "
-					+ "VALUES("
-					+ "'"+s.getServiceId()+"','"+seq+"',sysdate) ";
-			
-			
+					+ "sysdate,'"+s.getType()+"','"+s.getSeq()+"') ";
 			System.out.println("sql:"+sql);
-			int eRow1 = st.executeUpdate(sql);
-			System.out.println("sql2:"+sql2);
-			int eRow2 = st.executeUpdate(sql2);
-			
-			int eRow3 = 0;
-			if("E".equalsIgnoreCase(s.getType()))
-				eRow3 = insertChairMain(s);
-			else
-				eRow3 = 1;
-			
-			if(eRow1 != 1 || eRow2 != 1 || eRow3 != 1){
-				throw new Exception("Update data fail!");
-			}
+			int eRow = st.executeUpdate(new String(sql.getBytes("BIG5"),"ISO-8859-1"));
+
+			if(eRow!=1)
+				throw new Exception("Update data fail! InsertSubscriber "+eRow);
+			updateSubscription(s);
 			result = true;
 		}finally{
 			try {
@@ -389,6 +427,80 @@ public class SubscriberDao extends CRMBaseDao{
 			}
 		}	
 		return result;
+	}
+	
+	public boolean insertSubscription(Subscriber s) throws Exception{
+		
+		Statement st = null;
+		boolean result = false;
+		try {
+
+			st = getConn1().createStatement();
+			
+			String sql = "INSERT INTO "
+					+ "CRM_SUBSCRIPTION("
+					+ "SERVICEID,SEQ,CREATETIME) "
+					+ "VALUES("
+					+ "'"+s.getServiceId()+"','"+s.getSeq()+"',sysdate) ";
+			
+			System.out.println("sql:"+sql);
+			int eRow = st.executeUpdate(new String(sql.getBytes("BIG5"),"ISO-8859-1"));
+			
+			if(eRow!=1)
+				throw new Exception("Update data fail! inserted Subscription "+eRow);
+			
+			result = true;
+		}finally{
+			try {
+				if(st!=null)
+					st.close();
+			} catch (Exception e) {
+			}
+		}
+		return result;	
+		
+		
+	}
+	
+	public boolean updateSubscription(Subscriber s) throws Exception{
+		
+		
+		boolean result = false;
+		
+		Statement st = null;
+		try {
+
+			st = getConn1().createStatement();
+
+			String sql = "UPDATE CRM_SUBSCRIPTION A "
+					+ "SET A.SEQ = '"+s.getSeq()+"',A.UPDATETIME = SYSDATE "
+					+ "WHERE A.SERVICEID = '"+s.getServiceId()+"'";
+			
+			System.out.println("sql:"+sql);
+			int eRow = st.executeUpdate(sql);
+			
+			if(eRow>1)
+				throw new Exception("Update data fail! updated Subscription "+eRow);
+			else if(eRow==0)
+				insertSubscription(s);
+			
+			if("E".equalsIgnoreCase(s.getType())){
+				updateChairMain(s);
+			}else if("P".equalsIgnoreCase(s.getType())){
+				deleteChairMain(s);
+			}
+			
+			
+			result = true;
+		}finally{
+			try {
+				if(st!=null)
+					st.close();
+			} catch (Exception e) {
+			}
+		}
+		return result;	
+		
 	}
 	
 	public int insertChairMain(Subscriber s) throws Exception{
@@ -402,9 +514,9 @@ public class SubscriberDao extends CRMBaseDao{
 		Statement st = null;
 		
 		try {
-			st = conn.createStatement();
+			st = getConn1().createStatement();
 			System.out.println("sql:"+sql);
-			result = st.executeUpdate(sql);
+			result = st.executeUpdate(new String(sql.getBytes("BIG5"),"ISO-8859-1"));
 
 		}finally{
 			try {
@@ -416,8 +528,39 @@ public class SubscriberDao extends CRMBaseDao{
 		return result;
 	}
 	
-	public int deleteChairMain(Subscriber s) throws Exception{
-		int result = 0;
+	public boolean updateChairMain(Subscriber s) throws Exception{
+		boolean result = false;
+		
+		
+		String sql = "UPDATE CRM_CHAIRMAN A "
+				+ "SET A.CHAIRMAN = '"+s.getChair()+"', A.CHAIRMAN_ID = '"+s.getChairID()+"' "
+				+ "WHERE A.SEQ = '"+s.getSeq()+"'";
+		
+		
+		Statement st = null;
+		
+		try {
+			st = getConn1().createStatement();
+			System.out.println("sql:"+sql);
+			int eRow = st.executeUpdate(new String(sql.getBytes("BIG5"),"ISO-8859-1"));
+			if(eRow>1)
+				throw new Exception("Update data fail! updated ChairMain "+eRow);
+			else if(eRow==0)
+				insertChairMain(s);
+			
+			result = true;
+		}finally{
+			try {
+				if(st!=null)
+					st.close();
+			} catch (Exception e) {
+			}
+		}	
+		return result;
+	}
+	
+	public boolean deleteChairMain(Subscriber s) throws Exception{
+		boolean result = false;
 		
 		
 		String sql = "DELETE CRM_CHAIRMAN A "
@@ -427,9 +570,10 @@ public class SubscriberDao extends CRMBaseDao{
 		Statement st = null;
 		
 		try {
-			st = conn.createStatement();
+			st = getConn1().createStatement();
 			System.out.println("sql:"+sql);
-			result = st.executeUpdate(sql);
+			int eRow = st.executeUpdate(sql);
+			result = true;
 
 		}finally{
 			try {
@@ -444,37 +588,31 @@ public class SubscriberDao extends CRMBaseDao{
 	public boolean updateSubscriber(Subscriber s) throws Exception{
 		boolean result = false;
 		String sql = "UPDATE CRM_SUBSCRIBERS A "
-				+ "SET A.SUBS_NAME='"+s.getName()+"',A.SUBS_BIRTHDAY='"+s.getBirthday()+"',"
-				+ "A.SUBS_PHONE='"+s.getPhone()+"',A.SUBS_EMAIL='"+s.getEmail()+"',"
-				+ "A.SUBS_PERMANENT_ADDRESS='"+s.getPermanentAddress()+"',A.SUBS_BILLING_ADDRESS='"+s.getBillingAddress()+"',"
-				+ "A.AGENCY_ID='"+s.getAgency()+"',A.REMARK='"+s.getRemark()+"',A.UPDATETIME=SYSDATE ,A.SUBS_TYPE = '"+s.getType()+"'"
+				+ "SET A.SUBS_NAME='"+s.getName()+"',A.SUBS_BIRTHDAY='"+s.getBirthday()+"', "
+				+ "A.SUBS_PHONE='"+s.getPhone()+"',A.SUBS_EMAIL='"+s.getEmail()+"', "
+				+ "A.SUBS_PERMANENT_ADDRESS='"+s.getPermanentAddress()+"',A.SUBS_BILLING_ADDRESS='"+s.getBillingAddress()+"', "
+				+ "A.AGENCY_ID='"+s.getAgency()+"',A.REMARK='"+s.getRemark()+"',A.UPDATETIME=SYSDATE ,A.SUBS_TYPE = '"+s.getType()+"' "
 				+ "WHERE A.SEQ ='"+s.getSeq()+"'";
-		
-		String sql2 = "UPDATE CRM_CHAIRMAN A "
-				+ "SET A.CHAIRMAN = '"+s.getChair()+"', A.CHAIRMAN_ID = '"+s.getChairID()+"' "
-				+ "WHERE A.SEQ = '"+s.getSeq()+"'";
-		
+	
 		Statement st = null;
 		
 		try {
 			conn.setAutoCommit(false);
 			
-			st = conn.createStatement();
+			st = getConn1().createStatement();
 			System.out.println("sql:"+sql);
-			int eRow = st.executeUpdate(sql);
+			int eRow = st.executeUpdate(new String(sql.getBytes("BIG5"),"ISO-8859-1"));
 			
-			if(eRow == 0){
+			if(eRow>1)
+				throw new Exception("Update data fail! updated Subscriber "+eRow);
+			if(eRow == 0)
 				result = insertSubscriber(s);
-			}else{
-				if("E".equalsIgnoreCase(s.getType())){
-					if(st.executeUpdate(sql2) == 0){
-						insertChairMain(s);
-					}
-				}else if("P".equalsIgnoreCase(s.getType())){
-					deleteChairMain(s);
-				}
-				result = true;
-			}
+			
+			
+			updateSubscription(s);
+			
+			result = true;
+			
 			conn.commit();
 		}finally{
 			try {
@@ -482,13 +620,13 @@ public class SubscriberDao extends CRMBaseDao{
 					st.close();
 			} catch (Exception e) {
 			}
-			closeConnection();
+			//closeConnection();
 		}	
 		
 		return result;
 	}
 	
-	public List<String> queryVLN(String serviceId) throws SQLException{
+	public List<String> queryVLN(String serviceId) throws Exception{
 		List<String> result = new ArrayList<String>(); 
 
 		String sql = "SELECT A.FOLLOWMENUMBER "
@@ -500,7 +638,7 @@ public class SubscriberDao extends CRMBaseDao{
 		
 		try {
 			
-			st = conn.createStatement();
+			st = getConn1().createStatement();
 			System.out.println("sql:"+sql);
 			rs = st.executeQuery(sql);
 			
@@ -517,7 +655,7 @@ public class SubscriberDao extends CRMBaseDao{
 					st.close();
 			} catch (Exception e) {
 			}
-			closeConnection();
+			//closeConnection();
 		}
 		return result;
 	}
@@ -535,7 +673,7 @@ public class SubscriberDao extends CRMBaseDao{
 		
 		try {
 			
-			st = conn.createStatement();
+			st = getConn1().createStatement();
 			System.out.println("sql:"+sql);
 			rs = st.executeQuery(sql);
 			
@@ -556,12 +694,12 @@ public class SubscriberDao extends CRMBaseDao{
 					st.close();
 			} catch (Exception e) {
 			}
-			closeConnection();
+			//closeConnection();
 		}
 		return result;
 	}
 	
-	public String getGPRSStatus(String msisdn) throws SQLException{
+	public String getGPRSStatus(String msisdn) throws Exception{
 		String result = null;
 		String sql = "SELECT nvl(PDPSUBSID,0) as status "
 				+ "FROM BASICPROFILE "
@@ -572,7 +710,7 @@ public class SubscriberDao extends CRMBaseDao{
 		
 		try {
 			
-			st = conn.createStatement();
+			st = getConn1().createStatement();
 			System.out.println("sql:"+sql);
 			rs = st.executeQuery(sql);
 			
@@ -587,7 +725,7 @@ public class SubscriberDao extends CRMBaseDao{
 					st.close();
 			} catch (Exception e) {
 			}
-			closeConnection();
+			//closeConnection();
 		}
 		return result;
 	}

@@ -1,25 +1,29 @@
 package main.CRM.service;
 
 import java.io.InputStream;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Service;
+
 import main.CRM.dao.ExcelDao;
 import main.common.action.Excel;
 import main.common.service.BaseService;
 
+@Service
 public class ExcelService extends BaseService{
 	
 	public ExcelService() throws Exception {
 		super();
 	}
-	
-	ExcelDao excelDao = new ExcelDao();
+	@Resource
+	ExcelDao excelDao;
 
-	public InputStream  createSubscribersExcel() throws SQLException{
+	public InputStream  createSubscribersExcel() throws Exception{
 		
 		List<Map<String,Object>> data = excelDao.querySubscribers();
 		
@@ -54,4 +58,14 @@ public class ExcelService extends BaseService{
 		
 		return m;
 	}
+
+	public ExcelDao getExcelDao() {
+		return excelDao;
+	}
+
+	public void setExcelDao(ExcelDao excelDao) {
+		this.excelDao = excelDao;
+	}
+	
+	
 }

@@ -1,7 +1,8 @@
 package main.CRM.action;
 
-import java.sql.SQLException;
 import java.util.List;
+
+import javax.annotation.Resource;
 
 import main.CRM.bean.ApplicationData;
 import main.CRM.service.ApplicationService;
@@ -22,7 +23,9 @@ public class ApplicationAction extends BaseAction{
 	String type;
 	String verifiedDate;
 	
-	ApplicationService applicationService = new ApplicationService();
+	
+	@Resource
+	ApplicationService applicationService;
 	
 	public String queryAppByServiceId(){
 		System.out.println("queryByServiceId");
@@ -30,7 +33,7 @@ public class ApplicationAction extends BaseAction{
 		try {
 			List<ApplicationData> aList = applicationService.queryByServiceId(serviceid);
 			setSuccess(aList);
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			errorHandle(e);
 		}
 		
@@ -47,7 +50,7 @@ public class ApplicationAction extends BaseAction{
 				setFail(ERROR);
 			}
 			
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			errorHandle(e);
 		}
 		
@@ -76,6 +79,14 @@ public class ApplicationAction extends BaseAction{
 
 	public void setVerifiedDate(String verifiedDate) {
 		this.verifiedDate = verifiedDate;
+	}
+
+	public ApplicationService getApplicationService() {
+		return applicationService;
+	}
+
+	public void setApplicationService(ApplicationService applicationService) {
+		this.applicationService = applicationService;
 	}
 	
 	
