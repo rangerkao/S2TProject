@@ -26,6 +26,8 @@
 
     	<context:component-scan base-package="main.CRM.service" />
     	<context:component-scan base-package="main.CRM.dao" />
+    	<context:component-scan base-package="main.DVRS.service" />
+    	<context:component-scan base-package="main.DVRS.dao" />
     	<context:component-scan base-package="main.common.aop" />
     	<context:component-scan base-package="main.common.service" />
     	<context:component-scan base-package="main.common.dao" />

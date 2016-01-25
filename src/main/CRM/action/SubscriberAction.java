@@ -148,7 +148,7 @@ public class SubscriberAction extends BaseAction{
 		JSONObject j= jsonToJSONObject(input);
 		Subscriber s = new Subscriber(j);
 		try {
-			subscriberService.updateSubscriber(s);
+			subscriberService.updateSubscriber(s,input);
 			setSuccess(s);
 		} catch (Exception e) {
 			errorHandle(e);

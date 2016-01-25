@@ -3,6 +3,7 @@ package main.common.dao;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -16,22 +17,58 @@ public class BaseDao {
 	protected static Properties props =null;
 	protected static Connection conn=null;
 	protected static Connection conn2=null;
-
+	protected static Connection conn3=null;
+	
 	public BaseDao() throws Exception{
 		props=CacheAction.props;
 	}
 	
 	protected Connection getConn1() throws Exception{
-		
-		if(conn==null||conn.isClosed())
+		Statement st = null;
+		try {
+			st = conn.createStatement();
+		} catch (Exception e) {
 			createConnection();
+		}finally{
+			try {
+				if(st!=null)
+					st.close();
+			} catch (Exception e) {
+			}
+		}
 		return conn;
 	}
 	protected Connection getConn2() throws Exception{
-		
-		if(conn2==null||conn2.isClosed())
+		Statement st = null;
+		try {
+			st = conn2.createStatement();
+		} catch (Exception e) {
 			createConnection2();
+		}finally{
+			try {
+				if(st!=null)
+					st.close();
+			} catch (Exception e) {
+			
+			}
+		}
 		return conn2;
+	}
+	protected Connection getConn3() throws Exception{
+		Statement st = null;
+		try {
+			st = conn3.createStatement();
+		} catch (Exception e) {
+			createConnection3();
+		}finally{
+			try {
+				if(st!=null)
+					st.close();
+			} catch (Exception e) {
+			
+			}
+		}
+		return conn3;
 	}
 	protected void createConnection() throws Exception{
 		conn=connectDB();
@@ -41,11 +78,17 @@ public class BaseDao {
 		conn2=connectDB2();
 		System.out.println("Create connect2!");
 	}
+	protected void createConnection3() throws Exception{
+		conn3=connectDB3();
+		System.out.println("Create connect3!");
+	}
 	protected void closeConnection() throws SQLException{
 		if(conn!=null)
 			conn.close();
 		if(conn2!=null)
 			conn2.close();
+		if(conn3!=null)
+			conn3.close();
 		System.out.println("Close connect!");
 	}
 		//---------------建立DB 連結 conn1 主資料庫、conn2 Mboss----
@@ -85,6 +128,23 @@ public class BaseDao {
 					throw new Exception("DB Connect2 null !");
 				}
 			return conn2;
+		}
+		protected static Connection connectDB3() throws Exception {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection conn3=null;
+			String url=props.getProperty("CRMDB.URL")
+					.replace("{{Host}}", props.getProperty("CRMDB.Host"))
+					.replace("{{Port}}", props.getProperty("CRMDB.Port"))
+					.replace("{{DBName}}", props.getProperty("CRMDB.DBName"));
+			
+			conn3=connDB(props.getProperty("CRMDB.DriverClass"), url, 
+					props.getProperty("CRMDB.UserName"), 
+					props.getProperty("CRMDB.PassWord")
+					);
+				if(conn3==null){
+					throw new Exception("DB Connect3 null !");
+				}
+			return conn3;
 		}
 		
 		public static Connection connDB(String DriverClass, String URL,

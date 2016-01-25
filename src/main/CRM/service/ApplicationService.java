@@ -17,7 +17,7 @@ public class ApplicationService  extends BaseService{
 		// TODO Auto-generated constructor stub
 	}
 	@Resource
-	ApplicationDao applicationDao;
+	ApplicationDao applicationDao ;
 	
 	public List<ApplicationData> queryByServiceId(String serviceId) throws Exception{
 		return applicationDao.queryByServiceId(serviceId);
@@ -35,5 +35,6 @@ public class ApplicationService  extends BaseService{
 		this.applicationDao = applicationDao;
 	}
 
+	
 	
 }

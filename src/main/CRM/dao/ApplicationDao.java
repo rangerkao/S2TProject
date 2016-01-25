@@ -46,13 +46,13 @@ public class ApplicationDao extends CRMBaseDao {
 	}
 	public List<ApplicationData> queryApplication(String serviceId) throws Exception{
 		List<ApplicationData> result = new ArrayList<ApplicationData>();
-		String sql = "SELECT A.TYPE,to_char(A.VERIFIED_DATE,'yyyy/MM/dd hh24:mi:ss') VERIFIED_DATE "
+		String sql = "SELECT A.TYPE,DATE_FORMAT(A.VERIFIED_DATE,'%Y/%m/%d %H:%m:%s') VERIFIED_DATE "
 				+ "FROM CRM_APPLICATION A WHERE A.SERVICEID = '"+serviceId+"' ";
 		Statement st = null;
 		ResultSet rs = null;
 		
 		try{
-			st = getConn1().createStatement();
+			st = getConn3().createStatement();
 			rs = st.executeQuery(sql);
 			System.out.println("sql:"+sql);
 			while(rs.next()){

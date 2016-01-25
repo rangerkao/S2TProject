@@ -8,9 +8,11 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Repository;
+
 import main.DVRS.bean.Admin;
 import main.common.dao.BaseDao;
-
+@Repository
 public class AdminDao extends BaseDao {	
 
 	public AdminDao() throws Exception {
@@ -38,7 +40,7 @@ public class AdminDao extends BaseDao {
 		}
 		st.close();
 		rs.close();
-		closeConnection();
+		//closeConnection();
 
 		return list;
 		
@@ -67,7 +69,7 @@ public class AdminDao extends BaseDao {
 		}
 		pst.close();
 		rs.close();
-		closeConnection();
+		//closeConnection();
 
 		return admin;
 	}
@@ -84,7 +86,7 @@ public class AdminDao extends BaseDao {
 		pst.setString(4, admin.getRole());
 		result=pst.executeUpdate();
 		pst.close();
-		closeConnection();
+		//closeConnection();
 
 		
 		return result;
@@ -105,7 +107,7 @@ public class AdminDao extends BaseDao {
 		
 		result=pst.executeUpdate();
 		pst.close();
-		closeConnection();
+		//closeConnection();
 
 		return result;
 	}
@@ -121,7 +123,7 @@ public class AdminDao extends BaseDao {
 		pst.setString(1, admin.getAccount());
 		result=pst.executeUpdate();
 		pst.close();
-		closeConnection();
+		//closeConnection();
 
 		return result;
 	}

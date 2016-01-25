@@ -4,15 +4,20 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Service;
+
 import main.DVRS.bean.CurrentDay;
 import main.DVRS.bean.CurrentMonth;
 import main.DVRS.dao.CurrentDao;
 import main.common.service.BaseService;
 
-
+@Service
 public class CurrentService extends BaseService {
 
-	CurrentDao currentDao = new CurrentDao();
+	@Resource
+	CurrentDao currentDao;
 	
 	public CurrentService() throws Exception {
 		super();
@@ -42,5 +47,16 @@ public class CurrentService extends BaseService {
 		
 		return currentDao.queryCurrentDay(imsi,from,to);
 	}
+
+
+	public CurrentDao getCurrentDao() {
+		return currentDao;
+	}
+
+
+	public void setCurrentDao(CurrentDao currentDao) {
+		this.currentDao = currentDao;
+	}
+	
 	
 }

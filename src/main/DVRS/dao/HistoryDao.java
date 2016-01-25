@@ -6,9 +6,11 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Repository;
+
 import main.DVRS.bean.CardChange;
 import main.common.dao.BaseDao;
-
+@Repository
 public class HistoryDao extends BaseDao {
 
 	public HistoryDao() throws Exception {
@@ -60,7 +62,7 @@ public class HistoryDao extends BaseDao {
 			if(rs!=null)
 				rs.close();
 		}
-		closeConnection();
+		//closeConnection();
 		return result;
 	}
 	
@@ -108,7 +110,7 @@ public class HistoryDao extends BaseDao {
 			if(rs!=null)
 				rs.close();
 		}
-		closeConnection();
+		//closeConnection();
 		return result;
 	}
 	

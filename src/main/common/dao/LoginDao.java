@@ -22,7 +22,7 @@ public class LoginDao extends BaseDao{
 		ResultSet rs = null;
 		
 		try {
-			st = getConn1().createStatement();
+			st = getConn3().createStatement();
 			
 			String sql = "SELECT A.ACCOUNT,A.PASSWORD,A.ROLE FROM CRM_USER A WHERE A.ACCOUNT = '"+account+"' ";
 			

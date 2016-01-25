@@ -12,13 +12,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.springframework.stereotype.Repository;
+
 import main.DVRS.bean.CurrentDay;
 import main.DVRS.bean.CurrentMonth;
 import main.common.action.CacheAction;
 import main.common.dao.BaseDao;
 
 
-
+@Repository
 public class CurrentDao extends BaseDao {
 
 	public CurrentDao() throws Exception {
@@ -77,7 +79,7 @@ public class CurrentDao extends BaseDao {
 			}
 			rs.close();
 			st.close();
-			closeConnection();
+			//closeConnection();
 		return list;
 		
 	}
@@ -163,7 +165,7 @@ public class CurrentDao extends BaseDao {
 			System.out.println("query parse end!"+new Date());
 			rs.close();
 			pst.close();
-			closeConnection();
+			//closeConnection();
 		return list;
 		
 	}
@@ -212,7 +214,7 @@ public class CurrentDao extends BaseDao {
 			}
 			rs.close();
 			st.close();
-			closeConnection();
+			//closeConnection();
 		return list;
 		
 	}
@@ -293,7 +295,7 @@ public class CurrentDao extends BaseDao {
 			}
 			rs.close();
 			st.close();
-			closeConnection();
+			//closeConnection();
 		return list;
 		
 	}

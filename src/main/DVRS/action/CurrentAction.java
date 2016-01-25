@@ -6,6 +6,8 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import main.DVRS.bean.CurrentDay;
 import main.DVRS.bean.CurrentMonth;
 import main.DVRS.service.CurrentService;
@@ -29,7 +31,8 @@ public class CurrentAction extends BaseAction {
 	String to;
 	String suspend;
 	
-	CurrentService currentControl=new CurrentService();
+	@Resource
+	CurrentService currentControl;
 	
 	
 	public String queryCurrentMonth(){
@@ -91,6 +94,15 @@ public class CurrentAction extends BaseAction {
 	public void setSuspend(String suspend) {
 		this.suspend = suspend;
 	}
+
+	public CurrentService getCurrentControl() {
+		return currentControl;
+	}
+
+	public void setCurrentControl(CurrentService currentControl) {
+		this.currentControl = currentControl;
+	}
+	
 	
 	
 	

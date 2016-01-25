@@ -51,10 +51,7 @@
 	<!-- classpath 為 scr位置 -->
 	<context-param>
         <param-name>contextConfigLocation</param-name>
-        <param-value>	classpath:resource/config/action-context.xml,
-        				classpath:resource/DVRS/config/action-context.xml,
-        				classpath:resource/DVRS/config/service-context.xml,
-        				classpath:resource/DVRS/config/dao-context.xml,
+        <param-value>	classpath:resource/config/action-context.xml
         				</param-value>
     </context-param>
     <listener>

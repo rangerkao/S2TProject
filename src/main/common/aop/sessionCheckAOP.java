@@ -15,14 +15,14 @@ import com.opensymphony.xwork2.ActionContext;
 @Aspect
 public class sessionCheckAOP{
 
-	@Pointcut("execution(* main.CRM.action.SubscriberAction.queryListById(..))") //定義一個切入點,名稱為pointCutMethod(),攔截類的所有方法
+	@Pointcut("execution(* main.CRM.action..*(..)) || execution(* main.DVRS.action..*(..))") //定義一個切入點,名稱為pointCutMethod(),攔截類的所有方法
 	private void pointCutMethod() {
 		
 	}
 	
 	@Around("pointCutMethod()") 
 	public Object doAround(ProceedingJoinPoint pjp) throws Throwable {
-		System.out.println("AOP Test");
+		System.out.println("sessionCheck");
 		/*HttpServletRequest request = SysContent.getRequest();  
         HttpServletResponse response = SysContent.getResponse();  
         HttpSession session = SysContent.getSession(); */ 
@@ -34,8 +34,7 @@ public class sessionCheckAOP{
 		Object[] args=pjp.getArgs();
 		if(account != null){
 			o = pjp.proceed();
-			System.out.println("ACCount:"+account);
-	
+			//System.out.println("ACCount:"+account);
 		}
 		return o;
 	}

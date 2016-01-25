@@ -82,7 +82,7 @@
         
 		<action name="queryServiceIdList" class="main.CRM.action.SubscriberAction" method="queryServiceIdList"></action>
 
-        <action name="querySMS" class="main.CRM.action.SMSAction" method="querySMS"></action>
+        <action name="querySMS" class="main.CRM.action.SmsAction" method="querySMS"></action>
 
         <action name="queryQos" class="main.CRM.action.QosAction" method="queryQos"></action>
         

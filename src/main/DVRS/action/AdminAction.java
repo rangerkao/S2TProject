@@ -3,6 +3,8 @@ package main.DVRS.action;
 import java.sql.SQLException;
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import main.DVRS.bean.Admin;
 import main.DVRS.service.AdminService;
 import main.common.action.BaseAction;
@@ -22,7 +24,8 @@ public class AdminAction extends BaseAction{
 	  * ajax返回结果，也可是其他类型的，这里以String类型为例
 	  */
 	 
-	 private AdminService adminService=new AdminService();
+	@Resource
+	 private AdminService adminService;
 	 private Admin admin;
 	 private String mod;
 	
@@ -75,6 +78,15 @@ public class AdminAction extends BaseAction{
 
 	public void setMod(String mod) {
 		this.mod = mod;
+	}
+
+	public AdminService getAdminService() {
+		return adminService;
+	}
+
+	public void setAdminService(AdminService adminService) {
+		this.adminService = adminService;
 	} 
+	
 
 }

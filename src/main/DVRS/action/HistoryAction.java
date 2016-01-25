@@ -4,6 +4,8 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import main.DVRS.bean.CardChange;
 import main.DVRS.service.HistoryService;
 import main.common.action.BaseAction;
@@ -16,7 +18,8 @@ public class HistoryAction extends BaseAction {
 
 	String imsi;
 	
-	HistoryService historyService = new HistoryService();
+	@Resource
+	HistoryService historyService;
 	
 	
 	public HistoryAction() throws Exception{
@@ -55,6 +58,15 @@ public class HistoryAction extends BaseAction {
 	public void setImsi(String imsi) {
 		this.imsi = imsi;
 	}
+
+	public HistoryService getHistoryService() {
+		return historyService;
+	}
+
+	public void setHistoryService(HistoryService historyService) {
+		this.historyService = historyService;
+	}
+	
 	
 	
 }

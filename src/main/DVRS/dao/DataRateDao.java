@@ -6,9 +6,11 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Repository;
+
 import main.DVRS.bean.DataRate;
 import main.common.dao.BaseDao;
-
+@Repository
 public class DataRateDao extends BaseDao {
 	
 	public DataRateDao() throws Exception {
@@ -17,7 +19,7 @@ public class DataRateDao extends BaseDao {
 	}
 
 		//QueryList
-		public List<DataRate> queryDataRateList() throws SQLException{
+		public List<DataRate> queryDataRateList() throws Exception{
 			String sql=
 					"SELECT A.PRICEPLANID, C.NAME PRICEPLANNAME,A.MCCMNC,B.COUNTRY, B.NETWORK, "
 					+ "A.RATE, A.CHARGEUNIT, A.CURRENCY, A.DAYCAP "
@@ -30,7 +32,7 @@ public class DataRateDao extends BaseDao {
 					+ "FROM HUR_DATA_RATE A";*/
 			List<DataRate> list=new ArrayList<DataRate>();
 			
-				Statement st = conn.createStatement();
+				Statement st = getConn1().createStatement();
 				ResultSet rs=st.executeQuery(sql);
 				
 				while(rs.next()){
@@ -48,7 +50,7 @@ public class DataRateDao extends BaseDao {
 				}
 				st.close();
 				rs.close();	
-				closeConnection();
+				//closeConnection();
 			return list;
 			
 		}

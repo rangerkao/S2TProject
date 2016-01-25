@@ -3,17 +3,22 @@ package main.DVRS.service;
 import java.sql.SQLException;
 import java.util.List;
 
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Service;
+
 import main.DVRS.bean.Admin;
 import main.DVRS.dao.AdminDao;
 import main.common.service.BaseService;
-
+@Service
 public class AdminService extends BaseService{
 	
 	public AdminService() throws Exception {
 		super();
 	}
 	
-	private AdminDao adminDao=new AdminDao();
+	@Resource
+	private AdminDao adminDao;
 	
 	public List<Admin> queryAdminList() throws SQLException{
 		return adminDao.queryAdminList();
@@ -31,4 +36,13 @@ public class AdminService extends BaseService{
 		return adminDao.delete(admin);
 	}*/
 
+	public AdminDao getAdminDao() {
+		return adminDao;
+	}
+
+	public void setAdminDao(AdminDao adminDao) {
+		this.adminDao = adminDao;
+	}
+
+	
 }

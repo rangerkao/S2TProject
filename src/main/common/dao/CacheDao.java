@@ -6,7 +6,6 @@ import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.derby.iapi.store.raw.FetchDescriptor;
 import org.springframework.stereotype.Repository;
 @Repository
 public class CacheDao extends BaseDao{

@@ -6,6 +6,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import main.DVRS.bean.DataRate;
 import main.DVRS.service.DataRateService;
 import main.common.action.BaseAction;
@@ -23,7 +25,8 @@ public class DataRateAction extends BaseAction{
 	private static final long serialVersionUID = 1L;
 
 	List<DataRate> dataRateList=new ArrayList<DataRate>();
-	DataRateService dataRateService = new DataRateService();
+	@Resource
+	DataRateService dataRateService;
 	
 	public String queryDataRate(){
 		try {
@@ -35,4 +38,14 @@ public class DataRateAction extends BaseAction{
 			return errorHandle(e);
 		}
 	}
+
+	public DataRateService getDataRateService() {
+		return dataRateService;
+	}
+
+	public void setDataRateService(DataRateService dataRateService) {
+		this.dataRateService = dataRateService;
+	}
+	
+	
 }
