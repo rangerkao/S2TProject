@@ -1,6 +1,5 @@
-package main.DVRS.service;
+package main.DVRS.service ;
 
-import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 
@@ -57,6 +56,8 @@ public class CurrentService extends BaseService {
 	public void setCurrentDao(CurrentDao currentDao) {
 		this.currentDao = currentDao;
 	}
+
+	
 	
 	
 }

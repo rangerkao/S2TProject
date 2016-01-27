@@ -1,7 +1,5 @@
 package main.DVRS.action;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
@@ -32,14 +30,14 @@ public class CurrentAction extends BaseAction {
 	String suspend;
 	
 	@Resource
-	CurrentService currentControl;
+	CurrentService currentService;
 	
 	
 	public String queryCurrentMonth(){
 		
 		try {
 			System.out.println("imsi:"+imsi+",from:"+from+",to:"+to+",suspend:"+suspend+","+new Date());
-			List<CurrentMonth> list = currentControl.queryCurrentMonth(imsi,from.replace("-",""),to.replace("-",""),suspend);
+			List<CurrentMonth> list = currentService.queryCurrentMonth(imsi,from.replace("-",""),to.replace("-",""),suspend);
 			return setSuccess(list);
 		} catch (SQLException e) {
 			return errorHandle(e);
@@ -52,7 +50,7 @@ public class CurrentAction extends BaseAction {
 		
 		try {
 			System.out.println("imsi:"+imsi+",from:"+from+",to:"+to);
-			List<CurrentDay> list = currentControl.queryCurrentDay(imsi,from.replace("-",""),to.replace("-",""));
+			List<CurrentDay> list = currentService.queryCurrentDay(imsi,from.replace("-",""),to.replace("-",""));
 			return setSuccess(list);
 		} catch (SQLException e) {
 			return errorHandle(e);
@@ -95,15 +93,16 @@ public class CurrentAction extends BaseAction {
 		this.suspend = suspend;
 	}
 
-	public CurrentService getCurrentControl() {
-		return currentControl;
+	public CurrentService getCurrentService() {
+		return currentService;
 	}
 
-	public void setCurrentControl(CurrentService currentControl) {
-		this.currentControl = currentControl;
+	public void setCurrentService(CurrentService currentService) {
+		this.currentService = currentService;
 	}
-	
-	
+
+
+
 	
 	
 }
