@@ -20,12 +20,12 @@
 <body>
 	<tiles:insertAttribute name="page"/>
 	
-	<form action="createExcelbyJSON" method="post" target="sub_iframe" id="reportFrom" style="display: none;">
+	<form action="createExcelbyJSON" method="post"  id="reportFrom" style="display: none;">
 		<input type="text" name="reportDataList">
 		<input type="text" name="reportColHead">
 		<input type="text" name="reportName">
 	</form>
-	<form action="createSubscribersExcel" method="post" target="sub_iframe" id="reportFrom2" style="display: none;">
+	<form action="" method="post"  id="reportFrom2" style="display: none;">
 	</form>
 	<iframe name="sub_iframe" width="0" height="0" style="display: none;"></iframe>
 
@@ -65,13 +65,18 @@
 	
 	<script type="text/javascript">
 		function createExcel(head,data,name){
+			if(data==null ||data.length==0){
+				alert("No data!");
+				return;
+			}
 			$("[name='reportDataList']").val(encodeURI(JSON.stringify(data)));
 			$("[name='reportColHead']").val(encodeURI(JSON.stringify(head)));
 			$("[name='reportName']").val(encodeURI(JSON.stringify(name)));
 			$("#reportFrom").submit();	
 		}
-		function createExcel2(){
-			$("#reportFrom2").submit();	
+		function createExcel2(action){
+			//alert(action);
+			$("#reportFrom2").attr("action",action).submit();	
 		}
 	</script>
 	

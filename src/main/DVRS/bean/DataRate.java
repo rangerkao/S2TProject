@@ -1,7 +1,7 @@
 package main.DVRS.bean;
 
 public class DataRate {
-	Long pricePlanId;
+	String pricePlanId;
 	String pricePlanName;
 	String mccmnc;
 	String country;
@@ -15,7 +15,7 @@ public class DataRate {
 	
 	
 
-	public DataRate(Long pricePlanId, String pricePlanName, String mccmnc,
+	public DataRate(String pricePlanId, String pricePlanName, String mccmnc,
 			String country, String netWork, Double rate, Long chargeunit,
 			String currency, Double dayCap) {
 		super();
@@ -32,11 +32,11 @@ public class DataRate {
 
 
 
-	public Long getPricePlanId() {
+	public String getPricePlanId() {
 		return pricePlanId;
 	}
 
-	public void setPricePlanId(Long pricePlanId) {
+	public void setPricePlanId(String pricePlanId) {
 		this.pricePlanId = pricePlanId;
 	}
 

@@ -60,6 +60,9 @@ public class Excel extends BaseAction{
 			}
 			
 			data = new ArrayList<Map<String,Object>>();
+			if(reportDataList==null || "".equals(reportDataList)||"[]".equals(reportDataList))
+				return "success";
+			
 			JSONArray jaData = new JSONArray(java.net.URLDecoder.decode(reportDataList,"UTF-8"));
 			for(int i = 0 ; i < jaData.length() ; i++){
 				JSONObject jo = jaData.getJSONObject(i);			

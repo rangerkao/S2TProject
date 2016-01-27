@@ -71,11 +71,11 @@ public class ApplicationDao extends CRMBaseDao {
 	public boolean insertNew(String type,String serviceid,String verifiedDate) throws Exception{
 		boolean result = false;
 		String sql = "INSERT INTO CRM_APPLICATION(SERVICEID,VERIFIED_DATE,CREATETIME,TYPE) "
-				+ "VALUES("+serviceid+",sysdate,sysdate,'"+type+"')";
+				+ "VALUES("+serviceid+",now(),now(),'"+type+"')";
 		Statement st = null;
 		
 		try{
-			st = getConn1().createStatement();
+			st = getConn3().createStatement();
 			int r = st.executeUpdate(sql);
 			if(r==1){
 				result = true;

@@ -342,10 +342,10 @@ angular.module('MainApp')
 		    }).then(function(){
 		    });
 		};
-		self.downExcel = function(){
+		self.downLoadExcel = function(){
 			self.buttonDis =true;
-			createExcel2();
-			self.buttonDis = false;
+			createExcel2('createSubscribersExcel');
+			//self.buttonDis = false;
 		};
 		
 		$(document).ready(function () {

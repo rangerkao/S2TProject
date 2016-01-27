@@ -1,5 +1,6 @@
 package main.common.dao;
 
+import java.io.UnsupportedEncodingException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -54,7 +55,7 @@ public class BaseDao {
 		}
 		return conn2;
 	}
-	protected Connection getConn3() throws Exception{
+	protected static Connection getConn3() throws Exception{
 		Statement st = null;
 		try {
 			st = conn3.createStatement();
@@ -78,7 +79,7 @@ public class BaseDao {
 		conn2=connectDB2();
 		System.out.println("Create connect2!");
 	}
-	protected void createConnection3() throws Exception{
+	protected static void createConnection3() throws Exception{
 		conn3=connectDB3();
 		System.out.println("Create connect3!");
 	}
@@ -185,6 +186,26 @@ public class BaseDao {
 				l.set(i, jo);
 				l.set(j, io);
 			}
+		}
+		
+		public String processData(String data){
+			return (data==null?" ":data);
+		}
+		public String processEncodeData(String data,String sCharSet,String dCharSet){
+			if(data==null)
+				return " ";
+			
+			
+			try {
+				if(sCharSet==null || "".equals(sCharSet))
+					data = new String(data.getBytes(),dCharSet);
+				else
+					data = new String(data.getBytes(sCharSet),dCharSet);
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}
+			
+			return data;
 		}
 		
 		

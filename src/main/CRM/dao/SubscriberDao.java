@@ -2,6 +2,7 @@ package main.CRM.dao;
 
 import java.io.UnsupportedEncodingException;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -11,6 +12,7 @@ import java.util.Set;
 import org.springframework.stereotype.Repository;
 
 import main.CRM.bean.AddonService;
+import main.CRM.bean.PricePlanID;
 import main.CRM.bean.Subscriber;
 
 @Repository
@@ -27,7 +29,7 @@ public class SubscriberDao extends CRMBaseDao{
 		//CRM DB
 		String sql1 ="SELECT  A.SUBS_ID_TAXID ID,A.SUBS_NAME,A.SUBS_PERMANENT_ADDRESS,B.SERVICEID "
 				+ "FROM  CRM_DB.CRM_SUBSCRIBERS A LEFT JOIN CRM_DB.CRM_SUBSCRIPTION B ON A.SEQ =B.SEQ "
-				+ "WHERE A.SUBS_ID_TAXID = "+id+" ";
+				+ "WHERE A.SUBS_ID_TAXID = '"+id+"' ";
 		
 		Statement st = null ;
 		ResultSet rs = null ;
@@ -272,7 +274,7 @@ public class SubscriberDao extends CRMBaseDao{
 				result.setServiceId(rs.getString("SERVICEID"));
 				result.setS2tMsisdn(rs.getString("S2TMSISDN"));
 				result.setChtMsisdn(rs.getString("CHTMSISDN"));
-				result.setPrivePlanId(rs.getString("PRICEPLANID"));
+				result.setPrivePlanId(queryPricePlanId(rs.getString("PRICEPLANID")));
 				result.setStatus(rs.getString("STAUS"));
 				
 				result.setActivatedDate(rs.getString("DATEACTIVATED"));
@@ -482,7 +484,7 @@ public class SubscriberDao extends CRMBaseDao{
 				result.setS2tMsisdn(rs.getString("S2TMSISDN"));
 				result.setS2tIMSI(rs.getString("IMSI"));
 				result.setChtMsisdn(rs.getString("CHTMSISDN"));
-				result.setPrivePlanId(rs.getString("PRICEPLANID"));
+				result.setPrivePlanId(queryPricePlanId(rs.getString("PRICEPLANID")));
 		
 				result.setStatus(rs.getString("STAUS"));
 				
@@ -506,6 +508,8 @@ public class SubscriberDao extends CRMBaseDao{
 		
 		return result;
 	}
+	
+	
 	
 	public boolean insertSubscriber(Subscriber s) throws Exception{
 		boolean result = false;

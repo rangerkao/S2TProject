@@ -25,11 +25,15 @@ public class ExcelAction extends BaseAction{
 	@Resource
 	ExcelService excelService;
 	
-	public String createSubscribersExcel() throws Exception{
+	public String createSubscribersExcel(){
 
 		excelFileName = "customer"+new Date()+".xls";
 		
-		setExcelStream(excelService.createSubscribersExcel());
+		try {
+			setExcelStream(excelService.createSubscribersExcel());
+		} catch (Exception e) {
+			errorHandle(e);
+		}
 
 		return SUCCESS;
 	}
@@ -63,7 +67,5 @@ public class ExcelAction extends BaseAction{
 	public void setExcelService(ExcelService excelService) {
 		this.excelService = excelService;
 	}
-	
-	
 	
 }

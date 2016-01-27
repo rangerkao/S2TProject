@@ -23,7 +23,6 @@ angular.module('MainApp')
 		
 		
 		self.downLoadExcel = function(){
-			alert("click");
 			self.buttonDis = true;
 			createExcel(self.dataHeader,self.dataList,'費率表('+DateFormatString.Format(new Date())+')');
 			self.buttonDis = false;

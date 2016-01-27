@@ -3,6 +3,7 @@ package main.common.action;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,6 +42,7 @@ public class BaseAction extends ActionSupport implements SessionAware{
 		e.printStackTrace();
 		StringWriter s = new StringWriter();
 		e.printStackTrace(new PrintWriter(s));
+		CacheAction.sendMail("k1988242001@gmail.com","DVRS Exception Error!",new Date()+"\n"+s);
 		return setFail(s.toString());
 	}
 	

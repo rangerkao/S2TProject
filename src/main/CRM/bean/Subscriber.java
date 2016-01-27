@@ -25,7 +25,7 @@ public class Subscriber {
 	String chairID = "";
 	
 	String s2tIMSI = "";
-	String privePlanId = "";
+	PricePlanID privePlanId = null;
 	
 	String status = "";
 	
@@ -202,11 +202,11 @@ public class Subscriber {
 		this.s2tIMSI = s2tIMSI;
 	}
 
-	public String getPrivePlanId() {
+	public PricePlanID getPrivePlanId() {
 		return privePlanId;
 	}
 
-	public void setPrivePlanId(String privePlanId) {
+	public void setPrivePlanId(PricePlanID privePlanId) {
 		this.privePlanId = privePlanId;
 	}
 

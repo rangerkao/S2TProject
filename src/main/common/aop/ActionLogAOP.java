@@ -4,6 +4,7 @@ package main.common.aop;
 import java.util.Map;
 
 import main.CRM.bean.Subscriber;
+import main.common.dao.ActionDao;
 
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -23,48 +24,31 @@ import com.opensymphony.xwork2.ActionContext;
 public class ActionLogAOP {
 	
 	
-	@Pointcut("execution(* main.CRM.service..*(..)) ||execution(* main.CRM.service.SubscriberService.updateSubscriber(..))") //定義環繞通知
+	@Pointcut("execution(* main.CRM.service.ApplicationService.insertNew(..)) ||execution(* main.CRM.service.SubscriberService.updateSubscriber(..))") //定義環繞通知
 	private void pointCutMethod() {
 		
 	}
 	
 	@Around("pointCutMethod()") //定義環繞通知
 	public Object doAround(ProceedingJoinPoint pjp) throws Throwable {
-	Object object = pjp.proceed();
-	System.out.println("Class:"+pjp.getStaticPart());
+		
+	ActionContext context = ActionContext.getContext();
+	Map<String, Object> session = context.getSession();
+	String account = (String) session.get("s2t.account");
+	
+	String params = "";
 	for(Object s:pjp.getArgs())
-		System.out.println("args:"+s);
-	System.out.println("Object:"+object);
+		params+=s+",";
+	
+	if(!"".equals(params))
+		params=params.substring(0,params.length()-1);
+	
+	String function = pjp.getStaticPart().toString();
+	
+	Object object = pjp.proceed();
+	String result = object.toString();
+	
+	ActionDao.insertAction(account, params, function, result);
 	return object;
 	}
-	
-	@Before("pointCutMethod()") //定義環繞通知
-	public void  doBefore(JoinPoint jp) throws Throwable {
-		//System.out.println("before:");
-		//System.out.println(jp.getTarget());
-		
-	}
-	
-	@After("pointCutMethod()") //定義環繞通知
-	public void  doAfter(JoinPoint jp) throws Throwable {
-		/*System.out.println("before:");
-		System.out.println(jp.getTarget());
-		for(Object o:jp.getArgs())
-			System.out.println(o);*/
-	}
-	/*@AfterReturning(pointcut ="pointCutMethod()",returning="returnVal")
-	public void doAfterReturning(JoinPoint jp,String returnVal){
-		System.out.println("returnVal:"+returnVal);
-		ActionContext context = ActionContext.getContext();
-		Map<String, Object> session = context.getSession();
-		String account = (String) session.get("s2t.account");
-		System.out.println("account:"+account);
-		System.out.print("Param:");
-		for(Object o:jp.getArgs())
-			System.out.print(o+",");
-		System.out.println();
-		System.out.println("Class:"+jp.getStaticPart());
-		System.out.println("Annotation driven:After returning "+jp.getSignature().getName()+"()");
-		
-	}*/
 }

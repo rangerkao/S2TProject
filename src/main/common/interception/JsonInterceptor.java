@@ -31,13 +31,13 @@ public class JsonInterceptor extends AbstractInterceptor {
           
         Map<String, Object> session = actionContext.getSession();  
 		String account = (String) session.get("s2t.account");
-        System.out.println("Session  Account:"+account+",role:"+session.get("s2t.role"));
+        System.out.println("JsonInterceptor Session  Account:"+account+",role:"+session.get("s2t.role"));
 
 	
 		if(account != null)
 			return  invocation.invoke();
 
-		return "login";
+		return "needLogin";
 	}
 		
 }

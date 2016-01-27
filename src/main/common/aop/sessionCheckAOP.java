@@ -22,7 +22,6 @@ public class sessionCheckAOP{
 	
 	@Around("pointCutMethod()") 
 	public Object doAround(ProceedingJoinPoint pjp) throws Throwable {
-		System.out.println("sessionCheck");
 		/*HttpServletRequest request = SysContent.getRequest();  
         HttpServletResponse response = SysContent.getResponse();  
         HttpSession session = SysContent.getSession(); */ 
@@ -34,7 +33,7 @@ public class sessionCheckAOP{
 		Object[] args=pjp.getArgs();
 		if(account != null){
 			o = pjp.proceed();
-			//System.out.println("ACCount:"+account);
+			System.out.println("ACCount:"+account);
 		}
 		return o;
 	}

@@ -12,37 +12,17 @@
 		</action>
 	</package>
 	<package name="DVRS-ajax" extends="json-default">
-		<action name="queryAdmin" class="main.DVRS.action.AdminAction" method="queryAdmin" >
-	        <result type="json">
-	        	<param name="root">result</param>
-	        </result>
-        </action>
-        <action name="queryDataRate" class="main.DVRS.action.DataRateAction" method="queryDataRate" >
-	        <result type="json">
-	        	<param name="root">result</param>
-	        </result>
-        </action>
-        <action name="queryCurrentDay" class="main.DVRS.action.CurrentAction" method="queryCurrentDay" >
-	        <result type="json">
-	        	<param name="root">result</param>
-	        </result>
-        </action>
-        <action name="queryCurrentMonth" class="main.DVRS.action.CurrentAction" method="queryCurrentMonth" >
-	        <result type="json">
-	        	<param name="root">result</param>
-	        </result>
-        </action>
-        
-        <action name="queryCardChangeHistory" class="main.DVRS.action.HistoryAction" method="queryCardChangeHistory" >
-	        <result type="json">
-	        	<param name="root">result</param>
-	        </result>
-        </action>
-        <action name="queryNumberChangeHistory" class="main.DVRS.action.HistoryAction" method="queryNumberChangeHistory" >
-	        <result type="json">
-	        	<param name="root">result</param>
-	        </result>
-        </action>
+		<global-results>
+			<result type="json" name="success"><param name="root">result</param></result>
+			<result type="json" name="needLogin"><param name="root">needLogin</param></result>
+		</global-results>
+		<action name="queryAdmin" class="main.DVRS.action.AdminAction" method="queryAdmin" />
+        <action name="queryDataRate" class="main.DVRS.action.DataRateAction" method="queryDataRate" />
+        <action name="queryCurrentDay" class="main.DVRS.action.CurrentAction" method="queryCurrentDay" />
+        <action name="queryCurrentMonth" class="main.DVRS.action.CurrentAction" method="queryCurrentMonth" />
+        <action name="queryCardChangeHistory" class="main.DVRS.action.HistoryAction" method="queryCardChangeHistory" />
+        <action name="queryNumberChangeHistory" class="main.DVRS.action.HistoryAction" method="queryNumberChangeHistory" />
+	    
         <action name="querySms" class="main.DVRS.action.SmsAction" method="querySms" >
 	        <result type="json">
 	        	<param name="root">result</param>

@@ -2,10 +2,12 @@ package main.CRM.dao;
 
 import java.io.UnsupportedEncodingException;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 
 import org.springframework.stereotype.Repository;
 
+import main.CRM.bean.PricePlanID;
 import main.CRM.bean.Subscriber;
 import main.common.dao.BaseDao;
 @Repository
@@ -37,7 +39,7 @@ public class CRMBaseDao extends BaseDao{
 				s.setServiceId(rs.getString("SERVICEID"));
 				s.setS2tMsisdn(rs.getString("SERVICECODE"));
 				s.setChtMsisdn(rs.getString("MSISDN"));
-				s.setPrivePlanId(rs.getString("PRICEPLANID"));
+				s.setPrivePlanId(queryPricePlanId(rs.getString("PRICEPLANID")));
 			}
 
 		}finally{
@@ -79,7 +81,7 @@ public class CRMBaseDao extends BaseDao{
 				s.setServiceId(rs.getString("SERVICEID"));
 				s.setS2tMsisdn(rs.getString("SERVICECODE"));
 				s.setChtMsisdn(rs.getString("MSISDN"));
-				s.setPrivePlanId(rs.getString("PRICEPLANID"));
+				s.setPrivePlanId(queryPricePlanId(rs.getString("PRICEPLANID")));
 			}
 
 		}finally{
@@ -121,7 +123,7 @@ public class CRMBaseDao extends BaseDao{
 				s.setServiceId(rs.getString("SERVICEID"));
 				s.setS2tMsisdn(rs.getString("SERVICECODE"));
 				s.setChtMsisdn(rs.getString("MSISDN"));
-				s.setPrivePlanId(rs.getString("PRICEPLANID"));
+				s.setPrivePlanId(queryPricePlanId(rs.getString("PRICEPLANID")));
 			}
 		}
 		catch(Exception e){
@@ -176,24 +178,42 @@ public class CRMBaseDao extends BaseDao{
 		return serviceId;
 	}
 	
-	public String processData(String data){
-		return (data==null?" ":data);
-	}
-	public String processEncodeData(String data,String sCharSet,String dCharSet){
-		if(data==null)
-			return " ";
+	
+	
+	public PricePlanID queryPricePlanId(String id) throws SQLException, Exception{
+		PricePlanID p = new PricePlanID();
 		
-		
+		Statement st = null;
+		ResultSet rs = null;
+		String sql = "SELECT A.EFFECTIVITY,  A.PRICEPLANID,  A.NAME,  A.ALIASES,  A.PRODUCTION,  A.DESCRIPTION "
+				+ "FROM PRICEPLAN_DETAIL A "
+				+ "WHERE A.PRICEPLANID = "+id+" ";
 		try {
-			if(sCharSet==null || "".equals(sCharSet))
-				data = new String(data.getBytes(),dCharSet);
-			else
-				data = new String(data.getBytes(sCharSet),dCharSet);
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
+						
+			st = getConn1().createStatement();
+			System.out.println("query serviceId detail:"+sql);
+			rs = st.executeQuery(sql);
+			
+			while(rs.next()){
+				p.setEffectivity(rs.getString("EFFECTIVITY"));
+				p.setAliases(processEncodeData(rs.getString("ALIASES"),"ISO-8859-1","BIG5"));
+				p.setDesc(processEncodeData(rs.getString("DESCRIPTION"),"ISO-8859-1","BIG5"));
+				p.setId(rs.getString("PRICEPLANID"));
+				p.setName(processEncodeData(rs.getString("NAME"),"ISO-8859-1","BIG5"));
+				p.setProduction(processEncodeData(rs.getString("PRODUCTION"),"ISO-8859-1","BIG5"));
+			}
+		} finally{
+			try {
+				if(rs!=null)
+					rs.close();
+				if(st!=null)
+					st.close();
+			} catch (Exception e) {
+			}
+			//closeConnection();
 		}
 		
-		return data;
+		return p;
 	}
 
 }

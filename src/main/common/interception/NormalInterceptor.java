@@ -25,7 +25,7 @@ public class NormalInterceptor extends AbstractInterceptor  {
           
         Map<String, Object> session = actionContext.getSession();  
 		String account = (String) session.get("s2t.account");
-        System.out.println("Session  Account:"+account+",role:"+session.get("s2t.role"));
+        System.out.println("NormalInterceptor Session  Account:"+account+",role:"+session.get("s2t.role"));
 
 	
 		if(account != null)

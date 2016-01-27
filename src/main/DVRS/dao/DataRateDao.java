@@ -21,10 +21,10 @@ public class DataRateDao extends BaseDao {
 		//QueryList
 		public List<DataRate> queryDataRateList() throws Exception{
 			String sql=
-					"SELECT A.PRICEPLANID, C.NAME PRICEPLANNAME,A.MCCMNC,B.COUNTRY, B.NETWORK, "
+					"SELECT A.PRICEPLANID , D.NAME||'('||D.ALIASES||')' PRICEPLANNAME,A.MCCMNC,B.COUNTRY, B.NETWORK, "
 					+ "A.RATE, A.CHARGEUNIT, A.CURRENCY, A.DAYCAP "
-					+ "FROM HUR_DATA_RATE A, HUR_MCCMNC B, PRICEPLAN C "
-					+ "WHERE A.PRICEPLANID=C.PRICEPLANID AND A.MCCMNC=B.MCCMNC "
+					+ "FROM HUR_DATA_RATE A, HUR_MCCMNC B, PRICEPLAN C ,PRICEPLAN_DETAIL D "
+					+ "WHERE A.PRICEPLANID=C.PRICEPLANID AND A.MCCMNC=B.MCCMNC AND A.PRICEPLANID=D.PRICEPLANID "
 					+ "AND A.PRICEPLANID=139 "
 					+ "ORDER BY A.MCCMNC";
 			
@@ -37,8 +37,8 @@ public class DataRateDao extends BaseDao {
 				
 				while(rs.next()){
 					DataRate datarate =new DataRate();
-					datarate.setPricePlanId(rs.getLong("PRICEPLANID"));
-					datarate.setPricePlanName(rs.getString("PRICEPLANNAME")+("(環球卡)"));
+					datarate.setPricePlanId(processEncodeData(rs.getString("PRICEPLANID"),"ISO-8859-1","BIG5"));
+					datarate.setPricePlanName(processEncodeData(rs.getString("PRICEPLANNAME"),"ISO-8859-1","BIG5"));
 					datarate.setMccmnc(rs.getString("MCCMNC"));
 					datarate.setCountry(rs.getString("COUNTRY"));
 					datarate.setNetWork(rs.getString("NETWORK"));

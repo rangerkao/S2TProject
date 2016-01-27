@@ -37,7 +37,7 @@
 					  	</tr>
 					</table>
 				</modal>	
-				<a class="btn btn-success btn-xs"  ng-click="sCtrl.downExcel()" ng-disabled="sCtrl.buttonDis">download excel</a>	
+				<a class="btn btn-success btn-xs"  ng-click="sCtrl.downLoadExcel()" ng-disabled="sCtrl.buttonDis">download excel</a>	
 			<!-- 	<button data-toggle="modal" data-target="#serviceidModal" class="btn btn-success btn-xs" >choose serviceId</button>
 				<modal title="Choose a serviceid" id="serviceidModal">
 					<table class="dataTable">
@@ -136,7 +136,7 @@
 			</div>
 			
 		</div>
-		<div class="detail">
+		<div class="detail" >
 			<div class="tabs">
 				<ul class="nav nav-tabs">
 					<li role="presentation" class="{{$index===sCtrl.selectedTab?'active':''}}" ng-repeat="tab in sCtrl.tabs">
