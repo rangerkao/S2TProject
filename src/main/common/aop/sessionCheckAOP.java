@@ -1,6 +1,9 @@
 package main.common.aop;
 
+import java.util.Date;
 import java.util.Map;
+
+import main.common.dao.BaseDao;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -25,7 +28,7 @@ public class sessionCheckAOP{
 		/*HttpServletRequest request = SysContent.getRequest();  
         HttpServletResponse response = SysContent.getResponse();  
         HttpSession session = SysContent.getSession(); */ 
-		
+		BaseDao.setRequestTime(new Date());
 		ActionContext context = ActionContext.getContext();
 		Map<String, Object> session = context.getSession();
 		String account = (String) session.get("s2t.account");

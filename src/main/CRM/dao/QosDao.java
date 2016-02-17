@@ -20,7 +20,8 @@ public class QosDao extends CRMBaseDao {
 	public List<QosBean> queryQosList() throws Exception{
 		String sql=
 				"SELECT A.PROVISIONID,A.IMSI,A.MSISDN,A.PLAN,A.ACTION,A.RESPONSE_CODE,A.RESULT_CODE,to_char(A.CERATE_TIME,'yyyyMMdd hh24:mi:ss') ctime "
-				+ "FROM QOS_PROVISION_LOG A ";
+				+ "FROM QOS_PROVISION_LOG A "
+				+ "ORDER BY A.CERATE_TIME DESC ";
 
 		List<QosBean> list=new ArrayList<QosBean>();
 		
@@ -76,8 +77,9 @@ public class QosDao extends CRMBaseDao {
 				"SELECT A.PROVISIONID,A.IMSI,A.MSISDN,A.PLAN,A.ACTION,A.RESPONSE_CODE,A.RESULT_CODE,to_char(A.CERATE_TIME,'yyyyMMdd hh24:mi:ss') ctime "
 				+ "FROM QOS_PROVISION_LOG A "
 				+ "WHERE 1=1 "
-				+ (imsi!=null && !"".equals(imsi) ? "AND A.IMSI like '"+imsi+"'" : "")
-				+ (msisdn!=null && !"".equals(msisdn) ? "AND A.MSISDN like '"+msisdn+"'" : "");
+				+ (imsi!=null && !"".equals(imsi) ? "AND A.IMSI like '"+imsi+"' " : "")
+				+ (msisdn!=null && !"".equals(msisdn) ? "AND A.MSISDN like '"+msisdn+"' " : "")
+				+ "ORDER BY A.CERATE_TIME DESC ";
 
 		List<QosBean> list=new ArrayList<QosBean>();
 		

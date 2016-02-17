@@ -21,6 +21,7 @@ angular.module('MainApp')
 		
 		self.queryVLN = function(serviceId){
 			self.VLNs = [];
+			self.VLN = '';
 			if(!serviceId || serviceId == '')
 				return;
 			self.elseMsg = "查詢中...";
@@ -29,12 +30,21 @@ angular.module('MainApp')
 				if(data['error']){
 					alert(data['error']);
 				}else{
+					console.log(data['data']);
 					self.VLNs=data['data'];
+						for(var i = 0 ;i<self.VLNs.length;i++){
+							self.VLN += self.VLNs[i]+',';
+						}
+						if(self.VLN.length>0)
+							self.VLN = self.VLN.substring(0,self.VLN.length-1);
+					
+					
+					
 				}
 		    }).error(function(data, status, headers, config) {   
 		           alert("error");
 		    }).then(function(){
-		    	self.elseMsg = "完成!";
+		    	self.elseMsg = "查詢完成!";
 		    });
 			
 		};
@@ -54,6 +64,8 @@ angular.module('MainApp')
 				}else{
 					
 					self.addons=data['data'];
+					console.log(self.addons);
+					console.log(self.addons.length);
 					/*angular.forEach(data['data'][0],function(obj,key){
 						alert(obj+","+key);
 					});*/
@@ -61,7 +73,7 @@ angular.module('MainApp')
 		    }).error(function(data, status, headers, config) {   
 		           alert("error");
 		    }).then(function(){
-		    	self.elseMsg = "完成!";
+		    	self.elseMsg = "查詢完成!";
 		    });
 			
 		};
@@ -82,7 +94,7 @@ angular.module('MainApp')
 		    }).error(function(data, status, headers, config) {   
 		           alert("error");
 		    }).then(function(){
-		    	self.elseMsg = "完成!";
+		    	self.elseMsg = "查詢完成!";
 		    });
 			
 		};

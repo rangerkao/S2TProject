@@ -39,7 +39,7 @@ public class SmsDao extends CRMBaseDao{
 			st = getConn1().createStatement();
 			st2 = getConn2().createStatement();
 			
-			String sql = "SELECT SCLASS,SEND_NUMBER,MSG,TO_CHAR(SENDTIME,'yyyyMMddhh24miss') SENDTIME "
+			String sql = "SELECT SCLASS,SEND_NUMBER,MSG,TO_CHAR(SENDTIME,'yyyyMMdd hh24:mi:ss') SENDTIME "
 					+ "FROM( "
 					+ "		SELECT 'DVRS' SCLASS ,A.SEND_NUMBER,A.MSG,A.SEND_DATE  SENDTIME "
 					+ "		FROM HUR_SMS_LOG A "
@@ -71,7 +71,7 @@ public class SmsDao extends CRMBaseDao{
 			rs.close();
 			rs = null;
 			
-			sql = "SELECT SCLASS,SEND_NUMBER,MSG,TO_CHAR(SENDTIME,'yyyyMMddhh24miss') SENDTIME "
+			sql = "SELECT SCLASS,SEND_NUMBER,MSG,TO_CHAR(SENDTIME,'yyyyMMdd hh24:mi:ss') SENDTIME "
 					+ "FROM( "
 					+ "		SELECT 'LocalNumber' SCLASS,A.SERVICECODE SEND_NUMBER,A.MSGCONTENT MSG,A.LASTSUCCESSTIME SENDTIME "
 					+ "		FROM MSSENDINGTASK A "

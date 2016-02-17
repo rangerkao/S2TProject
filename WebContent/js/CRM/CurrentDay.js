@@ -53,10 +53,10 @@ angular.module('MainApp')
 		    }).error(function(data, status, headers, config) {   
 		    	alert("Error:");
 		    	self.buttonDis = false;
-		    	self.dayMsg = "完成!";
+		    	self.dayMsg = "查詢完成!";
 		    }).then(function(){
 		    	self.buttonDis = false;
-		    	self.dayMsg = "完成!";
+		    	self.dayMsg = "查詢完成!";
 		    });
 		};
 		

@@ -45,7 +45,7 @@ angular.module('MainApp')
 		    }).error(function(data, status, headers, config) {   
 		    	alert("error");
 		    }).then(function(){
-		    	self.qosMsg="完成!";
+		    	self.qosMsg="查詢完成!";
 			});
 		};
 		

@@ -39,15 +39,28 @@ public class CacheDao extends BaseDao{
 				+ "     	  GROUP BY IMSI )B "
 				+ " WHERE A.IMSI=B.IMSI AND A.COMPLETEDATE =B.COMPLETEDATE ";
 
-		Statement st = getConn2().createStatement();
+		Statement st = null;
 		
-		ResultSet rs=st.executeQuery(sql);
+		ResultSet rs = null;
 		
-		while(rs.next()){
-			imsitoServiceID.put(rs.getString("IMSI"), rs.getString("SERVICEID"));
+		try{
+			st = getConn2().createStatement();
+			
+			rs = st.executeQuery(sql);
+			while(rs.next()){
+				imsitoServiceID.put(rs.getString("IMSI"), rs.getString("SERVICEID"));
+			}
+		}finally{
+			try {
+				if(rs!=null)
+					rs.close();
+				if(st!=null)
+					st.close();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
-		rs.close();
-		st.close();
 		
 		return imsitoServiceID;
 	}
@@ -75,16 +88,28 @@ public class CacheDao extends BaseDao{
 				+ "					WHERE A.ORDERID =B.ORDERID AND   B.FIELDID=3713) "
 				+ "			GROUP BY SERVICEID )B "
 				+ "		WHERE A.SERVICEID=B.SERVICEID AND A.COMPLETEDATE =B.COMPLETEDATE ";
-		Connection subConn2 = connectDB2();
-		Statement st = subConn2.createStatement();
-		
-		ResultSet rs=st.executeQuery(sql);
-	
-		while(rs.next()){
-			serviceIDtoIMSI.put(rs.getString("SERVICEID"), rs.getString("IMSI"));
+		Statement st = null;
+		ResultSet rs = null;
+		try {
+			st = getConn2().createStatement();
+			
+			rs = st.executeQuery(sql);
+
+			while(rs.next()){
+				serviceIDtoIMSI.put(rs.getString("SERVICEID"), rs.getString("IMSI"));
+			}
+		}finally{
+			try {
+				if(rs!=null)
+					rs.close();
+				if(st!=null)
+					st.close();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
-		rs.close();
-		st.close();
+		
 		//closeConnection();
 		return serviceIDtoIMSI;
 	}

@@ -32,7 +32,7 @@ angular.module('MainApp')
 		    }).error(function(data, status, headers, config) {   
 		    	alert("error");
 		    }).then(function(){
-		    	self.appMsg = "完成!";
+		    	self.appMsg = "查詢完成!";
 		    });
 		};
 		

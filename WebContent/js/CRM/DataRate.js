@@ -11,13 +11,15 @@ angular.module('MainApp')
 		                 {name:"費率",col:"rate",_width:"5%"},
 		                 {name:"計價單位(KB)",col:"chargeunit",_width:"10%"},
 		                 {name:"幣別",col:"currency",_width:"5%"},
-		                 {name:"每日上限",col:"dayCap",_width:"10%"}];
+		                 {name:"每日收費上限",col:"dayCap",_width:"10%"}];
 		self.query = function(){
 			AjaxService.query('queryDataRate',{})
 			.success(function(data, status, headers, config) {  
 				self.dataList=data['data'];
 		    }).error(function(data, status, headers, config) {   
 		    	self.Error=data['error'];
+		    }).then(function(){
+		    	self.rateMsg = '查詢完成!';
 		    });
 		};
 		

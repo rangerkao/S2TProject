@@ -48,7 +48,7 @@ angular.module('MainApp')
 		    	alert("error");
 		    }).then(function(){
 		    	self.buttonDis = false;
-		    	self.smsMsg = "完成!";
+		    	self.smsMsg = "查詢完成!";
 			});;
 		};
 	}]);

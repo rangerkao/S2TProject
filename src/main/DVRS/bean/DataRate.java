@@ -9,7 +9,7 @@ public class DataRate {
 	Double rate;
 	Long chargeunit;
 	String currency;
-	Double dayCap;
+	String dayCap;
 	
 	public DataRate(){};
 	
@@ -17,7 +17,7 @@ public class DataRate {
 
 	public DataRate(String pricePlanId, String pricePlanName, String mccmnc,
 			String country, String netWork, Double rate, Long chargeunit,
-			String currency, Double dayCap) {
+			String currency, String dayCap) {
 		super();
 		this.pricePlanId = pricePlanId;
 		this.pricePlanName = pricePlanName;
@@ -110,13 +110,13 @@ public class DataRate {
 
 
 
-	public Double getDayCap() {
+	public String getDayCap() {
 		return dayCap;
 	}
 
 
 
-	public void setDayCap(Double dayCap) {
+	public void setDayCap(String dayCap) {
 		this.dayCap = dayCap;
 	}
 	

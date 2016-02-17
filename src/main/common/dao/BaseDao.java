@@ -7,8 +7,11 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Properties;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import main.CRM.bean.SMS;
 import main.common.action.CacheAction;
@@ -19,15 +22,32 @@ public class BaseDao {
 	protected static Connection conn=null;
 	protected static Connection conn2=null;
 	protected static Connection conn3=null;
+	private static Date requestTime;
 	
 	public BaseDao() throws Exception{
 		props=CacheAction.props;
+		
+		Timer timer = new Timer();
+
+		Date now = new Date();//現在時間
+
+		timer.schedule(new taskClass(),now,1000*60*5);
+
+	}	
+	
+	class taskClass extends TimerTask{
+
+		public void run(){
+			if(getRequestTime() ==null || new Date().getTime()>=(getRequestTime().getTime()+1000*60*5))
+				closeConnection();
+		}
 	}
 	
 	protected Connection getConn1() throws Exception{
 		Statement st = null;
 		try {
 			st = conn.createStatement();
+			
 		} catch (Exception e) {
 			createConnection();
 		}finally{
@@ -83,14 +103,18 @@ public class BaseDao {
 		conn3=connectDB3();
 		System.out.println("Create connect3!");
 	}
-	protected void closeConnection() throws SQLException{
-		if(conn!=null)
-			conn.close();
-		if(conn2!=null)
-			conn2.close();
-		if(conn3!=null)
-			conn3.close();
-		System.out.println("Close connect!");
+	protected void closeConnection(){
+		try {
+			if(conn!=null)
+				conn.close();
+			if(conn2!=null)
+				conn2.close();
+			if(conn3!=null)
+				conn3.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		System.out.println("Close connect!("+new Date()+")");
 	}
 		//---------------建立DB 連結 conn1 主資料庫、conn2 Mboss----
 
@@ -158,20 +182,23 @@ public class BaseDao {
 		}
 		
 		public long getTimeValue(String s) throws ParseException{
+			return getTimeValue(s,"yyyyMMddHHmmss");
+		}
+		public long getTimeValue(String s,String format) throws ParseException{
 			Long value = null;
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+			SimpleDateFormat sdf = new SimpleDateFormat(format);
 			value=sdf.parse(s).getTime();
 			return value;
 		}
 		
-		
+
 		public void sort(List<SMS> l) throws ParseException{
 			
 			int size = l.size();
 			
 			for(int i = 0 ; i<size;i++){
 				for(int j = 1 ;j<size;j++){
-					swap(l,j-1,getTimeValue(l.get(j-1).getSendTime()),j,getTimeValue(l.get(j).getSendTime()));
+					swap(l,j-1,getTimeValue(l.get(j-1).getSendTime(),"yyyyMMdd HH:mm:ss"),j,getTimeValue(l.get(j).getSendTime(),"yyyyMMdd HH:mm:ss"));
 				}
 			}
 			
@@ -207,8 +234,14 @@ public class BaseDao {
 			
 			return data;
 		}
+		public static Date getRequestTime() {
+			return requestTime;
+		}
+		public static void setRequestTime(Date requestTime) {
+			System.out.println("setRequestTime "+new Date());
+			BaseDao.requestTime = requestTime;
+		}
 		
 		
-	
-	
 }
+

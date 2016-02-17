@@ -1,10 +1,12 @@
 package main.common.aop;
 
 
+import java.util.Date;
 import java.util.Map;
 
 import main.CRM.bean.Subscriber;
 import main.common.dao.ActionDao;
+import main.common.dao.BaseDao;
 
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -31,7 +33,6 @@ public class ActionLogAOP {
 	
 	@Around("pointCutMethod()") //定義環繞通知
 	public Object doAround(ProceedingJoinPoint pjp) throws Throwable {
-		
 	ActionContext context = ActionContext.getContext();
 	Map<String, Object> session = context.getSession();
 	String account = (String) session.get("s2t.account");

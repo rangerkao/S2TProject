@@ -35,6 +35,22 @@
 		<action name="goSystemMenu" class="main.common.action.SystemMenuAction" method="goSystemMenu" >
 			<result name="success" type="tiles">systemMenu</result>
 		</action>
+		<!-- Cache -->
+    	<action name="flushCache" method="flushCache" class="main.common.action.CacheAction">
+	        <result name="success" type="tiles">cache</result>
+        </action>
+        
+        <action name="reloadCache" method="reloadCache" class="main.common.action.CacheAction">
+	        <result name="success" type="tiles">cache</result>
+        </action>
+        
+        <action name="batchReloadCache" method="batchReloadCache" class="main.common.action.CacheAction">
+	        <result name="success" type="tiles">cache</result>
+        </action>
+        
+        <action name="reloadProperties" method="reloadProperties" class="main.common.action.CacheAction">
+	        <result name="success" type="tiles">cache</result>
+        </action>
 		<!-- Escel 下載 -->
 		<action name="createExcelbyJSON"  method="createExcelbyJSON" class="main.common.action.Excel">  
             <result name="success" type="stream">  

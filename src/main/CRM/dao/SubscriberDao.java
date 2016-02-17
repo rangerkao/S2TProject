@@ -751,12 +751,12 @@ public class SubscriberDao extends CRMBaseDao{
 		
 		return result;
 	}
-	
+	//TODO
 	public List<String> queryVLN(String serviceId) throws Exception{
 		List<String> result = new ArrayList<String>(); 
 
-		String sql = "SELECT A.FOLLOWMENUMBER "
-				+ "FROM FOLLOWMEDATA A "
+		String sql = "SELECT A.VLN "
+				+ "FROM VLNNUMBER A "
 				+ "WHERE A.SERVICEID = '"+serviceId+"'";
 				
 		Statement st = null;
@@ -769,7 +769,7 @@ public class SubscriberDao extends CRMBaseDao{
 			rs = st.executeQuery(sql);
 			
 			while(rs.next()){
-				result.add(rs.getString("FOLLOWMENUMBER"));
+				result.add(rs.getString("VLN"));
 			}
 			
 			

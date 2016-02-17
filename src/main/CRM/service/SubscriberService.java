@@ -21,7 +21,7 @@ public class SubscriberService extends BaseService{
 	}
 
 	@Resource
-	SubscriberDao subscriberDao ;
+	SubscriberDao subscriberDao;
 	
 	
 	public List<Subscriber> queryListById(String id) throws Exception{

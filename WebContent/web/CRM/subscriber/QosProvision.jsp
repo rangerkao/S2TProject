@@ -13,10 +13,10 @@
 		</div>
 	</div> -->
 	<div>
-		<font color="red">Plan 1：一般用戶(舊) 2：一般用戶 3：華人上網包(香港) 4：華人上網包(香港+大陸)</font>
+		<font color="red">Plan 1：一般用戶(舊) ；2：一般用戶 ；3：華人上網包(香港)； 4：華人上網包(香港+大陸)</font>
 	</div>
 	<page-table 
-		tableWidth = "80%" 
+		table-width = "100%" 
 		table-header="qosCtrl.qosHeader" 
 		table-data="qosCtrl.qosList">
 	</page-table>

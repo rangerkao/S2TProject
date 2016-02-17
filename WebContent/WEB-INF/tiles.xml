@@ -22,6 +22,14 @@
     		</definition>
     	</put-attribute>
     </definition>
+    <definition name="cache" extends="baseLayout">
+    	<put-attribute name="page">
+    		<definition template="/web/tiles/base1.jsp">
+    			<put-attribute name="top" value="/web/tiles/top.jsp" />
+       	 		<put-attribute name="middle" value="/web/login.jsp" />
+    		</definition>
+    	</put-attribute>
+    </definition>
     <definition name="welcome" extends="baseLayout">
     	<put-attribute name="page">
     		<definition template="/web/tiles/base1.jsp">

@@ -2,7 +2,7 @@
 <div ng-controller="CurrentDayCtrl as dCtrl" class="container-fluid max_height" style="vertical-align: middle;">
 	<div class="row max_height" align="center">
 		<h4>{{tab.title}}({{dCtrl.dayMsg}})</h4>
-		<div class="col-xs-3" align="right">查詢期間從</div>
+		<div class="col-xs-3" align="right">請輸入查詢期間從</div>
 		<div class="col-xs-3">
 			<datepicker-directive selected-value = "dCtrl.dateFrom" ></datepicker-directive> 
 		</div>

@@ -4,8 +4,10 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.stereotype.Repository;
 
@@ -107,13 +109,27 @@ public class ExcelDao extends CRMBaseDao{
 					+ "					(	SELECT B.SERVICEID,MAX(B.DATEACTIVATED) DATEACTIVATED "
 					+ "						FROM SERVICE B GROUP BY SERVICEID) B "
 					+ "						WHERE A.SERVICEID = B.SERVICEID AND A.DATEACTIVATED = B.DATEACTIVATED) E "
-					+ "WHERE E.SERVICEID IN ({{SERIVCEIDS}})  AND E.SERVICECODE = F.S2TMSISDN(+) ";
+					+ "WHERE E.SERVICECODE = F.S2TMSISDN(+) "; //E.SERVICEID IN ({{SERIVCEIDS}})  AND
 			
 			 
 			String serviceids = "";
 			int i = 0;
 			Map<String,String> m3 = null;
-			for(Map<String, Object> m : result){
+			
+			System.out.println("Execute SQL :"+sql);
+			rs = st.executeQuery(sql);
+			
+			while(rs.next()){
+				m3 = new HashMap<String,String>();
+				m3.put("PARTNERMSISDN", rs.getString("PARTNERMSISDN"));
+				m3.put("SERVICECODE", rs.getString("SERVICECODE"));
+				m3.put("DATEACTIVATED", rs.getString("DATEACTIVATED"));
+				m3.put("DATECANCELED", rs.getString("DATECANCELED"));
+				m2.put(rs.getString("SERVICEID"), m3);
+			}
+			rs.close();
+			
+			/*for(Map<String, Object> m : result){
 				serviceids += m.get("SERVICEID")+",";
 				i++;
 				if(i==1000){
@@ -157,7 +173,9 @@ public class ExcelDao extends CRMBaseDao{
 				}
 				serviceids = "";
 				i=0;					
-			}
+			}*/
+			
+			
 		}finally{
 			try {
 				if(st!=null)
@@ -168,14 +186,33 @@ public class ExcelDao extends CRMBaseDao{
 			}
 		}
 		System.out.println("Set remain data!");
+		Set<String> serviceids = new HashSet<String>();
+		
 		for(Map<String, Object> m : result){
-			if(m2.get(m.get("SERVICEID"))!=null){
+			String serviceid = (m.get("SERVICEID")!=null ?m.get("SERVICEID").toString():"");
+			
+			serviceids.add(serviceid);
+			if(m2.get(serviceid)!=null){
 				m.put("PARTNERMSISDN",m2.get(m.get("SERVICEID")).get("PARTNERMSISDN"));
 				m.put("SERVICECODE",m2.get(m.get("SERVICEID")).get("SERVICECODE"));
 				m.put("DATEACTIVATED",m2.get(m.get("SERVICEID")).get("DATEACTIVATED"));
 				m.put("DATECANCELED",m2.get(m.get("SERVICEID")).get("DATECANCELED"));
 			}
 		}
+		for(String serviceid : m2.keySet()){
+			if(!serviceids.contains(serviceid)){
+				Map<String, Object> m = new HashMap<String, Object>();
+				m.put("SERVICEID",serviceid);
+				m.put("PARTNERMSISDN",m2.get(serviceid).get("PARTNERMSISDN"));
+				m.put("SERVICECODE",m2.get(serviceid).get("SERVICECODE"));
+				m.put("DATEACTIVATED",m2.get(serviceid).get("DATEACTIVATED"));
+				m.put("DATECANCELED",m2.get(serviceid).get("DATECANCELED"));
+				result.add(m);
+			}
+		}
+	
+		
+		
 		
 		//closeConnection();
 			

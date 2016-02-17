@@ -6,6 +6,7 @@
 			<button class="btn btn-success btn-xs" ng-click="dCtrl.downLoadExcel()" ng-disabled="dCtrl.buttonDis">download exce</button>
 		</div>
 		<page-table 
+			table-width="90%" 
 			table-header="dCtrl.dataHeader" 
 			table-data="dCtrl.dataList">
 		</page-table>
