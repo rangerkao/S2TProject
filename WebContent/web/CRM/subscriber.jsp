@@ -1,8 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <div ng-controller="SubscriberCtrl as sCtrl" class="container-fluid max_height" style="vertical-align: middle; background-color: rgba(45, 41, 41, 0.36);">
 	<div class="row max_height subPage" align="center">
-		<div class="info">
+		
+		<div class="infoc col-xs-12">
+			
 			<label>使用者資訊{{sCtrl.custInfo.seq}}</label>
+			<span class="glyphicon glyphicon-chevron-up" aria-hidden="true" ng-click="sCtrl.hideNotNecessaryClicked()" ng-show="!sCtrl.hideNotNecessary"></span>
+			<span class="glyphicon glyphicon-chevron-down" aria-hidden="true" ng-click="sCtrl.hideNotNecessaryClicked()" ng-show="sCtrl.hideNotNecessary"></span>
 			<a ng-href="logout"><font color="red" >登出</font></a>
 			<div>
 				<label ng-repeat="item in sCtrl.radioList">
@@ -37,7 +41,7 @@
 					  	</tr>
 					</table>
 				</modal>	
-				<a class="btn btn-success btn-xs"  ng-click="sCtrl.downLoadExcel()" ng-disabled="sCtrl.buttonDis">download excel</a>	
+				<a class="btn btn-success btn-xs"  ng-click="sCtrl.downLoadExcel()" ng-disabled="sCtrl.buttonDis">產生客戶總表</a>	
 			<!-- 	<button data-toggle="modal" data-target="#serviceidModal" class="btn btn-success btn-xs" >choose serviceId</button>
 				<modal title="Choose a serviceid" id="serviceidModal">
 					<table class="dataTable">
@@ -47,105 +51,116 @@
 					</table>
 				</modal> -->
 			</div>
-			<div class="col-xs-12">
+			
 				<div class="col-xs-3" align="left">
 					<label>S2T MSISDN:</label>
 					<span ng-bind="sCtrl.custInfo.s2tMsisdn"></span>
 				</div>
-				<div class="col-xs-3" align="left" ng-dblclick="sCtrl.infoEditMod('name')">
+				<div class="col-xs-3" align="left" ng-dblclick="sCtrl.infoEditMod('name')" ng-hide="sCtrl.hideNotNecessary">
 					<label>姓名:</label>
 					<span ng-bind="sCtrl.custInfo.name" ng-show="sCtrl.show.name"></span>
 					<input type="text" ng-model = "sCtrl.custInfo.name" ng-show="!sCtrl.show.name" ng-change="sCtrl.whenInfoCahnge('name')">
 				</div>
-				<div class="col-xs-3" align="left" ng-dblclick="sCtrl.infoEditMod('idTaxid')">
+				<div class="col-xs-3" align="left" ng-dblclick="sCtrl.infoEditMod('idTaxid')" ng-hide="sCtrl.hideNotNecessary">
 					<label>統一編號/證號:</label>
 					<span ng-bind="sCtrl.custInfo.idTaxid" ng-show="sCtrl.show.idTaxid"></span>
 					<input type="text" ng-model = "sCtrl.custInfo.idTaxid" ng-show="!sCtrl.show.idTaxid" ng-change="sCtrl.whenInfoCahnge('idTaxid')">
 					<input type="button" value="帶入資料" ng-click="sCtrl.queryInfo()" class="btn btn-danger btn-xs" ng-show="!sCtrl.show.idTaxid">
 				</div>
-				<div class="col-xs-3" align="left" ng-dblclick="sCtrl.infoEditMod('birthday')">
+				<div class="col-xs-3" align="left" ng-dblclick="sCtrl.infoEditMod('birthday')" ng-hide="sCtrl.hideNotNecessary">
 					<label>生日(民國):</label>
 					<span ng-bind="sCtrl.custInfo.birthday" ng-show="sCtrl.show.birthday"></span>
 					<input type="text" ng-model = "sCtrl.custInfo.birthday" ng-show="!sCtrl.show.birthday" ng-change="sCtrl.whenInfoCahnge('birthday')">
 				</div>
-			</div>
-			<div class="col-xs-12">
+		
 				<div class="col-xs-3" align="left">
 					<label>Home MSISDN:</label>
 					<span ng-bind="sCtrl.custInfo.chtMsisdn"></span>
 				</div>
-				<div class="col-xs-3" align="left" ng-dblclick="sCtrl.infoEditMod('email')">
+				<div class="col-xs-3" align="left" ng-dblclick="sCtrl.infoEditMod('email')" ng-hide="sCtrl.hideNotNecessary">
 					<label>Email:</label>
 					<span ng-bind="sCtrl.custInfo.email" ng-show="sCtrl.show.email"></span>
 					<input type="text" ng-model = "sCtrl.custInfo.email" ng-show="!sCtrl.show.email" ng-change="sCtrl.whenInfoCahnge('email')">
 				</div>
-				<div class="col-xs-6" align="left" ng-dblclick="sCtrl.infoEditMod('billingAddress')">
+				<div class="col-xs-6" align="left" ng-dblclick="sCtrl.infoEditMod('billingAddress')" ng-hide="sCtrl.hideNotNecessary">
 					<label>帳單地址：</label>
 					<span ng-bind="sCtrl.custInfo.billingAddress" ng-show="sCtrl.show.billingAddress"></span>
 					<input type="text" ng-model = "sCtrl.custInfo.billingAddress" ng-show="!sCtrl.show.billingAddress" ng-change="sCtrl.whenInfoCahnge('billingAddress')">
 				</div>
-			</div>
-			<div class="col-xs-12">
+			
 				<div class="col-xs-3" align="left">
 					<label>Service ID：</label>
 					<span ng-bind="sCtrl.custInfo.serviceId"></span>
 				</div>
-				<div class="col-xs-3" align="left" ng-dblclick="sCtrl.infoEditMod('phone')">
+				<div class="col-xs-3" align="left" ng-dblclick="sCtrl.infoEditMod('phone')" ng-hide="sCtrl.hideNotNecessary">
 					<label>聯絡電話：</label>
 					<span ng-bind="sCtrl.custInfo.phone" ng-show="sCtrl.show.phone"></span>
 					<input type="text" ng-model = "sCtrl.custInfo.phone" ng-show="!sCtrl.show.phone" ng-change="sCtrl.whenInfoCahnge('phone')">
 				</div>
-				<div class="col-xs-6" align="left" ng-dblclick="sCtrl.infoEditMod('permanentAddress')">
+				<div class="col-xs-6" align="left" ng-dblclick="sCtrl.infoEditMod('permanentAddress')" ng-hide="sCtrl.hideNotNecessary">
 					<label>戶籍地址：</label> 
 					<span ng-bind="sCtrl.custInfo.permanentAddress" ng-show="sCtrl.show.permanentAddress"></span>
 					<input type="text" ng-model = "sCtrl.custInfo.permanentAddress" ng-show="!sCtrl.show.permanentAddress" ng-change="sCtrl.whenInfoCahnge('permanentAddress')">
 				</div>
-			</div>
-			<div class="col-xs-12">
+			
 				<div class="col-xs-3" align="left">
 					<label>狀態：</label>
 					<span ng-bind="sCtrl.custInfo.status" ></span>
 				</div>
-				<div class="col-xs-3" align="left" ng-dblclick="sCtrl.infoEditMod('agency')">
+				<div class="col-xs-3" align="left" ng-dblclick="sCtrl.infoEditMod('agency')" ng-hide="sCtrl.hideNotNecessary">
 					<label>代辦處代號：</label>
 					<span ng-bind="sCtrl.custInfo.agency" ng-show="sCtrl.show.agency"></span>
 					<input type="text" ng-model = "sCtrl.custInfo.agency" ng-show="!sCtrl.show.agency" ng-change="sCtrl.whenInfoCahnge('agency')">
 				</div>
-				<div class="col-xs-3" align="left" ng-dblclick="sCtrl.infoEditMod('type')">
+				<div class="col-xs-3" align="left" ng-dblclick="sCtrl.infoEditMod('type')" ng-hide="sCtrl.hideNotNecessary">
 					<label>類型：</label>
 					<label>
 						<input type="radio" name="type" ng-model="sCtrl.custInfo.type" ng-disabled="sCtrl.show.type" ng-change="sCtrl.whenInfoCahnge('type')" value="P">個人
 						<input type="radio" name="type" ng-model="sCtrl.custInfo.type" ng-disabled="sCtrl.show.type" ng-change="sCtrl.whenInfoCahnge('type')" value="E">公司
 					</label>
 				</div>
-				<div class="col-xs-3" align="left">
+				<div class="col-xs-3" align="left" ng-hide="sCtrl.hideNotNecessary">
 					<input type="button" value="save" ng-click="sCtrl.updateSubscriber()" class="btn btn-danger btn-xs" ng-show="sCtrl.showSave">
 				</div>
-			</div>
-			<div class="col-xs-12" ng-show="sCtrl.custInfo.type=='E'">
-				<div class="col-xs-6" align="left" ng-dblclick="sCtrl.infoEditMod('chair')">
+
+				<div class="col-xs-6" align="left" ng-dblclick="sCtrl.infoEditMod('chair')" ng-show="sCtrl.custInfo.type=='E'" ng-hide="sCtrl.hideNotNecessary">
 					<label>負責人：</label>
 					<span ng-bind="sCtrl.custInfo.chair" ng-show="sCtrl.show.chair"></span>
 					<input type="text" ng-model = "sCtrl.custInfo.chair" ng-show="!sCtrl.show.chair" ng-change="sCtrl.whenInfoCahnge('chair')">
 				</div>
-				<div class="col-xs-6" align="left" ng-dblclick="sCtrl.infoEditMod('chairID')">
+				<div class="col-xs-6" align="left" ng-dblclick="sCtrl.infoEditMod('chairID')" ng-show="sCtrl.custInfo.type=='E'" ng-hide="sCtrl.hideNotNecessary">
 					<label>負責人 ID：</label>
 					<span ng-bind="sCtrl.custInfo.chairID" ng-show="sCtrl.show.chairID"></span>
 					<input type="text" ng-model = "sCtrl.custInfo.chairID" ng-show="!sCtrl.show.chairID" ng-change="sCtrl.whenInfoCahnge('chairID')">
 				</div>
-			</div>
-			
+
 		</div>
-		<div class="detail" >
-			<div class="tabs">
-				<ul class="nav nav-tabs">
-					<li role="presentation" class="{{$index===sCtrl.selectedTab?'active':''}}" ng-repeat="tab in sCtrl.tabs">
-						<a class="tab bg-info" ng-click="sCtrl.selectTab($index)">{{tab.title}}</a>
+		<!-- <span >===============================   </span>
+		<span class="glyphicon glyphicon-chevron-up" aria-hidden="true" ng-click="sCtrl.hideNotNecessary=true"></span>
+		
+		<div class="btn-group" role="group">
+				<button class="btn btn-default btn-xs dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+					頁面選單
+					<span class="caret"></span>
+				</button>
+				<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+					<li role="presentation" ng-repeat="tab in sCtrl.tabs">
+						<a role="menuitem" tabindex="-1"  ng-click="sCtrl.selectTab($index)">{{tab.title}}</a>
 					</li>
 				</ul>
 			</div>
+			<span class="glyphicon glyphicon-chevron-down" aria-hidden="true" ng-click="sCtrl.hideNotNecessary=false"></span>
+		<span >   ===============================</span> -->
+		<div class="detail" >
+			 <div class="tabs">
+				<ul class="nav nav-tabs">
+					<li role="presentation" class="{{$index===sCtrl.selectedTab?'active':''}}" ng-repeat="tab in sCtrl.tabs">
+						<a class="tab bg-info" ng-click="sCtrl.selectTab($index)" style="padding: 5px;margin: 0px;">{{tab.title}}</a>
+					</li>
+				</ul>
+			</div> 
 			<div ng-repeat="tab in sCtrl.tabs" class="tabContent" ng-show="sCtrl.selectedTab==={{$index}}">
-				<div ng-include="tab.url"></div>  
+				<div ng-include="tab.url" ></div>  
 			</div>
 		</div>
 	</div>

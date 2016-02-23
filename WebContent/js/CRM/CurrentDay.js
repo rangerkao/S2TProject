@@ -21,7 +21,8 @@ angular.module('MainApp')
 			           {name:"是否發送過每日警示",col:"alert",_width:"9%"}];
 		
 		self.dataList=[];
-		
+		self.dateFrom = new Date();
+		self.dateTo = new Date();
 		self.query = function(imsi){
 			self.dataList =[];
 			if(!imsi){

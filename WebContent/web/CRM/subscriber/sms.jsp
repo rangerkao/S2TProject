@@ -5,20 +5,24 @@
 		<input type="text" ng-model="smsCtrl.smstest"><input type="button" value="smstest" 
 				ng-click="eCtrl.querySMS(smsCtrl.smstest,smsCtrl.smstest,DateFormatString.Format(smsCtrl.dateFrom),DateFormatString.Format(smsCtrl.dateTo))">
 	</div>
-	
-	<div class="col-xs-3" align="right">查詢期間從</div>
-	<div class="col-xs-3">
-		<datepicker-directive selected-value = "smsCtrl.dateFrom" ></datepicker-directive> 
-	</div>
-	<div class="col-xs-1">
-		到
-	</div>
-	<div class="col-xs-3">
-		<datepicker-directive selected-value = "smsCtrl.dateTo" ></datepicker-directive> 
-	</div>
-	<div class="col-xs-2" align="right">
-		<button type="button" class="btn btn-primary" ng-click="smsCtrl.querySMSwithTime()" ng-disabled="smsCtrl.buttonDis">查詢簡訊</button>
-	</div>
+	<div class="col-xs-12" align="right">
+			<div class="col-xs-2" align="right"></div>
+			<div class="col-xs-2" align="right">
+				請輸入查詢期間從
+			</div>
+			<div class="col-xs-2" align="center">
+				<datepicker-directive selected-value = "smsCtrl.dateFrom" ></datepicker-directive> 
+			</div>
+			<div class="col-xs-1" align="center">
+				<p>到</p>
+			</div>
+			<div class="col-xs-2" align="center">
+				<datepicker-directive selected-value = "smsCtrl.dateTo" ></datepicker-directive> 
+			</div>
+			<div class="col-xs-3" align="left">
+				<button type="button" class="btn btn-primary btn-xs" ng-click="smsCtrl.querySMSwithTime()" ng-disabled="smsCtrl.buttonDis">查詢簡訊</button>
+			</div>
+		</div>
 	<page-table 
 		table-width = "100%" 
 		table-header="smsCtrl.smsHeader" 

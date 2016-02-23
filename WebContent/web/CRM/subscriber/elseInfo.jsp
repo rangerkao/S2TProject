@@ -3,26 +3,26 @@
 	<h4>{{tab.title}}({{eCtrl.elseMsg}})</h4>
 	<div align="left">
 		<form class="form-horizontal" role="form" >
-			<div class="form-group">
+			<div class="form-group elseInfoList" style="width: 100%">
 				<label class="col-sm-2 control-label">s2t IMSI:</label>
 				<div class="col-sm-10">
 					<p class="form-control-static">{{eCtrl.s2tIMSI}}</p>
 				</div>
 			</div>
-	  		<div class="form-group">
+	  		<div class="form-group elseInfoList" style="width: 100%">
 				<label class="col-sm-2 control-label">home IMSI:</label>
 				<div class="col-sm-10">
 					<p class="form-control-static">{{eCtrl.homeIMSI}}</p>
 				</div>
 			</div>
-			<div class="form-group">
+			<div class="form-group elseInfoList" style="width: 100%">
 				<label class="col-sm-2 control-label">VLN:</label>
 				<div class="col-sm-10">
 					<div class="col-xs-12" ng-show="sCtrl.testMode"><input type="text" ng-model="eCtrl.vlntest"><input type="button" value="vlntest" ng-click="eCtrl.queryVLN(eCtrl.vlntest)"></div>
 					<p class="form-control-static">{{eCtrl.VLN}}</p>
 				</div>
 			</div>
-			<div class="form-group">
+			<div class="form-group elseInfoList" style="width: 100%">
 				<label class="col-sm-2 control-label">資費:</label>
 				<div class="col-sm-10">
 					<div class="form-control-static" ng-show="eCtrl.privePlanId!=null">
@@ -30,7 +30,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="form-group">
+			<div class="form-group elseInfoList" style="width: 100%">
 				<label class="col-sm-2 control-label">說明:</label>
 				<div class="col-sm-10">
 					<div class="form-control-static" ng-show="eCtrl.privePlanId!=null">
@@ -38,25 +38,26 @@
 					</div>
 				</div>
 			</div>
-			<div class="form-group">
-				<label class="col-sm-2 control-label">數據狀態:</label>
-				<div class="col-sm-10">
-					<p class="form-control-static" ng-show="eCtrl.gprsStatus!=null">{{eCtrl.gprsStatus==0?'關閉':'開啟'}}({{eCtrl.gprsStatus}})</p>
-				</div>
-			</div>
-			<div class="form-group">
+			
+			<div class="form-group elseInfoList" style="width: 100%">
 				<label class="col-sm-2 control-label">啟用時間:</label>
 				<div class="col-sm-10">
 					<p class="form-control-static">{{eCtrl.activatedDate}}</p>
 				</div>
 			</div>
-			<div class="form-group">
+			<div class="form-group elseInfoList" style="width: 100%">
 				<label class="col-sm-2 control-label">退租時間:</label>
 				<div class="col-sm-10">
 					<p class="form-control-static">{{eCtrl.canceledDate}}</p>
 				</div>
 			</div>
-			<div class="form-group">
+			<div class="form-group elseInfoList" style="width: 100%">
+				<label class="col-sm-2 control-label">數據狀態:</label>
+				<div class="col-sm-10">
+					<p class="form-control-static" ng-show="eCtrl.gprsStatus!=null">{{eCtrl.gprsStatus==0?'關閉':'開啟'}}({{eCtrl.gprsStatus}})</p>
+				</div>
+			</div>
+			<div class="form-group elseInfoList" style="width: 100%">
 				<label class="col-sm-2 control-label">華人上網包:</label>
 				<div class="col-sm-10">
 					<div class="col-xs-12" ng-show="sCtrl.testMode"><input type="text" ng-model="eCtrl.addontest"><input type="button" value="addontest" ng-click="eCtrl.queryAddons(eCtrl.addontest)"></div>

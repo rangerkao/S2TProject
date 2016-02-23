@@ -210,14 +210,31 @@ public class ExcelDao extends CRMBaseDao{
 				result.add(m);
 			}
 		}
-	
-		
-		
-		
+
 		//closeConnection();
-			
-		return result;
+		return sortByServiceid(result);		
+	}
+	
+	//20160223 add 
+	public List<Map<String,Object>> sortByServiceid(List<Map<String,Object>> list){
 		
+			for(int i=0 ; i< list.size()-1 ; i++){
+				for(int j=0 ; j< list.size()-1 ; j++){
+					Map<String,Object> m1 = list.get(j);
+					Map<String,Object> m2 = list.get(j+1);
+					int servicei = Integer.parseInt( m1.get("SERVICEID")==null?"0":(String) m1.get("SERVICEID"));
+					int servicej = Integer.parseInt( m2.get("SERVICEID")==null?"0":(String) m2.get("SERVICEID"));
+					
+					if(servicei>servicej){
+						list.set(j+1,m1 );
+						list.set(j,m2 );
+					}
+				}
+
+		}
+		
+		return list;
+
 	}
 	
 	

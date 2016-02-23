@@ -1,11 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <div ng-model="tablePage" >		
-	<div class="col-xs-12" align="center"> 
-		<button type="button" name="Previous"  class="pagination btn btn-warning" ng-click='changePage("before")' style="width: 100px;">
+	<div class="col-xs-12" align="center" style="margin-bottom: 10px;"> 
+		<button type="button" name="Previous"  class="pagination btn btn-warning" ng-click='changePage("before")' style="width: 100px;padding: 3px;margin: 0px;">
 			<span class="glyphicon glyphicon-chevron-left"></span> Previous
 		</button>
 		<input type="text" ng-model="pageNum" style="width: 25px;">
-		<button type="button" name="Next" class="pagination btn btn-warning" ng-click='changePage("after")' style="width: 100px;"> 
+		<button type="button" name="Next" class="pagination btn btn-warning" ng-click='changePage("after")' style="width: 100px;padding: 3px;margin: 0px;"> 
 			Next<span class="glyphicon glyphicon-chevron-right"></span>
 		</button>
 		<span style="width: 50px;">&nbsp;</span>
@@ -13,9 +13,10 @@
 		<span style="width: 50px;">&nbsp;</span>
 		<label>每頁筆數</label>
 		<input ng-model='onePage' type="text" value="10" style="width: 50px;">
+		<label>共<span style="width: 50px;" >{{tableData==null?'0':tableData.length}}</span>筆</label>
 	</div>
-	<div class="col-xs-12" style="height: {{tableHeight}}; overflow: auto; ">
-		<table class="table-bordered table-hover" style="width:{{tableWidth}};" id="PageTable" >
+	<div class="col-xs-12 ddT" style="overflow: auto;height:{{tableHeight}}; " >
+		<table class=" table-bordered table-hover" style="width:{{tableWidth}};" id="PageTable" >
 			<tr class="even_columm" >
 				<td ng-repeat="head in tableHeader" align="center" style="width: {{head._width}}">{{head.name}}</td>
 			</tr>

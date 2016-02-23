@@ -105,3 +105,17 @@ a{
 .dataTable tr:HOVER {
 	background-color: #A1C7EF
 }
+
+/******************************* else info ********************************/
+.elseInfoList{
+	margin: 0px;
+	padding: 0px;
+}
+.form-group{
+	width:100%;
+}
+.tab{
+	padding: 0px;margin: 0px;
+}
+
+

@@ -2,6 +2,16 @@ angular.module('MainApp')
 	.controller('SubscriberCtrl',['AjaxService','ActionService','$scope',function(AjaxService,ActionService,$scope){
 		var self=this;
 		self.testMode = false;
+		self.hideNotNecessary = false;
+		
+		self.hideNotNecessaryClicked = function(){
+			self.hideNotNecessary= !self.hideNotNecessary;
+			if(self.hideNotNecessary){
+				$(".ddT").css("height",($(".ddT").height()+110)+"px")
+			}else{
+				$(".ddT").css("height",($(".ddT").height()-110)+"px")
+			}
+		};
 		//initial
 		self.init = function(){
 			//Customer Info
@@ -27,7 +37,7 @@ angular.module('MainApp')
 			//Button control
 			self.showSave = false;
 		};
-		
+				
 		self.showControl = function(){
 			self.show={				
 					'name':true,
@@ -69,7 +79,7 @@ angular.module('MainApp')
 		self.tabs=[
 		           {url:'web/CRM/subscriber/elseInfo.jsp',title:'供裝資訊',content:'供裝資訊',active:false,disabled:false},
 		           //{url:'web/CRM/subscriber/addon.jsp',title:'供裝記錄',content:'供裝記錄',active:false,disabled:false},
-		           {url:'web/CRM/subscriber/QosProvision.jsp',title:'CMHK Qos查詢',content:'CMHK Qos查詢',active:false,disabled:false},
+		           {url:'web/CRM/subscriber/QosProvision.jsp',title:'CMHK QoS查詢',content:'CMHK QoS查詢',active:false,disabled:false},
 		           {url:'web/CRM/subscriber/application.jsp',title:'申請書回收查詢',content:'申請書回收查詢',active:true,disabled:false},
 		           {url:'web/CRM/subscriber/sms.jsp',title:'系統簡訊(開通、落地、超量)',content:'系統簡訊(開通、落地、超量)',active:false,disabled:false},
 		           //{url:'web/CRM/subscriber/bill.jsp',title:'月出帳記錄(含明細)',content:'月出帳記錄(含明細)',active:false,disabled:false},
@@ -77,8 +87,8 @@ angular.module('MainApp')
 		           //{url:'web/CRM/subscriber/receive.jsp',title:'付款記錄',content:'付款記錄',active:false,disabled:false},
 		           //{url:'web/CRM/subscriber/collection.jsp',title:'催收記錄',content:'催收記錄',active:false,disabled:false},
 		           //{url:'web/CRM/subscriber/appeal.jsp',title:'申訴記錄',content:'申訴記錄',active:false,disabled:false},
-		           {url:'web/CRM/subscriber/currentMonth.jsp',title:'月累計',content:'月累計',active:false,disabled:false},
-		           {url:'web/CRM/subscriber/currentDay.jsp',title:'日累計',content:'日累計',active:false,disabled:false},
+		           {url:'web/CRM/subscriber/currentMonth.jsp',title:'數據用量月累計',content:'數據用量月累計',active:false,disabled:false},
+		           {url:'web/CRM/subscriber/currentDay.jsp',title:'數據用量日累計',content:'數據用量日累計',active:false,disabled:false},
 		           {url:'web/CRM/subscriber/dataRate.jsp',title:'各國費率表',content:'各國費率表',active:false,disabled:false}
 		           ];
 		
@@ -351,5 +361,7 @@ angular.module('MainApp')
 		$(document).ready(function () {
 			self.getSession();
 			self.init();
-		});			
+			
+		});	
+		
 	}]);

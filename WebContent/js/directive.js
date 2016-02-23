@@ -14,7 +14,7 @@ angular.module('MainApp')
 				
 			},
 			link:function($scope,$element,$attrs){
-				$scope.tableHeight = ($("body").height()-400)+"px";
+				$scope.tableHeight = ($(".tabContent").height())+"px";
 				if(!$scope.tableWidth)
 					$scope.tableWidth = '50%';
 				
@@ -156,7 +156,7 @@ angular.module('MainApp')
 	}).directive('datepickerDirective',[function(){
 		return {
 			templateUrl:'web/directive/datePicker.jsp',
-			restrict: 'AE',
+			restrict: 'AEC',
 			scope:{
 				selectedValue:'='
 			},

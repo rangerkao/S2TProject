@@ -19,6 +19,7 @@ angular.module('MainApp')
 		self.querySMSwithTime = function(){
 			if(self.s2tMsisdn==null)
 				return;
+			self.dateTo.setDate(self.dateTo.getDate()+1);
 			self.querySMS(self.s2tMsisdn,self.chtMsisdn,DateFormatString.Format(self.dateFrom),DateFormatString.Format(self.dateTo));
 		};
 
