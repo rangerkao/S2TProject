@@ -15,15 +15,32 @@
 		<input ng-model='onePage' type="text" value="10" style="width: 50px;">
 		<label>共<span style="width: 50px;" >{{tableData==null?'0':tableData.length}}</span>筆</label>
 	</div>
-	<div class="col-xs-12 ddT" style="overflow: auto;height:{{tableHeight}}; " >
-		<table class=" table-bordered table-hover" style="width:{{tableWidth}};" id="PageTable" >
-			<tr class="even_columm" >
-				<td ng-repeat="head in tableHeader" align="center" style="width: {{head._width}}">{{head.name}}</td>
+	<div class="col-xs-12 ddT" >
+		<table style="width:{{tableWidth}};">
+			<tr class="even_columm">
+				<td style="">
+					<table class=" table-bordered table-hover" style="width:100%;" >
+						<tr  >
+							<td ng-repeat="head in tableHeader" align="center" style="width: {{head._width}}">{{head.name}}</td>
+							<td align="center" style="width: 4%"></td>
+						</tr>
+					</table>
+				</td>
+				<td style="width:16px;">
+				</td>
 			</tr>
-			<tr ng-repeat="data in dataList" class="{{($odd?'even_columm':'odd_columm')}}" ng-click='onSelect(data)'>
-				<td ng-repeat="head in tableHeader" align="center" style="width: ={{head._width}}">{{data[head.col]}}</td>
+			<tr>
+				<td colspan="2">
+					<div style="overflow-y:scroll; ;max-height:{{tableHeight}};width:100%;">
+						<table class=" table-bordered table-hover" style="width:100%;" id="PageTable" >
+							<tr ng-repeat="data in dataList" class="{{($odd?'even_columm':'odd_columm')}}" ng-click='onSelect(data)'>
+								<td ng-repeat="head in tableHeader" align="center" style="width: {{head._width}}">{{data[head.col]}}</td>
+							</tr>
+						</table>
+					</div>
+				</td>
 			</tr>
 		</table>
-	</div>
-	
+	</div> 
+
 </div>

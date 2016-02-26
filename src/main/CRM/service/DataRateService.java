@@ -1,4 +1,4 @@
-package main.DVRS.service;
+package main.CRM.service;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -7,8 +7,8 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
-import main.DVRS.bean.DataRate;
-import main.DVRS.dao.DataRateDao;
+import main.CRM.bean.DataRate;
+import main.CRM.dao.DataRateDao;
 import main.common.service.BaseService;
 @Service
 public class DataRateService extends BaseService{

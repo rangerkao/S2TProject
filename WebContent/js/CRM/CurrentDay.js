@@ -4,8 +4,10 @@ angular.module('MainApp')
 		
 		$scope.$on('queryDay',function(event,data){
 			self.s2tIMSI=data['s2tIMSI'];
-			self.dataList=[];
-			self.dayMsg="";
+		});
+		
+		$scope.$on('subReset',function(event,data){
+			self.init();
 		});
 
 		//-------------data head ---------------------
@@ -20,9 +22,7 @@ angular.module('MainApp')
 			           {name:"國家業者",col:"mccmnc",_width:"9%"},
 			           {name:"是否發送過每日警示",col:"alert",_width:"9%"}];
 		
-		self.dataList=[];
-		self.dateFrom = new Date();
-		self.dateTo = new Date();
+		
 		self.query = function(imsi){
 			self.dataList =[];
 			if(!imsi){
@@ -60,8 +60,15 @@ angular.module('MainApp')
 		    	self.dayMsg = "查詢完成!";
 		    });
 		};
-		
+		self.init = function(){
+			self.dataList=[];
+			self.dateFrom = new Date();
+			self.dateTo = new Date();
+			self.dayMsg="";
+		}
 		$(document).ready(function () {
+			self.init();
 		});		
+		
 		
 	}]);

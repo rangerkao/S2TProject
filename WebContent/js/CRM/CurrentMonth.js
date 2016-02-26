@@ -4,7 +4,10 @@ angular.module('MainApp')
 		
 		$scope.$on('queryMonth',function(event,data){
 			self.s2tIMSI=data['s2tIMSI'];
-			self.dataList=[];
+		});
+		
+		$scope.$on('subReset',function(event,data){
+			self.init();
 		});
 		
 		var now = new Date();
@@ -70,12 +73,19 @@ angular.module('MainApp')
 		    });
 		};
 		
-		$(document).ready(function () {
+		self.init = function(){
+			self.monMsg=""
+			self.monthDataList =[];
 			self.fy = self.years[0];
 			self.fm = self.mons[now.getMonth()];
 			self.ty = self.years[0];
 			self.tm = self.mons[now.getMonth()];
+		};
+		$(document).ready(function () {
+			self.init();
 			
 			//alert(self.fy+"/"+self.fm+"~"+self.ty+"/"+self.tm);
 		});	
+		
+		
 	}]);

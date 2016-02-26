@@ -7,6 +7,11 @@ angular.module('MainApp')
 			self.queryAppList(self.serviceId);
 		});
 		
+		$scope.$on('subReset',function(event,data){
+			self.appMsg = "";
+			self.appList = [];
+		});
+		
 		self.appHeader = [{name:"申請書類型",col:"type",_width:"50%"},
 		                  {name:"審定日",col:"applicationDate",_width:"50%"}];
 

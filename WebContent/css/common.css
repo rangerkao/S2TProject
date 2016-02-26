@@ -26,6 +26,11 @@ h1.title{
 	text-shadow: 5px 5px 5px #0000FF;
 }
 
+.custInfo [type=text]{
+	height:20px;
+	width:50%;
+}
+
 /******************************* Accordion area ********************************/
 .accordion h4{
 	/*set menu title style*/
@@ -117,5 +122,12 @@ a{
 .tab{
 	padding: 0px;margin: 0px;
 }
-
-
+¡@.Freezing 
+¡@¡@ { 
+¡@¡@ 
+¡@¡@ position:relative ; 
+¡@¡@ table-layout:fixed;
+¡@¡@ top:expression(this.offsetParent.scrollTop); 
+¡@¡@ z-index: 10;
+¡@¡@ } 
+¡@¡@.Freezing th{text-overflow:ellipsis;overflow:hidden;white-space: nowrap;padding:2px;}

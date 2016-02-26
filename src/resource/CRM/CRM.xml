@@ -91,6 +91,10 @@
  		<action name="queryAppByServiceId" class="main.CRM.action.ApplicationAction" method="queryAppByServiceId"></action>
  		
  		<action name="NeedLogin" class="main.common.action.NeedLoginAction" method="NeedLogin"></action>
+ 		
+ 		<action name="queryDataRate" class="main.CRM.action.DataRateAction" method="queryDataRate" />
+        <action name="queryCurrentDay" class="main.CRM.action.CurrentAction" method="queryCurrentDay" />
+        <action name="queryCurrentMonth" class="main.CRM.action.CurrentAction" method="queryCurrentMonth" />
 
 	</package>
 </struts>

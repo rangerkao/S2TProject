@@ -1,4 +1,4 @@
-package main.DVRS.action;
+package main.CRM.action;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -8,8 +8,8 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import main.DVRS.bean.DataRate;
-import main.DVRS.service.DataRateService;
+import main.CRM.bean.DataRate;
+import main.CRM.service.DataRateService;
 import main.common.action.BaseAction;
 
 public class DataRateAction extends BaseAction{

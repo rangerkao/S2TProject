@@ -1,4 +1,4 @@
-package main.DVRS.bean;
+package main.CRM.bean;
 
 public class CurrentMonth {
 

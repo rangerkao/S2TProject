@@ -1,4 +1,4 @@
-package main.DVRS.dao;
+package main.CRM.dao;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -8,7 +8,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import main.DVRS.bean.DataRate;
+import main.CRM.bean.DataRate;
 import main.common.dao.BaseDao;
 @Repository
 public class DataRateDao extends BaseDao {

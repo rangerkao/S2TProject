@@ -17,9 +17,7 @@
 			<result type="json" name="needLogin"><param name="root">needLogin</param></result>
 		</global-results>
 		<action name="queryAdmin" class="main.DVRS.action.AdminAction" method="queryAdmin" />
-        <action name="queryDataRate" class="main.DVRS.action.DataRateAction" method="queryDataRate" />
-        <action name="queryCurrentDay" class="main.DVRS.action.CurrentAction" method="queryCurrentDay" />
-        <action name="queryCurrentMonth" class="main.DVRS.action.CurrentAction" method="queryCurrentMonth" />
+       
         <action name="queryCardChangeHistory" class="main.DVRS.action.HistoryAction" method="queryCardChangeHistory" />
         <action name="queryNumberChangeHistory" class="main.DVRS.action.HistoryAction" method="queryNumberChangeHistory" />
 	    

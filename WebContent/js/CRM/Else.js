@@ -3,7 +3,6 @@ angular.module('MainApp')
 		var self = this;
 		
 		$scope.$on('queryElse',function(event,data){			
-			console.log(data['s2tIMSI']);
 			self.s2tMsisdn = data['s2tMsisdn'];
 			self.serviceid = data['serviceid'];
 			self.s2tIMSI = data['s2tIMSI'];
@@ -17,11 +16,11 @@ angular.module('MainApp')
 			self.queryGPRS(self.s2tMsisdn);
 		});
 		
-		self.VLNs = [];
+		$scope.$on('subReset',function(event,data){
+			self.init();
+		});
 		
 		self.queryVLN = function(serviceId){
-			self.VLNs = [];
-			self.VLN = '';
 			if(!serviceId || serviceId == '')
 				return;
 			self.elseMsg = "查詢中...";
@@ -49,11 +48,8 @@ angular.module('MainApp')
 			
 		};
 		
-		self.addons = [];
 		
 		self.queryAddons = function(serviceid){
-			console.log("serviceid:"+serviceid);
-			self.addons = [];
 			if(!serviceid || serviceid == '')
 				return;
 			self.elseMsg = "查詢中...";
@@ -79,8 +75,6 @@ angular.module('MainApp')
 		};
 		
 		self.queryGPRS = function(s2tMsisdn){
-			console.log("msisdn:"+s2tMsisdn);
-			self.gprsStatus="";
 			if(!s2tMsisdn || s2tMsisdn == '')
 				return;
 			self.elseMsg = "查詢中...";
@@ -99,5 +93,23 @@ angular.module('MainApp')
 			
 		};
 		
-		
+		self.init = function(){
+			self.elseMsg = "";
+			self.VLNs = [];
+			self.VLN = '';
+			self.addons = [];
+			self.gprsStatus="";
+			self.s2tMsisdn = "";
+			self.serviceid = "";
+			self.s2tIMSI = "";
+			self.homeIMSI = "";
+			self.privePlanId = "";
+			self.activatedDate = "";
+			self.canceledDate = "";
+		};
+		$(document).ready(function () {
+			self.init();
+			
+			//alert(self.fy+"/"+self.fm+"~"+self.ty+"/"+self.tm);
+		});	
 	}]);

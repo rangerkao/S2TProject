@@ -321,7 +321,7 @@ public class SubscriberDao extends CRMBaseDao{
 		return result;
 	}
 	
-	//select all data
+	//get customer data
 	public Subscriber queryDataById(String id) throws Exception{
 		Subscriber result = new Subscriber(); 
 		//Main by customer data
@@ -427,7 +427,7 @@ public class SubscriberDao extends CRMBaseDao{
 				+ "FROM SERVICE C,FOLLOWMEDATA  D,IMSI F "
 				+ "WHERE C.SERVICEID= D.SERVICEID(+) "
 				+ "AND C.SERVICEID = F.SERVICEID(+) "
-				+ "AND D.FOLLOWMENUMBER LIKE '886%' "
+				+ "AND D.FOLLOWMENUMBER(+) LIKE '886%' "
 				+ "AND C.SERVICEID = "+id+" ";;
 				
 		Statement st = null;

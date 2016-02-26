@@ -10,7 +10,8 @@ angular.module('MainApp')
 				chooseRow:'&',
 				pageNum:'=',
 				onePage:'=',
-				tableWidth:'@'
+				tableWidth:'@',
+				tableName:"@"
 				
 			},
 			link:function($scope,$element,$attrs){

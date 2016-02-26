@@ -2,12 +2,15 @@ angular.module('MainApp')
 	.controller('CRMSMSCtrl',['AjaxService','DateFormatString','$scope',function(AjaxService,DateFormatString,$scope){
 		var self = this;	
 		
-		self.custInfo = [];
-		
 		$scope.$on('querySMS',function(event,data){
 			self.s2tMsisdn=data['s2tMsisdn'];
 			self.chtMsisdn=data['chtMsisdn'];
 			self.querySMS(self.s2tMsisdn,self.chtMsisdn,null,null);
+		});
+		
+		$scope.$on('subReset',function(event,data){
+			self.smsMsg="";
+			self.SMSList = [];
 		});
 		
 		self.smsHeader=[

@@ -3,7 +3,6 @@ angular.module('MainApp')
 		var self=this;
 		self.testMode = false;
 		self.hideNotNecessary = false;
-		
 		self.hideNotNecessaryClicked = function(){
 			self.hideNotNecessary= !self.hideNotNecessary;
 			if(self.hideNotNecessary){
@@ -12,26 +11,28 @@ angular.module('MainApp')
 				$(".ddT").css("height",($(".ddT").height()-110)+"px")
 			}
 		};
+		
+		self.origincustInfo={};
 		//initial
 		self.init = function(){
 			//Customer Info
 			self.custInfo={				
-					'name':' ',
-					'birthday':' ',
-					'idTaxid':' ',
-					'phone':' ',
-					'email':' ',
-					'permanentAddress':' ',
-					'billingAddress':' ',
-					'agency':' ',
-					'remark':' ',
-					'type':' ',
-					'createtime':' ',
-					'updatetime':' ',
-					
-					'chair':' ',
-					'chairID':' '
+					'name':'',
+					'birthday':'',
+					'idTaxid':'',
+					'phone':'',
+					'email':'',
+					'permanentAddress':'',
+					'billingAddress':'',
+					'agency':'',
+					'remark':'',
+					'type':'P',
+					'createtime':'',
+					'updatetime':'',
+					'chair':'',
+					'chairID':''
 				};
+			angular.copy(self.custInfo,self.origincustInfo);
 			//Customer column edit show control
 			self.showControl();
 			//Button control
@@ -95,7 +96,7 @@ angular.module('MainApp')
 		self.radioList=[{id:"id",name:"ID"},
 		                {id:"name",name:"名稱"},
 		                {id:"s2tm",name:"香港號"},
-		                {id:"main",name:"主號"},
+		                {id:"main",name:"Home MSISDN"},
 		                {id:"vln",name:"VLN"}];
 				
 		self.selectedTab = 0;
@@ -111,8 +112,39 @@ angular.module('MainApp')
 			};
 		};
 		self.whenInfoCahnge = function(col){
-			self.infoCahnge[col]=true;
-			self.showSave = true;
+			
+			if(col=='idTaxid'){
+				var str = self.custInfo[col];
+				if(str==''){
+					self.show['type']=false;
+					self.custInfo['type']='P';
+				}else{
+					self.show['type']=true;
+					if(str.match('^[A-Za-z]+')){
+						self.custInfo['type']='P';
+					}else{
+						self.custInfo['type']='E';
+					}
+				}
+				
+			}
+			
+			
+			if(self.custInfo[col]!=self.origincustInfo[col]){
+				self.infoCahnge[col]=true;
+			}else{
+				self.infoCahnge[col]=false;
+			
+			}
+
+			self.showSave = false;
+			angular.forEach(self.infoCahnge,function(value,key){
+				if(value){
+					self.showSave = true;
+				}
+			});
+			
+			
 		};
 		
 		self.selectTab=function(index){
@@ -194,6 +226,8 @@ angular.module('MainApp')
 					self.custInfo.agency=data['data'].agency;
 					self.custInfo.type=data['data'].type;
 					self.custInfo.seq=data['data'].seq;
+					self.custInfo.chair=data['data'].chair;
+					self.custInfo.chairIDdata['data'].chairIDdata;
 				};
 		    }).error(function(data, status, headers, config) {   
 		           alert("error");
@@ -227,6 +261,7 @@ angular.module('MainApp')
 			
 			self.custInfo = [];
 			self.IDList=[];
+			self.subReset();
 			AjaxService.query(action,{input:self.input})
 			.success(function(data, status, headers, config) {
 				console.log(data);
@@ -279,6 +314,7 @@ angular.module('MainApp')
 						alert("無此客戶！");
 					else{
 						self.custInfo=data['data'];
+						angular.copy(self.custInfo,self.origincustInfo);
 						//
 						self.querySMS(self.custInfo.s2tMsisdn, self.custInfo.chtMsisdn);
 						//
@@ -324,6 +360,10 @@ angular.module('MainApp')
 				privePlanId:privePlanId,activatedDate:activatedDate,canceledDate:canceledDate,homeIMSI:homeIMSI});
 		};
 		
+		self.subReset = function(){
+			$scope.$broadcast('subReset',{});
+		}
+		
 
 		self.updateSubscriber = function(){
 			if(!self.custInfo.serviceId){
@@ -337,8 +377,23 @@ angular.module('MainApp')
 				self.custInfo.chair = '';
 				self.custInfo.chairID = '';
 			}
+			
+			var updateInfo={		
+					'serviceId':self.custInfo['serviceId'],
+					'name':self.custInfo['name'],
+					'birthday':self.custInfo['birthday'],
+					'idTaxid':self.custInfo['idTaxid'],
+					'phone':self.custInfo['phone'],
+					'email':self.custInfo['email'],
+					'permanentAddress':self.custInfo['permanentAddress'],
+					'billingAddress':self.custInfo['billingAddress'],
+					'agency':self.custInfo['agency'],
+					'type':self.custInfo['type'],
+					'chair':self.custInfo['chair'],
+					'chairID':self.custInfo['chairID']
+				};
 				
-			AjaxService.query('updateSubscriber',{input:angular.toJson(self.custInfo)})
+			AjaxService.query('updateSubscriber',{input:angular.toJson(updateInfo)})
 			.success(function(data, status, headers, config) {	
 				if(data['error']){
 					alert(data['error']);

@@ -7,6 +7,12 @@ angular.module('MainApp')
 			self.s2tMsisdn=data['s2tMsisdn'];
 			self.queryQos();
 		});
+		
+		$scope.$on('subReset',function(event,data){
+			self.qosMsg="";
+			self.qosList = [];
+		});
+		
 		self.qosHeader = [{name:"provision ID",col:"provisionID",_width:"20%"},
 					      {name:"IMSI",col:"imsi",_width:"20%"},
 					      {name:"門號",col:"msisdn",_width:"15%"},
