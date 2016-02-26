@@ -379,6 +379,7 @@ angular.module('MainApp')
 			}
 			
 			var updateInfo={		
+					'seq':self.custInfo['seq'],
 					'serviceId':self.custInfo['serviceId'],
 					'name':self.custInfo['name'],
 					'birthday':self.custInfo['birthday'],
