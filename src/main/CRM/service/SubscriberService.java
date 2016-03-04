@@ -48,6 +48,12 @@ public class SubscriberService extends BaseService{
 		return result;
 	}
 	
+	public List<Subscriber> queryListByS2tIMSI(String s2tIMSI) throws Exception{
+		List<Subscriber> result = null;
+		result = subscriberDao.queryListByS2tIMSI(s2tIMSI);
+		return result;
+	}
+	
 	public List<Subscriber> queryListByChtMsisdn(String chtMsisdn) throws Exception{
 		List<Subscriber> result = null;
 		result = subscriberDao.queryListByChtMsisdn(chtMsisdn);

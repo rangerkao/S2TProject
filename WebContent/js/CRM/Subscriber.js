@@ -97,7 +97,8 @@ angular.module('MainApp')
 		                {id:"name",name:"名稱"},
 		                {id:"s2tm",name:"香港號"},
 		                {id:"main",name:"Home MSISDN"},
-		                {id:"vln",name:"VLN"}];
+		                {id:"vln",name:"VLN"},
+		                {id:"imsi",name:"IMSI"}];
 				
 		self.selectedTab = 0;
 		self.infoEditable = false;
@@ -258,6 +259,8 @@ angular.module('MainApp')
 				action='queryListByMainMsisdn';
 			else if(self.selectedType=='vln')
 				action='queryListByVLN';
+			else if(self.selectedType=='imsi')
+				action='queryListByS2tIMSI';
 			
 			self.custInfo = [];
 			self.IDList=[];

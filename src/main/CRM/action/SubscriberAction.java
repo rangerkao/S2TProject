@@ -79,6 +79,19 @@ public class SubscriberAction extends BaseAction{
 		
 		return SUCCESS;
 	}
+	
+	public String queryListByS2tIMSI(){
+		System.out.println("queryListByS2tIMSI...");
+		System.out.println("input="+input);
+		try {
+			List<Subscriber> sList = subscriberService.queryListByS2tIMSI(input);
+			setSuccess(sList);
+		} catch (Exception e) {
+			errorHandle(e);
+		}
+		
+		return SUCCESS;
+	}
 
 	public String queryListByChtMsisdn(){
 		System.out.println("queryListByChtMsisdn...");

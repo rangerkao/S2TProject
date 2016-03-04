@@ -70,6 +70,7 @@
         <action name="queryListByName" class="main.CRM.action.SubscriberAction" method="queryListByName"></action>
         <action name="queryListByVLN" class="main.CRM.action.SubscriberAction" method="queryListByVLN"></action>
         <action name="queryListByS2tMisidn" class="main.CRM.action.SubscriberAction" method="queryListByS2tMisidn"></action>
+        <action name="queryListByS2tIMSI" class="main.CRM.action.SubscriberAction" method="queryListByS2tIMSI"></action>
         <action name="queryListByChtMsisdn" class="main.CRM.action.SubscriberAction" method="queryListByChtMsisdn"></action>
         <action name="queryListByMainMsisdn" class="main.CRM.action.SubscriberAction" method="queryListByMainMsisdn"></action>
         

@@ -5,13 +5,14 @@ angular.module('MainApp')
 		
 		self.dataHeader=[{name:"資費ID",col:"pricePlanId",_width:"5%"},
 		                 {name:"資費名稱",col:"pricePlanName",_width:"25%"},
-		                 {name:"MCCMNC",col:"mccmnc",_width:"15%"},
+		                 {name:"MCCMNC",col:"mccmnc",_width:"10%"},
 		                 {name:"國家",col:"country",_width:"10%"},
-		                 {name:"網路業者",col:"netWork",_width:"15%"},
+		                 {name:"網路業者",col:"netWork",_width:"10%"},
 		                 {name:"費率",col:"rate",_width:"5%"},
 		                 {name:"計價單位(KB)",col:"chargeunit",_width:"10%"},
 		                 {name:"幣別",col:"currency",_width:"5%"},
-		                 {name:"每日收費上限",col:"dayCap",_width:"10%"}];
+		                 {name:"每日收費上限",col:"dayCap",_width:"10%"},
+		                 {name:"啟用時間",col:"startTime",_width:"10%"}];
 		self.query = function(){
 			AjaxService.query('queryDataRate',{})
 			.success(function(data, status, headers, config) { 

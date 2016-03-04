@@ -154,6 +154,23 @@ public class SubscriberDao extends CRMBaseDao{
 		return result;
 	}
 	
+	public List<Subscriber> queryListByS2tIMSI(String s2tIMSI) throws Exception{
+		List<Subscriber> result = new ArrayList<Subscriber>();
+
+		try{
+			Subscriber s = queryServiceIdbyS2tImsi(s2tIMSI);
+			if(s.getServiceId() != null &&!"".equals(s.getServiceId()))
+				result.add(queryList(s.getServiceId()));
+			
+			/*if(result.size()==0){
+				result.add(s);
+			}*/
+		}finally{
+			//closeConnection();
+		}
+		return result;
+	}
+	
 	public List<Subscriber> queryListByChtMsisdn(String chtMsisdn) throws Exception{
 		List<Subscriber> result = new ArrayList<Subscriber>();
 		
@@ -344,7 +361,7 @@ public class SubscriberDao extends CRMBaseDao{
 				+ "DATE_FORMAT(A.CREATETIME,'%Y/%m/%d %H:%m:%s') CREATETIME,DATE_FORMAT(A.UPDATETIME,'%Y/%m/%d %H:%m:%s') UPDATETIME, "
 				+ "A.SUBS_TYPE,B. SERVICEID,E.CHAIRMAN,E.CHAIRMAN_ID "
 				+ "FROM CRM_DB.CRM_SUBSCRIBERS A left join CRM_DB.CRM_SUBSCRIPTION B on A.seq =B.seq left join CRM_DB.CRM_CHAIRMAN E on A.seq = E.seq "
-				+ "WHERE A.SUBS_ID_TAXID = "+id+" ";
+				+ "WHERE A.SUBS_ID_TAXID = '"+id+"' ";
 		
 		Statement st = null;
 		ResultSet rs = null;

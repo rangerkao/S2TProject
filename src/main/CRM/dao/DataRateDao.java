@@ -23,6 +23,7 @@ public class DataRateDao extends BaseDao {
 			String sql=
 					"SELECT A.PRICEPLANID , D.NAME||'('||D.ALIASES||')' PRICEPLANNAME,A.MCCMNC,B.COUNTRY, B.NETWORK, "
 					+ "A.RATE, A.CHARGEUNIT, A.CURRENCY, (case when A.DAYCAP ='-1' then 'NA' else to_char(A.DAYCAP) END ) DAYCAP "
+					+ ",A.START_TIME,A.END_TIME "
 					+ "FROM HUR_DATA_RATE A, HUR_MCCMNC B, PRICEPLAN C ,PRICEPLAN_DETAIL D "
 					+ "WHERE A.PRICEPLANID=C.PRICEPLANID AND A.MCCMNC=B.MCCMNC AND A.PRICEPLANID=D.PRICEPLANID "
 					+ "AND A.PRICEPLANID=139 "
@@ -46,6 +47,8 @@ public class DataRateDao extends BaseDao {
 					datarate.setChargeunit(rs.getLong("CHARGEUNIT"));
 					datarate.setCurrency(rs.getString("CURRENCY"));
 					datarate.setDayCap(rs.getString("DAYCAP"));
+					datarate.setStartTime(rs.getString("START_TIME"));
+					datarate.setEndTime(rs.getString("END_TIME"));
 					list.add(datarate);
 				}
 				st.close();

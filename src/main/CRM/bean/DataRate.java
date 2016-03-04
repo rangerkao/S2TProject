@@ -10,6 +10,8 @@ public class DataRate {
 	Long chargeunit;
 	String currency;
 	String dayCap;
+	String startTime;
+	String endTime;
 	
 	public DataRate(){};
 	
@@ -118,6 +120,30 @@ public class DataRate {
 
 	public void setDayCap(String dayCap) {
 		this.dayCap = dayCap;
+	}
+
+
+
+	public String getStartTime() {
+		return startTime;
+	}
+
+
+
+	public void setStartTime(String startTime) {
+		this.startTime = startTime;
+	}
+
+
+
+	public String getEndTime() {
+		return endTime;
+	}
+
+
+
+	public void setEndTime(String endTime) {
+		this.endTime = endTime;
 	}
 	
 	
