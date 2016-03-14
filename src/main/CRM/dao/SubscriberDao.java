@@ -527,6 +527,48 @@ public class SubscriberDao extends CRMBaseDao{
 	}
 	
 	
+	public boolean updateSubscriber(Subscriber s) throws Exception{
+		boolean result = false;
+		String sql = "UPDATE CRM_DB.CRM_SUBSCRIBERS A "
+				+ "SET A.SUBS_ID_TAXID='"+s.getIdTaxid()+"',A.SUBS_NAME='"+s.getName()+"',A.SUBS_BIRTHDAY='"+s.getBirthday()+"', "
+				+ "A.SUBS_PHONE='"+s.getPhone()+"',A.SUBS_EMAIL='"+s.getEmail()+"', "
+				+ "A.SUBS_PERMANENT_ADDRESS='"+s.getPermanentAddress()+"',A.SUBS_BILLING_ADDRESS='"+s.getBillingAddress()+"', "
+				+ "A.AGENCY_ID='"+s.getAgency()+"',A.REMARK='"+s.getRemark()+"',A.UPDATETIME=now() ,A.SUBS_TYPE = '"+s.getType()+"' "
+				+ "WHERE A.SEQ ='"+s.getSeq()+"'";
+	
+		Statement st = null;
+		
+		getConn3().setAutoCommit(false);
+		
+		if(s.getSeq()== null ||"".equals(s.getSeq())){
+			result = insertSubscriber(s);
+		}else{
+			try {
+				st = getConn3().createStatement();
+				System.out.println("sql:"+sql);
+				int eRow = st.executeUpdate(sql);
+				
+				if(eRow>1)
+					throw new Exception("Update data fail! updated Subscriber "+eRow);
+				if(eRow == 0)
+					result = insertSubscriber(s);
+				result = true;
+			}finally{
+				try {
+					if(st!=null)
+						st.close();
+				} catch (Exception e) {
+				}
+				//closeConnection();
+			}	
+		}
+		updateSubscription(s);
+		getConn3().commit();
+		
+		
+		
+		return result;
+	}
 	
 	public boolean insertSubscriber(Subscriber s) throws Exception{
 		boolean result = false;
@@ -619,14 +661,18 @@ public class SubscriberDao extends CRMBaseDao{
 					+ "SET A.SEQ = '"+s.getSeq()+"',A.UPDATETIME = now() "
 					+ "WHERE A.SERVICEID = '"+s.getServiceId()+"'";
 			
-			System.out.println("sql:"+sql);
-			int eRow = st.executeUpdate(sql);
-			
-			if(eRow>1)
-				throw new Exception("Update data fail! updated Subscription "+eRow);
-			else if(eRow==0)
-				insertSubscription(s);
-			
+			if(s.getServiceId()==null || "".equals(s.getServiceId())){
+				throw new Exception("Invalid serviceid!");
+			}else{
+				System.out.println("sql:"+sql);
+				int eRow = st.executeUpdate(sql);
+				
+				if(eRow>1)
+					throw new Exception("Update data fail! updated Subscription "+eRow);
+				else if(eRow==0)
+					insertSubscription(s);
+			}
+
 			if("E".equalsIgnoreCase(s.getType())){
 				updateChairMain(s);
 			}else if("P".equalsIgnoreCase(s.getType())){
@@ -728,46 +774,7 @@ public class SubscriberDao extends CRMBaseDao{
 		return result;
 	}
 	
-	public boolean updateSubscriber(Subscriber s) throws Exception{
-		boolean result = false;
-		String sql = "UPDATE CRM_DB.CRM_SUBSCRIBERS A "
-				+ "SET A.SUBS_ID_TAXID='"+s.getIdTaxid()+"',A.SUBS_NAME='"+s.getName()+"',A.SUBS_BIRTHDAY='"+s.getBirthday()+"', "
-				+ "A.SUBS_PHONE='"+s.getPhone()+"',A.SUBS_EMAIL='"+s.getEmail()+"', "
-				+ "A.SUBS_PERMANENT_ADDRESS='"+s.getPermanentAddress()+"',A.SUBS_BILLING_ADDRESS='"+s.getBillingAddress()+"', "
-				+ "A.AGENCY_ID='"+s.getAgency()+"',A.REMARK='"+s.getRemark()+"',A.UPDATETIME=now() ,A.SUBS_TYPE = '"+s.getType()+"' "
-				+ "WHERE A.SEQ ='"+s.getSeq()+"'";
 	
-		Statement st = null;
-		
-		try {
-			getConn3().setAutoCommit(false);
-			
-			st = getConn3().createStatement();
-			System.out.println("sql:"+sql);
-			int eRow = st.executeUpdate(sql);
-			
-			if(eRow>1)
-				throw new Exception("Update data fail! updated Subscriber "+eRow);
-			if(eRow == 0)
-				result = insertSubscriber(s);
-			
-			
-			updateSubscription(s);
-			
-			result = true;
-			
-			getConn3().commit();
-		}finally{
-			try {
-				if(st!=null)
-					st.close();
-			} catch (Exception e) {
-			}
-			//closeConnection();
-		}	
-		
-		return result;
-	}
 	//TODO
 	public List<String> queryVLN(String serviceId) throws Exception{
 		List<String> result = new ArrayList<String>(); 

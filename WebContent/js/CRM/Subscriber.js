@@ -404,6 +404,23 @@ angular.module('MainApp')
 					ActionService.unblock();
 				}else{
 					alert("success!");
+					var info=data['data'];
+					
+					self.custInfo['seq'] = info['seq'];
+					self.custInfo['serviceId'] = info['serviceId'];
+					self.custInfo['name'] = info['name'];
+					self.custInfo['birthday'] = info['birthday'];
+					self.custInfo['idTaxid'] = info['idTaxid'];
+					self.custInfo['phone'] = info['phone'];
+					self.custInfo['email'] = info['email'];
+					self.custInfo['permanentAddress'] = info['permanentAddress'];
+					self.custInfo['billingAddress'] = info['billingAddress'];
+					self.custInfo['agency'] = info['agency'];
+					self.custInfo['type'] = info['type'];
+					self.custInfo['chair'] = info['chair'];
+					self.custInfo['chairID'] = info['chairID'];
+					angular.copy(self.custInfo,self.origincustInfo);
+					
 				}
 					
 		    }).error(function(data, status, headers, config) {   
