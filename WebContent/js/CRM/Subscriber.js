@@ -34,28 +34,28 @@ angular.module('MainApp')
 				};
 			angular.copy(self.custInfo,self.origincustInfo);
 			//Customer column edit show control
-			self.showControl();
+			//self.showControl(true);
 			//Button control
 			self.showSave = false;
 		};
 				
-		self.showControl = function(){
+		self.showControl = function(colShow){
 			self.show={				
-					'name':true,
-					'birthday':true,
-					'idTaxid':true,
-					'phone':true,
-					'email':true,
-					'permanentAddress':true,
-					'billingAddress':true,
-					'agency':true,
-					'remark':true,
-					'type':true,
-					'createtime':true,
-					'updatetime':true,
+					'name':colShow,
+					'birthday':colShow,
+					'idTaxid':colShow,
+					'phone':colShow,
+					'email':colShow,
+					'permanentAddress':colShow,
+					'billingAddress':colShow,
+					'agency':colShow,
+					'remark':colShow,
+					'type':colShow,
+					'createtime':colShow,
+					'updatetime':colShow,
 					
-					'chair':true,
-					'chairID':true
+					'chair':colShow,
+					'chairID':colShow
 				};
 			//When change control
 			self.infoCahnge={				
@@ -177,9 +177,18 @@ angular.module('MainApp')
 						alert("查無Session資料");
 					}else{
 						self.role=self.session["s2t.role"];
-						if(self.role =='admin'){
+						//alert(self.role);
+						self.infoEditable = true;
+						self.appEditable = true;
+						/*if(self.role =='admin'){
 							self.infoEditable = true;
 							self.appEditable = true;
+						}*/
+						
+						if(self.role =='apply_Proccesser'){
+							self.showControl(false);
+						}else{
+							self.showControl(true);
 						}
 					}
 					//console.log("success");
@@ -190,6 +199,71 @@ angular.module('MainApp')
 		    	
 		    });
 		};
+		
+		self.onSelectedTypeKeyDown = function(){
+			if(event.keyCode ==13){
+				self.queryList();
+			}
+		}
+		
+		function detectBrowser(){
+			var sAgent = navigator.userAgent.toLowerCase();
+			this.isIE = (sAgent.indexOf("msie")!=-1); //IE6.0-7
+			this.isFF = (sAgent.indexOf("firefox")!=-1);//firefox
+			this.isSa = (sAgent.indexOf("safari")!=-1);//safari
+			this.isOp = (sAgent.indexOf("opera")!=-1);//opera
+			this.isNN = (sAgent.indexOf("netscape")!=-1);//netscape
+			this.isCh = (sAgent.indexOf("chrome")!=-1);//chrome
+			this.isMa = this.isIE;//marthon
+			this.isOther = (!this.isIE && !this.isFF && !this.isSa && !this.isOp && !this.isNN && !this.isSa);//unknown Browser
+		}
+		
+		function reaponsBrowser(){
+			var oBrowser = new detectBrowser();
+			if (oBrowser.isIE) { 
+				//alert("IE6.0/7.0(or above version)."); 
+			}else{
+				
+			}
+			if (oBrowser.isSa && !oBrowser.isCh) { 
+				//alert("Safari."); 
+			} 
+			if (oBrowser.isOp) { 
+				//alert("Opera."); 
+			} 
+			if (oBrowser.isCh && oBrowser.isSa) { 
+				//alert("Chrom."); 
+			} 
+			if(oBrowser.isFF) { 
+				//alert("FireFox."); 
+			}
+		}
+		
+		function getNextElement(sender){
+			alert(sender.nodeName);
+			var nextElmt = sender.nextSibling;
+			alert(sender.nodeName);
+			var i = 0;
+			try{
+				while (nextElmt.nodeName!="INPUT" && nextElmt.nodeName!="SELECT") {
+					alert(nextElmt.nodeName);
+						nextElmt = nextElmt.nextSibling;
+				}
+			}catch (e){
+				return sender;
+			}
+			return nextElmt;
+		}
+		
+		self.onDataKeyDown = function(){
+			if(event.keyCode == 13){
+				//alert($(angular.element(event.currentTarget)).attr('id'));
+				//alert($(event.currentTarget).attr('id'));
+			}
+		}
+		
+		
+		
 		
 		self.ServiceIdList = function(id){
 			if(!id)
@@ -373,7 +447,7 @@ angular.module('MainApp')
 				alert("請先進行查詢！");
 				return;
 			}
-			self.showControl();
+			self.showControl(true);
 			self.showSave = false;
 			
 			if(self.custInfo.type == 'P'){
@@ -436,8 +510,7 @@ angular.module('MainApp')
 		
 		$(document).ready(function () {
 			self.getSession();
-			self.init();
-			
+			self.init();			
 		});	
 		
 	}]);

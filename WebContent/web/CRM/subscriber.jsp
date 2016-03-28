@@ -11,10 +11,10 @@
 			</div>
 			<div class="col-xs-8" align="right">
 				<label ng-repeat="item in sCtrl.radioList">
-					<input type="radio" ng-model="sCtrl.selectedType"  value="{{item.id}}" ng-change="sCtrl.selectType()" ng-init="sCtrl.selectedType='id'">{{item.name}}
+					<input type="radio" ng-model="sCtrl.selectedType"  value="{{item.id}}" ng-change="sCtrl.selectType()" ng-init="sCtrl.selectedType='main'">{{item.name}}
 				</label>
-				<input type="text" ng-model="sCtrl.input">
-				<input type="button" value="search" ng-click="sCtrl.queryList()" class="btn btn-primary btn-xs">		
+				<input type="text" ng-model="sCtrl.input" ng-keydown="sCtrl.onSelectedTypeKeyDown()">
+				<a type="button" value="search" ng-click="sCtrl.queryList()" class="btn btn-primary btn-xs">search</a>	
 			</div>
 			<div class="col-xs-4" align="left">
 				<button data-toggle="modal" data-target="#companyModal" class="btn btn-warning btn-xs">choose company</button>
@@ -51,7 +51,7 @@
 					</table>
 				</modal> -->
 			</div>
-			<div class="col-xs-12 custInfo">
+			<div class="col-xs-12 custInfo"  >
 				<div class="col-xs-3" align="left">
 					<label>S2T MSISDN:</label>
 					<span ng-bind="sCtrl.custInfo.s2tMsisdn"></span>
@@ -59,13 +59,13 @@
 				<div class="col-xs-3" align="left" ng-dblclick="sCtrl.infoEditMod('name')" ng-hide="sCtrl.hideNotNecessary">
 					<label>姓名:</label>
 					<span ng-bind="sCtrl.custInfo.name" ng-show="sCtrl.show.name"></span>
-					<input type="text" ng-model = "sCtrl.custInfo.name" ng-show="!sCtrl.show.name" ng-change="sCtrl.whenInfoCahnge('name')">
+					<input id="T1" ng-keydown="sCtrl.onDataKeyDown()" type="text" ng-model = "sCtrl.custInfo.name" ng-show="!sCtrl.show.name" ng-change="sCtrl.whenInfoCahnge('name')"  >
 				</div>
 				<div class="col-xs-3" align="left" ng-dblclick="sCtrl.infoEditMod('idTaxid')" ng-hide="sCtrl.hideNotNecessary">
 					<label>統一編號/證號:</label>
 					<span ng-bind="sCtrl.custInfo.idTaxid" ng-show="sCtrl.show.idTaxid"></span>
-					<input type="text" ng-model = "sCtrl.custInfo.idTaxid" ng-show="!sCtrl.show.idTaxid" ng-change="sCtrl.whenInfoCahnge('idTaxid')">
-					<input type="button" value="帶入資料" ng-click="sCtrl.queryInfo()" class="btn btn-danger btn-xs" ng-show="!sCtrl.show.idTaxid">
+					<input id="T2" type="text" ng-model = "sCtrl.custInfo.idTaxid" ng-show="!sCtrl.show.idTaxid" ng-change="sCtrl.whenInfoCahnge('idTaxid')">
+					<a type="button" value="帶入資料" ng-click="sCtrl.queryInfo()" class="btn btn-danger btn-xs" ng-show="!sCtrl.show.idTaxid">帶入資料</a>
 				</div>
 				<div class="col-xs-3" align="left" ng-dblclick="sCtrl.infoEditMod('birthday')" ng-hide="sCtrl.hideNotNecessary">
 					<label>生日(民國):</label>
