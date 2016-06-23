@@ -8,6 +8,7 @@ public class ApplicationData {
 	String chtImsi;
 	String chtMsisdn;
 	
+	String serviceid;
 	String applicationDate;
 	String type;
 	
@@ -58,6 +59,15 @@ public class ApplicationData {
 	public void setType(String type) {
 		this.type = type;
 	}
+
+	public String getServiceid() {
+		return serviceid;
+	}
+
+	public void setServiceid(String serviceid) {
+		this.serviceid = serviceid;
+	}
+	
 	
 	
 }

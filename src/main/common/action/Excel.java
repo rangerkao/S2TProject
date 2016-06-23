@@ -78,7 +78,14 @@ public class Excel extends BaseAction{
 				data.add(m);
 			}
 			excelFileName = reportName+".xls";
-			excelStream=createExcel(head,data);
+			
+			HSSFWorkbook wb = createExcel(head,data);
+			
+			ByteArrayOutputStream os = new ByteArrayOutputStream();  
+            wb.write(os);  
+            byte[] fileContent = os.toByteArray();  
+
+			excelStream = new ByteArrayInputStream(fileContent);  
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -93,28 +100,30 @@ public class Excel extends BaseAction{
 		return "success";
 	}
 	
-	public static InputStream createExcel(List<Map<String,String>> head,List<Map<String,Object>> data){
+	public static HSSFWorkbook createExcel(List<Map<String,String>> head,List<Map<String,Object>> data){
 		InputStream inputStream = null;
 		int rowN = 0;
+		int sheetN = 0;
+		HSSFWorkbook wb = null;
 		try {  
 			//第一步，創建webbook文件
-            HSSFWorkbook wb = new HSSFWorkbook();  
+            wb = new HSSFWorkbook();  
 
             //第二步，添加sheet
-            HSSFSheet sheet = wb.createSheet("表格1");  
-            //第三步添加表頭第0行
-            HSSFRow row = sheet.createRow(rowN++);  
+            HSSFSheet sheet = wb.createSheet("sheet"+sheetN++);  
+              
             //第四步，設定樣式
             HSSFCellStyle style = wb.createCellStyle();  
             style.setAlignment(HSSFCellStyle.ALIGN_CENTER);  
             //第五部，建立單元格
             HSSFCell cell;  
 
-            
-            for(int i = 0 ; i < head.size() ; i++){
-    			String name=head.get(i).get("name");
+            //第三步添加表頭第0行
+            HSSFRow row = sheet.createRow(rowN++);
+            for(int k = 0 ; k < head.size() ; k++){
+    			String name=head.get(k).get("name");
     			
-				cell = row.createCell(i);  
+				cell = row.createCell(k);  
                 cell.setCellValue(name);  
                 cell.setCellStyle(style); 
     		}		
@@ -132,15 +141,30 @@ public class Excel extends BaseAction{
                 	else
                 		row.createCell(j).setCellValue("");
         		}	
+                
+                //避免超過65535限制row數
+                if(i!=0&&i%65530==0){
+                	sheet = wb.createSheet("sheet"+sheetN++);
+                	rowN = 0;
+                	//添加表頭
+                	row = sheet.createRow(rowN++);
+                	for(int k = 0 ; k < head.size() ; k++){
+             			String name=head.get(k).get("name");
+         				cell = row.createCell(k);  
+                        cell.setCellValue(name);  
+                        cell.setCellStyle(style); 
+             		}		
+                }
             }  
 
+            
           //第七步，放置串流  
-            ByteArrayOutputStream os = new ByteArrayOutputStream();  
+            /*ByteArrayOutputStream os = new ByteArrayOutputStream();  
             wb.write(os);  
             byte[] fileContent = os.toByteArray();  
             ByteArrayInputStream is = new ByteArrayInputStream(fileContent);  
             
-            inputStream = is;            
+            inputStream = is;   */         
             
             //reportName=java.net.URLDecoder.decode(reportName,"UTF-8");
             
@@ -153,7 +177,7 @@ public class Excel extends BaseAction{
             e.printStackTrace();  
         }  
   
-        return inputStream;  
+        return wb;  
 	}
 
 	public String getExcelFileName() {

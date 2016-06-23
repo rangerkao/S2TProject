@@ -24,7 +24,7 @@ public class ApplicationDao extends CRMBaseDao {
 	
 	public List<ApplicationData> queryByS2tMsisdn(String s2tMsisdn) throws Exception{
 		List<ApplicationData> result = new ArrayList<ApplicationData>();
-		String serviceId = queryServiceIdbyS2tMsisdn(s2tMsisdn).getServiceId();
+		String serviceId = queryServiceIdbyS2tMsisdn(s2tMsisdn);
 		result = queryApplication(serviceId);
 		//closeConnection();
 		return result;
@@ -32,7 +32,7 @@ public class ApplicationDao extends CRMBaseDao {
 	
 	public List<ApplicationData> queryByChtMsisdn(String chtMsisdn) throws Exception{
 		List<ApplicationData> result = new ArrayList<ApplicationData>();
-		String serviceId = queryServiceIdbyChtMsisdn(chtMsisdn).getServiceId();
+		String serviceId = queryServiceIdbyChtMsisdn(chtMsisdn);
 		result = queryApplication(serviceId);
 		//closeConnection();
 		return result;
@@ -46,7 +46,7 @@ public class ApplicationDao extends CRMBaseDao {
 	}
 	public List<ApplicationData> queryApplication(String serviceId) throws Exception{
 		List<ApplicationData> result = new ArrayList<ApplicationData>();
-		String sql = "SELECT A.TYPE,DATE_FORMAT(A.VERIFIED_DATE,'%Y/%m/%d %H:%m:%s') VERIFIED_DATE "
+		String sql = "SELECT A.SERVICEID,A.TYPE,DATE_FORMAT(A.VERIFIED_DATE,'%Y/%m/%d %H:%m:%s') VERIFIED_DATE "
 				+ "FROM CRM_APPLICATION A WHERE A.SERVICEID = '"+serviceId+"' ";
 		Statement st = null;
 		ResultSet rs = null;
@@ -57,6 +57,32 @@ public class ApplicationDao extends CRMBaseDao {
 			System.out.println("sql:"+sql);
 			while(rs.next()){
 				ApplicationData a = new ApplicationData();
+				a.setServiceid(rs.getString("SERVICEID"));
+				a.setApplicationDate(rs.getString("VERIFIED_DATE"));
+				a.setType(rs.getString("TYPE"));
+				result.add(a);
+			}
+		}finally{
+			
+		}
+		
+		return result;
+	}
+	
+	public List<ApplicationData> queryByDate(String date) throws Exception{
+		List<ApplicationData> result = new ArrayList<ApplicationData>();
+		String sql = "SELECT A.SERVICEID,A.TYPE,DATE_FORMAT(A.VERIFIED_DATE,'%Y/%m/%d %H:%m:%s') VERIFIED_DATE "
+				+ "FROM CRM_APPLICATION A WHERE DATE_FORMAT(A.VERIFIED_DATE,'%Y%m%d') = '"+date+"' ";
+		Statement st = null;
+		ResultSet rs = null;
+		
+		try{
+			st = getConn3().createStatement();
+			rs = st.executeQuery(sql);
+			System.out.println("sql:"+sql);
+			while(rs.next()){
+				ApplicationData a = new ApplicationData();
+				a.setServiceid(rs.getString("SERVICEID"));
 				a.setApplicationDate(rs.getString("VERIFIED_DATE"));
 				a.setType(rs.getString("TYPE"));
 				result.add(a);

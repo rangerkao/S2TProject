@@ -40,23 +40,7 @@ angular.module('MainApp')
 		};
 				
 		self.showControl = function(colShow){
-			self.show={				
-					'name':colShow,
-					'birthday':colShow,
-					'idTaxid':colShow,
-					'phone':colShow,
-					'email':colShow,
-					'permanentAddress':colShow,
-					'billingAddress':colShow,
-					'agency':colShow,
-					'remark':colShow,
-					'type':colShow,
-					'createtime':colShow,
-					'updatetime':colShow,
-					
-					'chair':colShow,
-					'chairID':colShow
-				};
+			
 			//When change control
 			self.infoCahnge={				
 					'name':false,
@@ -106,21 +90,22 @@ angular.module('MainApp')
 		self.serviceIdList = [];
 		self.IDList = [];
 		
+		
+		self.show = true;
 		//Edit column control
 		self.infoEditMod = function(col){
-			if(self.infoEditable){
+			self.show = !self.show;
+			/*if(self.infoEditable){
 				self.show[col]=!self.show[col];
-			};
+			};*/
 		};
 		self.whenInfoCahnge = function(col){
 			
 			if(col=='idTaxid'){
 				var str = self.custInfo[col];
 				if(str==''){
-					self.show['type']=false;
 					self.custInfo['type']='P';
 				}else{
-					self.show['type']=true;
 					if(str.match('^[A-Za-z]+')){
 						self.custInfo['type']='P';
 					}else{
@@ -292,17 +277,28 @@ angular.module('MainApp')
 				if(data['error']){
 					alert(data['error']);
 				}else{
-					self.custInfo.name=data['data'].name;
-					self.custInfo.birthday=data['data'].birthday;
-					self.custInfo.phone=data['data'].phone;
-					self.custInfo.email=data['data'].email;
-					self.custInfo.permanentAddress=data['data'].permanentAddress;
-					self.custInfo.billingAddress=data['data'].billingAddress;
-					self.custInfo.agency=data['data'].agency;
-					self.custInfo.type=data['data'].type;
-					self.custInfo.seq=data['data'].seq;
-					self.custInfo.chair=data['data'].chair;
-					self.custInfo.chairIDdata['data'].chairIDdata;
+					if(data['data'].name)
+						self.custInfo.name=data['data'].name;
+					if(data['data'].birthday)
+						self.custInfo.birthday=data['data'].birthday;
+					if(data['data'].phone)
+						self.custInfo.phone=data['data'].phone;
+					if(data['data'].email)
+						self.custInfo.email=data['data'].email;
+					if(data['data'].permanentAddress)
+						self.custInfo.permanentAddress=data['data'].permanentAddress;
+					if(data['data'].billingAddress)
+						self.custInfo.billingAddress=data['data'].billingAddress;
+					if(data['data'].agency)
+						self.custInfo.agency=data['data'].agency;
+					if(data['data'].type)
+						self.custInfo.type=data['data'].type;
+					if(data['data'].seq)
+						self.custInfo.seq=data['data'].seq;
+					if(data['data'].chair)
+						self.custInfo.chair=data['data'].chair;
+					if(data['data'].chairID)
+						self.custInfo.chairID=data['data'].chairID;
 				};
 		    }).error(function(data, status, headers, config) {   
 		           alert("error");
@@ -357,7 +353,8 @@ angular.module('MainApp')
 						if(self.IDList.length==1){
 							console.log(self.IDList[0].serviceId);
 							if(self.IDList[0].serviceId && self.IDList[0].serviceId != ''){
-								self.chooseServiceId(self.IDList[0].serviceId);
+								/*self.chooseServiceId(self.IDList[0].serviceId);*/
+								self.chooseItem(self.IDList[0]);
 							}else{
 								alert("客戶已退租");
 								ActionService.unblock();
@@ -376,6 +373,31 @@ angular.module('MainApp')
 		    	
 		    });
 		};
+		
+		
+		self.chooseItem = function(item){
+			self.init();
+			self.custInfo=item;
+			$("#companyModal").modal('hide');
+			
+			angular.copy(self.custInfo,self.origincustInfo);
+			//
+			self.querySMS(self.custInfo.s2tMsisdn, self.custInfo.chtMsisdn);
+			//
+			self.queryQosList(self.custInfo.s2tMsisdn);
+			//
+			self.queryAppList(self.custInfo.serviceId);
+			//
+			self.queryMonth(self.custInfo.s2tIMSI);
+			//
+			self.queryDay(self.custInfo.s2tIMSI);
+			//
+			self.queryElse(self.custInfo.s2tMsisdn, self.custInfo.serviceId, self.custInfo.s2tIMSI, 
+					self.custInfo.privePlanId, self.custInfo.activatedDate, self.custInfo.canceledDate, 
+					self.custInfo.homeIMSI);
+			ActionService.unblock();
+		}
+		
 		//ID選擇
 		self.chooseServiceId=function(id){
 			self.init();
@@ -504,7 +526,7 @@ angular.module('MainApp')
 		};
 		self.downLoadExcel = function(){
 			self.buttonDis =true;
-			createExcel2('createSubscribersExcel');
+			createExcel2('getSubscribersExcel');
 			//self.buttonDis = false;
 		};
 		

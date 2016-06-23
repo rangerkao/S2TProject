@@ -40,6 +40,19 @@ public class ApplicationAction extends BaseAction{
 		return SUCCESS;
 	}
 	
+	public String queryAppByDate(){
+		System.out.println("queryByDate");
+		System.out.println("serviceid="+serviceid);
+		try {
+			List<ApplicationData> aList = applicationService.queryByDate(verifiedDate);
+			setSuccess(aList);
+		} catch (Exception e) {
+			errorHandle(e);
+		}
+		
+		return SUCCESS;
+	}
+	
 	public String insertNew(){
 		System.out.println("insertNew");
 		System.out.println("type:"+type+", serviceid:"+serviceid+", verifiedDate:"+verifiedDate);

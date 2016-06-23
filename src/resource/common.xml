@@ -40,13 +40,21 @@
 	        <result name="success" type="tiles">cache</result>
         </action>
         
-        <action name="reloadCache" method="reloadCache" class="main.common.action.CacheAction">
+        <!-- <action name="reloadCache" method="reloadCache" class="main.common.action.CacheAction">
+	        <result name="success" type="tiles">cache</result>
+        </action> -->
+        
+        <action name="createExcel" method="createExcel" class="main.common.action.CacheAction">
 	        <result name="success" type="tiles">cache</result>
         </action>
         
-        <action name="batchReloadCache" method="batchReloadCache" class="main.common.action.CacheAction">
+        <action name="batchCreateCache" method="batchCreateCache" class="main.common.action.CacheAction">
 	        <result name="success" type="tiles">cache</result>
         </action>
+        
+        <!-- <action name="batchReloadCache" method="batchReloadCache" class="main.common.action.CacheAction">
+	        <result name="success" type="tiles">cache</result>
+        </action> -->
         
         <action name="reloadProperties" method="reloadProperties" class="main.common.action.CacheAction">
 	        <result name="success" type="tiles">cache</result>

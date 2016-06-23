@@ -1,5 +1,6 @@
 package main.CRM.action;
 
+import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.Date;
 
@@ -19,18 +20,24 @@ public class ExcelAction extends BaseAction{
 	public ExcelAction() throws Exception{
 		super();
 	}
-	private InputStream excelStream;  //輸出變量
+	private static InputStream excelStream;  //輸出變量
 	private static String excelFileName; //下載文件名稱
 
-	@Resource
-	ExcelService excelService;
 	
-	public String createSubscribersExcel(){
+	ExcelService excelService = new ExcelService();
+	
+	public String getSubscribersExcel(){
 
 		excelFileName = "customer"+new Date()+".xls";
 		
 		try {
-			setExcelStream(excelService.createSubscribersExcel());
+			InputStream in = excelService.getExcel();
+			
+			if(in==null)
+				throw new Exception("File not Exist.");
+			
+			
+			setExcelStream(in);
 		} catch (Exception e) {
 			errorHandle(e);
 		}

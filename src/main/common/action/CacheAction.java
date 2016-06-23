@@ -22,6 +22,9 @@ import java.util.TimerTask;
 
 
 
+
+
+import main.CRM.service.ExcelService;
 import main.common.dao.CacheDao;
 
 import org.apache.log4j.PropertyConfigurator;
@@ -110,8 +113,17 @@ public class CacheAction  extends BaseAction{
 		}
 	}
 		
+	public String createExcel(){
+		try {
+			ExcelService.createSubscribersExcel();
+		} catch (Exception e) {
+			sendMail("Create Excel Error","Create Excel Error at "+new Date(),"CRM_Web","k1988242001@gmail.com,ranger.kao@sim2travel.com");
+		}
+		
+		return SUCCESS;
+	}
 	//----------------doBatch reload------------------
-	public String batchReloadCache(){
+	public String batchCreateCache(){
 		if(reloadThread==null || reloadThread.isInterrupted() || !reloadThread.isAlive()){
 			Thread reloadThread = new BatchThread(24);
 			reloadThread.setDaemon(true);
@@ -144,9 +156,16 @@ public class CacheAction  extends BaseAction{
 	public class taskClass extends TimerTask{
 
 		public void run(){
-			reloadCache();     
+			//reloadCache();
+			try {
+				ExcelService.createSubscribersExcel();
+			} catch (Exception e) {
+				sendMail("Create Excel Error","Create Excel Error at "+new Date(),"CRM_Web","k1988242001@gmail.com,ranger.kao@sim2travel.com");
+			}
 		}
 	}
+	
+	
 
 	
 	

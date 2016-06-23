@@ -130,7 +130,7 @@ public class SubscriberAction extends BaseAction{
 		}
 		return SUCCESS;
 	}
-	
+	/*
 	public String queryServiceIdList(){
 		System.out.println("queryServiceIdList...");
 		System.out.println("input="+input);
@@ -141,7 +141,7 @@ public class SubscriberAction extends BaseAction{
 			errorHandle(e);
 		}
 		return SUCCESS;
-	}
+	}*/
 	
 	public String queryDataByServiceId(){
 		System.out.println("queryDataByServiceId...");

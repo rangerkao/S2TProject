@@ -18,7 +18,149 @@ public class CRMBaseDao extends BaseDao{
 		// TODO Auto-generated constructor stub
 	}
 	
-	public Subscriber queryServiceIdbyS2tMsisdn(String s2tMsisdn) throws Exception{
+	public String queryServiceIdbyS2tMsisdn(String s2tMsisdn) throws Exception{
+		
+		String serviceid = null;
+		
+		Statement st1 = null;
+		ResultSet rs = null ;
+		String sql = null;
+
+		try {
+			st1 = getConn1().createStatement();
+			sql = "SELECT MAX(A.SERVICEID) SERVICEID "
+					+ "FROM SERVICE A "
+					+ "where A.SERVICECODE = '"+s2tMsisdn+"' ";
+			System.out.println("sql:"+sql);
+			rs = st1.executeQuery(sql);
+			
+			while(rs.next()){
+				serviceid = rs.getString("SERVICEID");
+			}
+
+		}finally{
+			try {
+				if(rs!=null)
+					rs.close();
+				if(st1!=null)
+					st1.close();
+			} catch (Exception e) {
+			}
+		}
+		
+		return serviceid;
+	}
+	
+	public String queryServiceIdbyChtMsisdn(String chtMsisdn) throws Exception{
+		String serviceid = null;
+		
+		Statement st1 = null;
+		ResultSet rs = null ;
+		String sql = null;
+
+		try {
+			st1 = getConn1().createStatement();
+			sql = "select A.SERVICEID "
+					+ "from FOLLOWMEDATA A "
+					+ "where A.FOLLOWMENUMBER = '"+chtMsisdn+"'";
+			System.out.println("sql:"+sql);
+			rs = st1.executeQuery(sql);
+			
+			while(rs.next()){
+				serviceid = rs.getString("SERVICEID");
+			}
+			
+			if(serviceid == null){
+				
+				rs.close();
+				
+				sql = "Select  A.S2T_MSISDN,A.S2T_IMSI "
+						+ "from S2T_TB_TYPB_WO_SYNC_FILE_DTL A "
+						+ "where (A.FORWARD_TO_HOME_NO like '%"+chtMsisdn+"%' or A.FORWARD_TO_S2T_NO_1 like '%"+chtMsisdn+"%' ) "
+						+ "AND trim(A.S2T_MSISDN) is not null "
+						+ "order by A.WORK_ORDER_NBR ";
+				
+				System.out.println("sql:"+sql);
+				rs = st1.executeQuery(sql);
+				
+				String s2tMsisdn = null;
+				while(rs.next()){
+					s2tMsisdn = rs.getString("S2T_MSISDN");
+				}
+				
+				serviceid = queryServiceIdbyS2tMsisdn(s2tMsisdn);
+			}
+
+		}finally{
+			try {
+				if(rs!=null)
+					rs.close();
+				if(st1!=null)
+					st1.close();
+			} catch (Exception e) {
+			}
+		}
+		return serviceid;
+	}
+	
+	public String queryServiceIdbyS2tImsi(String s2tImsi) throws Exception{
+String serviceid = null;
+		
+		Statement st1 = null;
+		ResultSet rs = null ;
+		String sql = null;
+
+		try {
+			st1 = getConn1().createStatement();
+			sql = "select MAX(A.SERVICEID)  SERVICEID "
+					+ "from imsi A "
+					+ "where imsi = '"+s2tImsi+"' ";
+;
+			System.out.println("sql:"+sql);
+			rs = st1.executeQuery(sql);
+			
+			while(rs.next()){
+				serviceid = rs.getString("SERVICEID");
+			}
+			
+			if(serviceid == null){
+				
+				rs.close();
+				
+				sql = "Select  A.S2T_MSISDN,A.S2T_IMSI "
+						+ "from S2T_TB_TYPB_WO_SYNC_FILE_DTL A "
+						+ "where A.S2T_IMSI like '%"+s2tImsi+"%' "
+						+ "AND trim(A.S2T_MSISDN) is not null "
+						+ "order by A.WORK_ORDER_NBR ";
+				
+				System.out.println("sql:"+sql);
+				rs = st1.executeQuery(sql);
+				
+				String s2tMsisdn = null;
+				while(rs.next()){
+					s2tMsisdn = rs.getString("S2T_MSISDN");
+				}
+				
+				serviceid = queryServiceIdbyS2tMsisdn(s2tMsisdn);
+			}
+
+		}finally{
+			try {
+				if(rs!=null)
+					rs.close();
+				if(st1!=null)
+					st1.close();
+			} catch (Exception e) {
+			}
+		}
+		
+		
+		
+		
+		return serviceid;
+	}
+	
+	/*public Subscriber queryServiceIdbyS2tMsisdn(String s2tMsisdn) throws Exception{
 		
 		Statement st2 = null;
 		ResultSet rs = null ;
@@ -30,7 +172,8 @@ public class CRMBaseDao extends BaseDao{
 					+ "FROM SERVICE A,IMSI B,FOLLOWMEDATA C "
 					+ "WHERE A.SERVICEID=B.SERVICEID AND A.SERVICECODE IS NOT NULL "
 					+ "AND B.SERVICEID=C.SERVICEID(+) AND C.FOLLOWMENUMBER LIKE '886%' "
-					+ "AND A.SERVICECODE = '"+s2tMsisdn+"'";
+					+ "AND A.SERVICECODE = '"+s2tMsisdn+"' "
+					+ "order by A.DATEACTIVATED ";
 			System.out.println("sql:"+sql);
 			rs = st2.executeQuery(sql);
 			
@@ -53,9 +196,9 @@ public class CRMBaseDao extends BaseDao{
 		}
 		
 		return s;
-	}
+	}*/
 	
-	public Subscriber queryServiceIdbyS2tImsi(String s2tImsi) throws Exception{
+	/*public Subscriber queryServiceIdbyS2tImsi(String s2tImsi) throws Exception{
 		
 		Statement st = null;
 		Statement st2 = null;
@@ -97,9 +240,9 @@ public class CRMBaseDao extends BaseDao{
 		}
 		
 		return s;
-	}
+	}*/
 	
-	public Subscriber queryServiceIdbyChtMsisdn(String chtMsisdn) throws Exception{
+	/*public Subscriber queryServiceIdbyChtMsisdn(String chtMsisdn) throws Exception{
 		
 		Statement st = null;
 		Statement st2 = null;
@@ -141,7 +284,7 @@ public class CRMBaseDao extends BaseDao{
 		}
 		
 		return s;
-	}
+	}*/
 	
 	public String queryServiceIdbyChtImsi(String chtImsi) throws Exception{
 		

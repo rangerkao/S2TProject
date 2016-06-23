@@ -54,7 +54,7 @@ public class SubscriberDao extends CRMBaseDao{
 		
 		for(String serviceid:serviceids){
 			if(!"".equals(serviceid))
-				result.add(queryList(serviceid));
+				result.add(queryDataByServiceId(serviceid));
 		}
 	
 		return result;
@@ -91,7 +91,7 @@ public class SubscriberDao extends CRMBaseDao{
 		
 		for(String serviceid:serviceids){
 			if(!"".equals(serviceid))
-				result.add(queryList(serviceid));
+				result.add(queryDataByServiceId(serviceid));
 		}
 	
 		return result;
@@ -119,7 +119,7 @@ public class SubscriberDao extends CRMBaseDao{
 			}
 			
 			if(serviceId != null &&!"".equals(serviceId))
-				result.add(queryList(serviceId));
+				result.add(queryDataByServiceId(serviceId));
 
 		}finally{
 			try {
@@ -141,9 +141,9 @@ public class SubscriberDao extends CRMBaseDao{
 		List<Subscriber> result = new ArrayList<Subscriber>();
 
 		try{
-			Subscriber s = queryServiceIdbyS2tMsisdn(s2tMsisdn);
-			if(s.getServiceId() != null &&!"".equals(s.getServiceId()))
-				result.add(queryList(s.getServiceId()));
+			String serviceid = queryServiceIdbyS2tMsisdn(s2tMsisdn);
+			if(serviceid!= null &&!"".equals(serviceid))
+				result.add(queryDataByServiceId(serviceid));
 			
 			/*if(result.size()==0){
 				result.add(s);
@@ -158,9 +158,9 @@ public class SubscriberDao extends CRMBaseDao{
 		List<Subscriber> result = new ArrayList<Subscriber>();
 
 		try{
-			Subscriber s = queryServiceIdbyS2tImsi(s2tIMSI);
-			if(s.getServiceId() != null &&!"".equals(s.getServiceId()))
-				result.add(queryList(s.getServiceId()));
+			String serviceid = queryServiceIdbyS2tImsi(s2tIMSI);
+			if(serviceid!= null &&!"".equals(serviceid))
+				result.add(queryDataByServiceId(serviceid));
 			
 			/*if(result.size()==0){
 				result.add(s);
@@ -175,9 +175,9 @@ public class SubscriberDao extends CRMBaseDao{
 		List<Subscriber> result = new ArrayList<Subscriber>();
 		
 		try{
-			Subscriber s = queryServiceIdbyChtMsisdn(chtMsisdn);
-			if(s.getServiceId() != null &&!"".equals(s.getServiceId()))
-				result.add(queryList(s.getServiceId()));
+			String serviceid = queryServiceIdbyChtMsisdn(chtMsisdn);
+			if(serviceid!= null &&!"".equals(serviceid))
+				result.add(queryDataByServiceId(serviceid));
 			
 			/*if(result.size()==0){
 				result.add(s);
@@ -210,7 +210,7 @@ public class SubscriberDao extends CRMBaseDao{
 			}
 			
 			if(serviceId != null &&!"".equals(serviceId))
-				result.add(queryList(serviceId));
+				result.add(queryDataByServiceId(serviceId));
 
 		}finally{
 			try {
@@ -229,10 +229,10 @@ public class SubscriberDao extends CRMBaseDao{
 	}
 	
 	
-	private Subscriber queryList(String serviceid) throws Exception{
+	/*private Subscriber queryList(String serviceid) throws Exception{
 		Subscriber result = new Subscriber();
 		result.setServiceId(serviceid);
-		/*String sql = "SELECT A.SUBS_ID_TAXID ID,A.SUBS_NAME,A.SUBS_PERMANENT_ADDRESS, "
+		String sql = "SELECT A.SUBS_ID_TAXID ID,A.SUBS_NAME,A.SUBS_PERMANENT_ADDRESS, "
 				+ "(CASE C.STATUS WHEN '1' THEN 'normal'  WHEN '3' THEN 'suspended' WHEN '4' THEN 'terminated' WHEN '10' THEN 'waiting' ELSE 'else' END) STAUS, "
 				+ "B. SERVICEID,C. SERVICECODE S2TMSISDN,C.PRICEPLANID,D.FOLLOWMENUMBER CHTMSISDN,C.DATEACTIVATED,C.DATECANCELED  "
 				+ "FROM CRM_SUBSCRIBERS A,CRM_SUBSCRIPTION B ,SERVICE C,FOLLOWMEDATA D "
@@ -240,7 +240,7 @@ public class SubscriberDao extends CRMBaseDao{
 				+ "AND B.SERVICEID= C.SERVICEID(+) "
 				+ "AND B.SERVICEID = D.SERVICEID(+) "
 				+ "AND D.FOLLOWMENUMBER(+)  LIKE '886%' "
-				+ " "+condition+" " ;*/
+				+ " "+condition+" " ;
 		
 		//CRM DB
 		String sql1 ="SELECT  A.SUBS_ID_TAXID ID,A.SUBS_NAME,A.SUBS_PERMANENT_ADDRESS,B.SERVICEID "
@@ -256,8 +256,19 @@ public class SubscriberDao extends CRMBaseDao{
 				+ "			C. SERVICECODE S2TMSISDN,C.PRICEPLANID,D.FOLLOWMENUMBER CHTMSISDN,C.DATEACTIVATED,C.DATECANCELED "
 				+ "FROM SERVICE C,FOLLOWMEDATA D "
 				+ "WHERE  C.SERVICEID = D.SERVICEID(+) "
-				+ "AND D.FOLLOWMENUMBER(+)  LIKE '886%' "
-				+ "AND C.SERVICEID = "+serviceid+" ";;
+				+ "AND D.FOLLOWMENUMBER(+)  LIKE '886%' AND D. FOLLOWMENUMBER is not null "
+				+ "AND C.SERVICEID = "+serviceid+" ";
+				
+				
+		String sql3 = "select C.SERVICEID, "
+				+ "			(CASE C.STATUS WHEN '1' THEN 'normal'  "
+				+ "							WHEN '3' THEN 'suspended' "
+				+ "							WHEN '4' THEN 'terminated' "
+				+ "							WHEN '10' THEN 'waiting' "
+				+ "							ELSE 'else' END) STAUS, "
+				+ "			C. SERVICECODE S2TMSISDN,C.PRICEPLANID,E.FORWARD_TO_HOME_NO CHTMSISDN,C.DATEACTIVATED,C.DATECANCELED "
+				+ "from service C,S2T_TB_TYPB_WO_SYNC_FILE_DTL E ,FOLLOWMEDATA D "
+				+ "where C.SERVICECODE LIKE E.S2T_MSISDN AND C.SERVICEID = D.SERVICEID(+) AND D. FOLLOWMENUMBER is null";
 		
 		Statement st = null ;
 		ResultSet rs = null ;
@@ -297,6 +308,25 @@ public class SubscriberDao extends CRMBaseDao{
 				result.setActivatedDate(rs.getString("DATEACTIVATED"));
 				result.setCanceledDate(rs.getString("DATECANCELED"));
 			}		
+			
+			
+			if(result.getChtMsisdn() == null){
+				rs.close();
+				
+				System.out.println("query List:"+sql3);
+				rs = st.executeQuery(sql3);
+				
+				while(rs.next()){
+					result.setServiceId(rs.getString("SERVICEID"));
+					result.setS2tMsisdn(rs.getString("S2TMSISDN"));
+					result.setChtMsisdn(rs.getString("CHTMSISDN"));
+					result.setPrivePlanId(queryPricePlanId(rs.getString("PRICEPLANID")));
+					result.setStatus(rs.getString("STAUS"));
+					
+					result.setActivatedDate(rs.getString("DATEACTIVATED"));
+					result.setCanceledDate(rs.getString("DATECANCELED"));
+				}	
+			}
 		}finally{
 			try {
 				if(rs!=null)
@@ -336,7 +366,7 @@ public class SubscriberDao extends CRMBaseDao{
 			//closeConnection();
 		}
 		return result;
-	}
+	}*/
 	
 	//get customer data
 	public Subscriber queryDataById(String id) throws Exception{
@@ -432,20 +462,47 @@ public class SubscriberDao extends CRMBaseDao{
 				+ "FROM CRM_DB.CRM_SUBSCRIBERS A left join CRM_DB.CRM_SUBSCRIPTION B on A.seq =B.seq left join CRM_DB.CRM_CHAIRMAN E on A.seq = E.seq "
 				+ "WHERE B.SERVICEID = "+id+" ";
 		
-		String sql2="SELECT F.HOMEIMSI,C. SERVICEID, "
+/*		String sql2="SELECT C. SERVICEID, "
 				+ "			(CASE C.STATUS "
 				+ "					WHEN '1' THEN 'normal' "
 				+ "					WHEN '3' THEN 'suspended' "
 				+ "					WHEN '4' THEN 'terminated' "
 				+ "					WHEN '10' THEN 'waiting' "
 				+ "					ELSE 'else' END) STAUS, "
-				+ "			C.DATEACTIVATED,C.DATECANCELED, "
-				+ "			C. SERVICECODE S2TMSISDN,C.PRICEPLANID,F.IMSI,D.FOLLOWMENUMBER CHTMSISDN "
+				+ "			C. SERVICECODE S2TMSISDN,C.PRICEPLANID,D.FOLLOWMENUMBER CHTMSISDN,C.DATEACTIVATED,C.DATECANCELED,F.HOMEIMSI,F.IMSI "
 				+ "FROM SERVICE C,FOLLOWMEDATA  D,IMSI F "
 				+ "WHERE C.SERVICEID= D.SERVICEID(+) "
 				+ "AND C.SERVICEID = F.SERVICEID(+) "
 				+ "AND D.FOLLOWMENUMBER(+) LIKE '886%' "
-				+ "AND C.SERVICEID = "+id+" ";;
+				+ "AND C.SERVICEID = "+id+" ";
+		*/
+		//S2T DB
+		String sql2 ="SELECT C.SERVICEID, "
+				+ "			(CASE C.STATUS WHEN '1' THEN 'normal'  "
+				+ "							WHEN '3' THEN 'suspended' "
+				+ "							WHEN '4' THEN 'terminated' "
+				+ "							WHEN '10' THEN 'waiting' "
+				+ "							ELSE 'else' END) STAUS, "
+				+ "			C. SERVICECODE S2TMSISDN,C.PRICEPLANID,D.FOLLOWMENUMBER CHTMSISDN,C.DATEACTIVATED,C.DATECANCELED,F.HOMEIMSI,F.IMSI "
+				+ "FROM SERVICE C,FOLLOWMEDATA D,IMSI F "
+				+ "WHERE  C.SERVICEID = D.SERVICEID(+) "
+				+ "AND C.SERVICEID = F.SERVICEID(+) "
+				+ "AND D.FOLLOWMENUMBER(+)  LIKE '886%' "
+				+ "AND C.status!=4 "
+				+ "AND C.SERVICEID = "+id+" "
+				+ "UNION "			
+				+ "select C.SERVICEID, "
+				+ "			(CASE C.STATUS WHEN '1' THEN 'normal'  "
+				+ "							WHEN '3' THEN 'suspended' "
+				+ "							WHEN '4' THEN 'terminated' "
+				+ "							WHEN '10' THEN 'waiting' "
+				+ "							ELSE 'else' END) STAUS, "
+				+ "			C. SERVICECODE S2TMSISDN,C.PRICEPLANID,E.FORWARD_TO_HOME_NO CHTMSISDN,C.DATEACTIVATED,C.DATECANCELED,E.ORIGINAL_CMCC_IMSI HOMEIMSI,E.S2T_IMSI IMSI "
+				+ "from service C,S2T_TB_TYPB_WO_SYNC_FILE_DTL E  "
+				+ "where C.SERVICECODE = E.S2T_MSISDN(+) "
+				+ "AND C.status=4 "
+				+ "AND E.SEND_TIME between C.DATEACTIVATED AND DATECANCELED "
+				+ "AND C.SERVICEID = "+id+" ";
 				
 		Statement st = null;
 		ResultSet rs = null;
@@ -475,7 +532,6 @@ public class SubscriberDao extends CRMBaseDao{
 				result.setChairID(rs.getString("CHAIRMAN_ID"));
 	
 				result.setSeq(rs.getString("SEQ"));
-
 			}
 		} finally{
 			try {

@@ -72,9 +72,9 @@ public class SubscriberService extends BaseService{
 		return result;
 	}
 	
-	public List<String> queryServiceIdList(String id) throws Exception{
+	/*public List<String> queryServiceIdList(String id) throws Exception{
 		return subscriberDao.queryServiceIdList(id);
-	}
+	}*/
 	
 	public Subscriber queryDataByServiceId(String id) throws Exception{
 		return subscriberDao.queryDataByServiceId(id);

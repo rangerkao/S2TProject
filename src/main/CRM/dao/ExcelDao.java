@@ -13,11 +13,14 @@ import org.springframework.stereotype.Repository;
 
 import main.CRM.bean.SubscriberExcel;
 import main.common.dao.BaseDao;
-@Repository
+
 public class ExcelDao extends CRMBaseDao{
+
+
 
 	public ExcelDao() throws Exception {
 		super();
+		// TODO Auto-generated constructor stub
 	}
 
 	//查詢列表
@@ -56,7 +59,7 @@ public class ExcelDao extends CRMBaseDao{
 					"SELECT DATE_FORMAT(D.VERIFIED_DATE,'%Y/%m/%d') VERIFIED_DATE,B.SERVICEID, "
 					+ "A.SUBS_NAME,A.SUBS_ID_TAXID,C.CHAIRMAN,C.CHAIRMAN_ID,A.SUBS_PHONE,A.SUBS_BIRTHDAY, "
 					+ "A.SUBS_PERMANENT_ADDRESS,A.SUBS_BILLING_ADDRESS,A.SUBS_EMAIL,A.AGENCY_ID,A.REMARK "
-					+ "FROM CRM_DB.CRM_SUBSCRIBERS A left join "
+					+ "FROM CRM_DB.CRM_SUBSCRIBERS A inner join "
 					+ "		CRM_DB.CRM_SUBSCRIPTION B on A.SEQ=B.SEQ left join "
 					+ "		CRM_DB.CRM_CHAIRMAN C on A.SEQ = C.SEQ left join "
 					+ "		(	SELECT MAX(VERIFIED_DATE) VERIFIED_DATE,SERVICEID "
@@ -211,6 +214,7 @@ public class ExcelDao extends CRMBaseDao{
 			}
 		}
 
+		System.out.println("data query finished");
 		//closeConnection();
 		return sortByServiceid(result);		
 	}
@@ -218,23 +222,74 @@ public class ExcelDao extends CRMBaseDao{
 	//20160223 add 
 	public List<Map<String,Object>> sortByServiceid(List<Map<String,Object>> list){
 		
-			for(int i=0 ; i< list.size()-1 ; i++){
-				for(int j=0 ; j< list.size()-1 ; j++){
-					Map<String,Object> m1 = list.get(j);
-					Map<String,Object> m2 = list.get(j+1);
-					int servicei = Integer.parseInt( m1.get("SERVICEID")==null?"0":(String) m1.get("SERVICEID"));
-					int servicej = Integer.parseInt( m2.get("SERVICEID")==null?"0":(String) m2.get("SERVICEID"));
-					
-					if(servicei>servicej){
-						list.set(j+1,m1 );
-						list.set(j,m2 );
-					}
-				}
+		System.out.println("sort data.");
+		List<Map<String,Object>> result = null;
+		try {
+			result = mergeSortByServiceid(list);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println("sort data end."+list.size()+","+result.size());
+		return result;
 
+	}
+	
+	public List<Map<String,Object>> mergeSortByServiceid(List<Map<String,Object>> list){
+		
+		int total = list.size();
+		int middle = (int) Math.floor(total/2);
+		
+		if(total <= 1){
+			return list;
 		}
 		
-		return list;
+		List<Map<String,Object>> left = mergeSortByServiceid(list.subList(0, middle));
+		List<Map<String,Object>> right = mergeSortByServiceid(list.subList(middle,total));
+		
+		List<Map<String,Object>> result = new ArrayList<Map<String,Object>>();
 
+		int i = 0,j=0;
+		
+		while(i<left.size()&&j<right.size()){
+			int servicei = Integer.parseInt(left.get(i).get("SERVICEID") == null ? "0"	: (String) left.get(i).get("SERVICEID"));
+			int servicej = Integer.parseInt(right.get(j).get("SERVICEID") == null ? "0"	: (String) right.get(j).get("SERVICEID"));
+			if(servicei<=servicej){
+				result.add(left.get(i));
+				i++;
+			}else{
+				result.add(right.get(j));
+				j++;
+			}
+		}
+		
+		for(;i<left.size();i++){
+			result.add(left.get(i));
+		}
+		for(;j<right.size();j++){
+			result.add(right.get(j));
+		}
+		
+		return result;
+	}
+	
+	public List<Map<String,Object>> bubbleSortByServiceid(List<Map<String,Object>> list){
+		
+		for (int i = 0; i < list.size() - 1; i++) {
+			for (int j = 0; j < list.size() - 1; j++) {
+				Map<String, Object> m1 = list.get(j);
+				Map<String, Object> m2 = list.get(j + 1);
+				int servicei = Integer.parseInt(m1.get("SERVICEID") == null ? "0"	: (String) m1.get("SERVICEID"));
+				int servicej = Integer.parseInt(m2.get("SERVICEID") == null ? "0"	: (String) m2.get("SERVICEID"));
+
+				if (servicei > servicej) {
+					list.set(j + 1, m1);
+					list.set(j, m2);
+				}
+			}
+
+		}
+		return list;
 	}
 	
 	

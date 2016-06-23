@@ -13,10 +13,12 @@ import java.util.Properties;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import org.springframework.jdbc.core.support.*;
+
 import main.CRM.bean.SMS;
 import main.common.action.CacheAction;
 
-public class BaseDao {
+public class BaseDao{
 
 	protected static Properties props =null;
 	protected static Connection conn=null;
@@ -92,18 +94,24 @@ public class BaseDao {
 		return conn3;
 	}
 	protected void createConnection() throws Exception{
+		needClose = true;
 		conn=connectDB();
 		System.out.println("Create connect1!");
 	}
 	protected void createConnection2() throws Exception{
+		needClose = true;
 		conn2=connectDB2();
 		System.out.println("Create connect2!");
 	}
 	protected static void createConnection3() throws Exception{
+		needClose = true;
 		conn3=connectDB3();
 		System.out.println("Create connect3!");
 	}
+	static boolean needClose = false;
 	protected void closeConnection(){
+		if(!needClose)
+			return;
 		try {
 			if(conn!=null)
 				conn.close();
@@ -114,6 +122,7 @@ public class BaseDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		needClose = false;
 		System.out.println("Close connect!("+new Date()+")");
 	}
 		//---------------建立DB 連結 conn1 主資料庫、conn2 Mboss----
