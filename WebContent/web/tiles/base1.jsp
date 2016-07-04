@@ -3,7 +3,7 @@
 
 <div class="container-fluid max_height">
 	<div class="row max_height" >
-		<table class="col-md-12 max_height" style="height: 99%">
+		<table class="col-xs-12 max_height" style="height: 99%">
 			<tr>
 				<td bgcolor="#AFFEFF" height="50px"><div><tiles:insertAttribute name="top"/> </div></td>
 			</tr>

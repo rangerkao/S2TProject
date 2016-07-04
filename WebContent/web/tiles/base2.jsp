@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles" %>  
-<div class="container-fluid max_height" >
+<div class="container-fluid max_height container " >
 	<div class="row max_height">
 		<%-- <table class="col-md-12" style="height: 100%;padding: 0px;">
 			<tr>
@@ -12,7 +12,7 @@
 				</td>
 			</tr>
 		</table> --%>
-		<table class="col-md-12 max_height" style="height: 99%;">
+		<table class="col-xs-12 max_height" style="height: 99%;">
 			<tr>
 				<td width="10%">
 					<table style="height: 100%;width: 100%; bgcolor=#404040; ">

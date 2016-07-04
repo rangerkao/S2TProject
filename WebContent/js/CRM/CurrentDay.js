@@ -11,16 +11,16 @@ angular.module('MainApp')
 		});
 
 		//-------------data head ---------------------
-		self.dataHeader=[{name:"累計日期",col:"day",_width:"9%"},
+		self.dataHeader=[{name:"累計日期",col:"day",_width:"10%"},
 		  	           {name:"IMSI",col:"imsi",_width:"10%"},
-			           {name:"累計費用",col:"charge",_width:"9%"},
-			           {name:"最後累計檔案ID",col:"lastFileId",_width:"9%"},
-			           {name:"最後使用時間",col:"lastDataTime",_width:"9%"},
-			           {name:"累計流量(byte)",col:"volume",_width:"9%"},
-			           {name:"更新時間",col:"updateDate",_width:"9%"},
-			           {name:"建立時間",col:"createDate",_width:"9%"},
-			           {name:"國家業者",col:"mccmnc",_width:"9%"},
-			           {name:"是否發送過每日警示",col:"alert",_width:"9%"}];
+			           {name:"累計費用",col:"charge",_width:"10%"},
+			           {name:"最後累計檔案ID",col:"lastFileId",_width:"10%"},
+			           {name:"最後使用時間",col:"lastDataTime",_width:"10%"},
+			           {name:"累計流量(byte)",col:"volume",_width:"10%"},
+			           {name:"更新時間",col:"updateDate",_width:"10%"},
+			           {name:"建立時間",col:"createDate",_width:"10%"},
+			           {name:"國家業者",col:"mccmnc",_width:"10%"},
+			           {name:"是否發送過每日警示",col:"alert",_width:"10%"}];
 		
 		
 		self.query = function(imsi){

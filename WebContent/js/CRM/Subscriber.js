@@ -246,7 +246,11 @@ angular.module('MainApp')
 				//alert($(event.currentTarget).attr('id'));
 			}
 		}
-		
+		self.onDataKeyDownToBringData = function(){
+			if(event.keyCode == 13){
+				self.queryInfo();
+			}
+		}
 		
 		
 		

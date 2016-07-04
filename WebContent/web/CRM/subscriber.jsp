@@ -87,7 +87,7 @@
 				<div class="col-sm-6" align="left" ng-dblclick="sCtrl.infoEditMod('idTaxid')" ng-hide="sCtrl.hideNotNecessary">
 					<label>統一編號／證號：</label>
 					<span ng-bind="sCtrl.custInfo.idTaxid" ng-show="sCtrl.show""></span>
-					<input id="T2" type="text" ng-model = "sCtrl.custInfo.idTaxid" ng-show="!sCtrl.show" ng-change="sCtrl.whenInfoCahnge('idTaxid')">
+					<input id="T2" ng-keydown="sCtrl.onDataKeyDownToBringData()" type="text" ng-model = "sCtrl.custInfo.idTaxid" ng-show="!sCtrl.show" ng-change="sCtrl.whenInfoCahnge('idTaxid')">
 					<a type="button" value="帶入資料" ng-click="sCtrl.queryInfo()" class="btn btn-danger btn-xs" ng-show="!sCtrl.show">帶入資料</a>
 				</div>
 				
