@@ -2,7 +2,7 @@
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles" %>  
 
 <!DOCTYPE html>
-<html ng-app="MainApp">
+<html ng-app="MainApp" style="background-color:  rgba(45, 41, 41, 0.36);">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Sim2Travel 維運管理系統(New)</title>
