@@ -1,8 +1,6 @@
 package main.CRM.dao;
 
-import java.io.UnsupportedEncodingException;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -12,8 +10,8 @@ import java.util.Set;
 import org.springframework.stereotype.Repository;
 
 import main.CRM.bean.AddonService;
-import main.CRM.bean.PricePlanID;
 import main.CRM.bean.Subscriber;
+import main.CRM.bean.USPacket;
 
 @Repository
 public class SubscriberDao extends CRMBaseDao{
@@ -22,7 +20,12 @@ public class SubscriberDao extends CRMBaseDao{
 		super();
 	}
 
-	//select ID and data
+	/**
+	 * 以ID查詢客戶清單
+	 * @param id
+	 * @return
+	 * @throws Exception
+	 */
 	public List<Subscriber> queryListById(String id) throws Exception{
 		List<Subscriber> result = new ArrayList<Subscriber>();
 		Set<String> serviceids = new HashSet<String>();
@@ -60,6 +63,12 @@ public class SubscriberDao extends CRMBaseDao{
 		return result;
 	}
 	
+	/**
+	 * 以名稱查詢客戶清單
+	 * @param name
+	 * @return
+	 * @throws Exception
+	 */
 	public List<Subscriber> queryListByName(String name) throws Exception{
 		List<Subscriber> result = new ArrayList<Subscriber>();
 		Set<String> serviceids = new HashSet<String>();
@@ -96,7 +105,12 @@ public class SubscriberDao extends CRMBaseDao{
 	
 		return result;
 	}
-	
+	/**
+	 * 以VLN查詢客戶清單
+	 * @param VLN
+	 * @return
+	 * @throws Exception
+	 */
 	public List<Subscriber> queryListByVLN(String VLN) throws Exception{
 		List<Subscriber> result = new ArrayList<Subscriber>();
 		
@@ -132,11 +146,15 @@ public class SubscriberDao extends CRMBaseDao{
 			}
 			//closeConnection();
 		}
-		
-		
 		return result;
 	}
 	
+	/**
+	 * 以香港號查詢客戶清單
+	 * @param s2tMsisdn
+	 * @return
+	 * @throws Exception
+	 */
 	public List<Subscriber> queryListByS2tMisidn(String s2tMsisdn) throws Exception{
 		List<Subscriber> result = new ArrayList<Subscriber>();
 
@@ -154,6 +172,12 @@ public class SubscriberDao extends CRMBaseDao{
 		return result;
 	}
 	
+	/**
+	 * 以香港IMSI查詢客戶清單
+	 * @param s2tIMSI
+	 * @return
+	 * @throws Exception
+	 */
 	public List<Subscriber> queryListByS2tIMSI(String s2tIMSI) throws Exception{
 		List<Subscriber> result = new ArrayList<Subscriber>();
 
@@ -170,6 +194,12 @@ public class SubscriberDao extends CRMBaseDao{
 		}
 		return result;
 	}
+	/**
+	 * 以中華號查詢客戶清單
+	 * @param chtMsisdn
+	 * @return
+	 * @throws Exception
+	 */
 	
 	public List<Subscriber> queryListByChtMsisdn(String chtMsisdn) throws Exception{
 		List<Subscriber> result = new ArrayList<Subscriber>();
@@ -187,7 +217,12 @@ public class SubscriberDao extends CRMBaseDao{
 		}
 		return result;
 	}
-	
+	/**
+	 * 以主號查詢客戶清單
+	 * @param mainMsisdn
+	 * @return
+	 * @throws Exception
+	 */
 	public List<Subscriber> queryListByMainMsisdn(String mainMsisdn) throws Exception{
 		List<Subscriber> result = new ArrayList<Subscriber>();
 		
@@ -368,7 +403,12 @@ public class SubscriberDao extends CRMBaseDao{
 		return result;
 	}*/
 	
-	//get customer data
+	/**
+	 * 以ID查詢客戶資料，供資料帶入使用
+	 * @param id
+	 * @return
+	 * @throws Exception
+	 */
 	public Subscriber queryDataById(String id) throws Exception{
 		Subscriber result = new Subscriber(); 
 		//Main by customer data
@@ -436,7 +476,12 @@ public class SubscriberDao extends CRMBaseDao{
 		
 		return result;
 	}
-	
+	/**
+	 * 以ServiceID查詢客戶資料，主ServiceID
+	 * @param id
+	 * @return
+	 * @throws Exception
+	 */
 	public Subscriber queryDataByServiceId(String id) throws Exception{
 		Subscriber result = new Subscriber(); 
 		result.setServiceId(id);
@@ -582,7 +627,12 @@ public class SubscriberDao extends CRMBaseDao{
 		return result;
 	}
 	
-	
+	/**
+	 * 更新客戶資料
+	 * @param s
+	 * @return
+	 * @throws Exception
+	 */
 	public boolean updateSubscriber(Subscriber s) throws Exception{
 		boolean result = false;
 		String sql = "UPDATE CRM_DB.CRM_SUBSCRIBERS A "
@@ -597,6 +647,7 @@ public class SubscriberDao extends CRMBaseDao{
 		getConn3().setAutoCommit(false);
 		
 		if(s.getSeq()== null ||"".equals(s.getSeq())){
+			//如果為新資料，進行插入動作
 			result = insertSubscriber(s);
 		}else{
 			try {
@@ -658,6 +709,7 @@ public class SubscriberDao extends CRMBaseDao{
 
 			if(eRow!=1)
 				throw new Exception("Update data fail! InsertSubscriber "+eRow);
+			//插入後更新對應資料
 			updateSubscription(s);
 			result = true;
 		}finally{
@@ -726,9 +778,11 @@ public class SubscriberDao extends CRMBaseDao{
 				if(eRow>1)
 					throw new Exception("Update data fail! updated Subscription "+eRow);
 				else if(eRow==0)
+					//如果為新資料，進行插入
 					insertSubscription(s);
 			}
 
+			//為公司戶嘗試更新負責人資訊，否則嘗試刪除不正確的負責人資料
 			if("E".equalsIgnoreCase(s.getType())){
 				updateChairMain(s);
 			}else if("P".equalsIgnoreCase(s.getType())){
@@ -817,7 +871,7 @@ public class SubscriberDao extends CRMBaseDao{
 		try {
 			st = getConn3().createStatement();
 			System.out.println("sql:"+sql);
-			int eRow = st.executeUpdate(sql);
+			st.executeUpdate(sql);
 			result = true;
 
 		}finally{
@@ -831,7 +885,12 @@ public class SubscriberDao extends CRMBaseDao{
 	}
 	
 	
-	//TODO
+	/**
+	 * 查詢VLN
+	 * @param serviceId
+	 * @return
+	 * @throws Exception
+	 */
 	public List<String> queryVLN(String serviceId) throws Exception{
 		List<String> result = new ArrayList<String>(); 
 
@@ -865,7 +924,12 @@ public class SubscriberDao extends CRMBaseDao{
 		}
 		return result;
 	}
-	
+	/**
+	 * 查詢華人上網包資料
+	 * @param serviceId
+	 * @return
+	 * @throws Exception
+	 */
 	public List<AddonService> queryAddonService(String serviceId) throws Exception{
 		List<AddonService> result = new ArrayList<AddonService>(); 
 
@@ -905,6 +969,12 @@ public class SubscriberDao extends CRMBaseDao{
 		return result;
 	}
 	
+	/**
+	 * 取得數據狀態
+	 * @param msisdn
+	 * @return
+	 * @throws Exception
+	 */
 	public String getGPRSStatus(String msisdn) throws Exception{
 		String result = null;
 		String sql = "SELECT nvl(PDPSUBSID,0) as status "
@@ -935,7 +1005,55 @@ public class SubscriberDao extends CRMBaseDao{
 		}
 		return result;
 	}
-	//else tool
+	/**
+	 * 取的華人上網包資料
+	 * @param serviceId
+	 * @return
+	 * @throws Exception
+	 */
+	public List<USPacket> queryUSPacket(String serviceId) throws Exception{
+		List<USPacket> result = new ArrayList<USPacket>(); 
+
+		String sql = "select A.SERVICEID,A.START_DATE,A.END_DATE,"
+				+ "to_char(A.CREATE_TIME,'yyyy/MM/dd hh24:mi:ss') CREATE_TIME,"
+				+ "to_char(A.CANCEL_TIME,'yyyy/MM/dd hh24:mi:ss') CANCEL_TIME,A.ALERTED||'%' ALERTED "
+				+ "from HUR_VOLUME_POCKET A "
+				+ "where A.TYPE = 0 AND A.SERVICEID = '"+serviceId+"' "
+				+ "ORDER by A.START_DATE DESC ";
+		
+				
+		Statement st = null;
+		ResultSet rs = null;
+		
+		try {
+			
+			st = getConn1().createStatement();
+			System.out.println("sql:"+sql);
+			rs = st.executeQuery(sql);
+			
+			while(rs.next()){
+				USPacket a = new USPacket();
+				a.setServiceid(rs.getString("SERVICEID"));
+				a.setStartDate(rs.getString("START_DATE"));
+				a.setEndDate(rs.getString("END_DATE"));
+				a.setCreateTime(rs.getString("CREATE_TIME"));
+				a.setCancelTime(rs.getString("CANCEL_TIME"));
+				a.setAlerted(rs.getString("ALERTED"));
+			
+				result.add(a);
+			}
+		} finally{
+			try {
+				if(rs!=null)
+					rs.close();
+				if(st!=null)
+					st.close();
+			} catch (Exception e) {
+			}
+			//closeConnection();
+		}
+		return result;
+	}
 	
 	
 }

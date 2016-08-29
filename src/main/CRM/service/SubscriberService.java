@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import main.CRM.bean.AddonService;
 import main.CRM.bean.Subscriber;
+import main.CRM.bean.USPacket;
 import main.CRM.dao.SubscriberDao;
 import main.common.service.BaseService;
 @Service
@@ -95,7 +96,9 @@ public class SubscriberService extends BaseService{
 	public String getGPRSStatus(String msisdn) throws Exception{
 		return subscriberDao.getGPRSStatus(msisdn);
 	}
-
+	public List<USPacket> queryUSPacket(String serviceId) throws Exception{
+		return subscriberDao.queryUSPacket(serviceId);
+	}
 	
 	
 	protected SubscriberDao getSubscriberDao() {
@@ -104,5 +107,7 @@ public class SubscriberService extends BaseService{
 	protected void setSubscriberDao(SubscriberDao subscriberDao) {
 		this.subscriberDao = subscriberDao;
 	}	
+	
+	
 	
 }

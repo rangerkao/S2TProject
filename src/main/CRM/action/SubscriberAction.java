@@ -8,6 +8,7 @@ import org.json.JSONObject;
 
 import main.CRM.bean.AddonService;
 import main.CRM.bean.Subscriber;
+import main.CRM.bean.USPacket;
 import main.CRM.service.SubscriberService;
 import main.common.action.BaseAction;
 
@@ -202,6 +203,18 @@ public class SubscriberAction extends BaseAction{
 		} catch (Exception e) {
 			errorHandle(e);
 		}
+		return SUCCESS;
+	}
+	
+	public String queryUSPacket(){
+		System.out.println("queryUSPacket...");
+		System.out.println("input="+input);
+		try {
+			List<USPacket> uSPacket = subscriberService.queryUSPacket(input);
+			setSuccess(uSPacket);
+		} catch (Exception e) {
+			errorHandle(e);
+		} 
 		return SUCCESS;
 	}
 

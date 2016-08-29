@@ -77,6 +77,7 @@
         <action name="queryVLN" class="main.CRM.action.SubscriberAction" method="queryVLN"></action>
         <action name="queryAddonService" class="main.CRM.action.SubscriberAction" method="queryAddonService"></action>
         <action name="getGPRSStatus" class="main.CRM.action.SubscriberAction" method="getGPRSStatus"></action>
+        <action name="queryUSPacket" class="main.CRM.action.SubscriberAction" method="queryUSPacket"></action>
 
         <action name="updateSubscriber" class="main.CRM.action.SubscriberAction" method="updateSubscriber"></action>
         

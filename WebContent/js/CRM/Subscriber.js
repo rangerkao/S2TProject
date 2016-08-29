@@ -94,6 +94,8 @@ angular.module('MainApp')
 		self.show = true;
 		//Edit column control
 		self.infoEditMod = function(col){
+			if(self.role=='noc')
+				return;
 			self.show = !self.show;
 			/*if(self.infoEditable){
 				self.show[col]=!self.show[col];
@@ -185,7 +187,7 @@ angular.module('MainApp')
 		    });
 		};
 		
-		self.onSelectedTypeKeyDown = function(){
+		self.onSelectedTypeKeyDown = function(event){
 			if(event.keyCode ==13){
 				self.queryList();
 			}
@@ -239,14 +241,8 @@ angular.module('MainApp')
 			}
 			return nextElmt;
 		}
-		
-		self.onDataKeyDown = function(){
-			if(event.keyCode == 13){
-				//alert($(angular.element(event.currentTarget)).attr('id'));
-				//alert($(event.currentTarget).attr('id'));
-			}
-		}
-		self.onDataKeyDownToBringData = function(){
+
+		self.onDataKeyDownToBringData = function(event){
 			if(event.keyCode == 13){
 				self.queryInfo();
 			}
