@@ -1,5 +1,6 @@
 package main.DVRS.dao;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -17,7 +18,7 @@ public class HistoryDao extends BaseDao {
 		super();
 	}
 
-	public List<CardChange> queryCardChangeHistory(String imsi) throws SQLException{
+	public List<CardChange> queryCardChangeHistory(String imsi) throws Exception{
 		List<CardChange> result = new ArrayList<CardChange>();
 		
 		if(imsi!=null &&!"".equals(imsi)){
@@ -36,6 +37,7 @@ public class HistoryDao extends BaseDao {
 		
 		Statement st = null;
 		ResultSet rs = null;
+		Connection conn = getConn1();
 		try {
 			st = conn.createStatement();
 			rs = st.executeQuery(sql);		
@@ -57,16 +59,15 @@ public class HistoryDao extends BaseDao {
 				result.add(c);
 			}
 		} finally{
-			if(st!=null)
-				st.close();
-			if(rs!=null)
-				rs.close();
+			if(st!=null) st.close();
+			if(rs!=null) rs.close();
+			closeConn1(conn);
 		}
 		//closeConnection();
 		return result;
 	}
 	
-	public List<CardChange> queryNumberChangeHistory(String imsi) throws SQLException{
+	public List<CardChange> queryNumberChangeHistory(String imsi) throws Exception{
 		List<CardChange> result = new ArrayList<CardChange>();
 		
 		if(imsi!=null &&!"".equals(imsi)){
@@ -83,6 +84,7 @@ public class HistoryDao extends BaseDao {
 		
 		Statement st = null;
 		ResultSet rs = null;
+		Connection conn = getConn1();
 		try {
 			st = conn.createStatement();
 			rs = st.executeQuery(sql);
@@ -105,10 +107,9 @@ public class HistoryDao extends BaseDao {
 				result.add(c);
 			}
 		}  finally{
-			if(st!=null)
-				st.close();
-			if(rs!=null)
-				rs.close();
+			if(st!=null) st.close();
+			if(rs!=null) rs.close();
+			closeConn1(conn);
 		}
 		//closeConnection();
 		return result;

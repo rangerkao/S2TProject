@@ -5,6 +5,8 @@ angular.module('MainApp')
 		
 		$scope.$on('queryQos',function(event,data){
 			self.s2tMsisdn=data['s2tMsisdn'];
+			self.activatedDate=data['activatedDate'];
+			self.canceledDate=data['canceledDate'];
 			self.queryQos();
 		});
 		
@@ -25,10 +27,14 @@ angular.module('MainApp')
 		self.qosList = [];
 		
 		self.queryQos = function(){
-			self.queryQosList(self.s2tMsisdn);
+			self.queryQosList(self.s2tMsisdn,self.activatedDate,self.canceledDate);
 		};
 		
-		self.queryQosList = function(msisdn){
+		self.queryQosList = function(msisdn,activeDate,cancelDate){
+
+			if(!cancelDate)
+				cancelDate='';
+			
 			self.qosList = [];
 			if(!msisdn)
 				return ;			
@@ -39,7 +45,7 @@ angular.module('MainApp')
 			}
 	
 			self.qosMsg = "查詢中...";
-			AjaxService.query('queryQos',{msisdn:msisdn})
+			AjaxService.query('queryQos',{msisdn:msisdn,activeDate:activeDate,cancelDate:cancelDate})
 											
 			.success(function(data, status, headers, config) {  
 				if(data['error']){

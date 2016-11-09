@@ -1,5 +1,6 @@
 package main.CRM.dao;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -51,7 +52,7 @@ public class ExcelDao extends CRMBaseDao{
 		
 		Statement st = null;
 		ResultSet rs = null;
-		
+		Connection conn = getConn3();
 		SubscriberExcel se = new SubscriberExcel();
 		se.getClass().getFields();
 		try {
@@ -66,8 +67,8 @@ public class ExcelDao extends CRMBaseDao{
 					+ "			FROM CRM_DB.CRM_APPLICATION "
 					+ "			GROUP BY SERVICEID) D ON B.SERVICEID = D.SERVICEID ";
 
-			st = getConn3().createStatement();
-			System.out.println("Execute SQL :"+sql);
+			st = conn.createStatement();
+			//System.out.println("Execute SQL :"+sql);
 			rs = st.executeQuery(sql);
 			while(rs.next()){
 				Map<String, Object> m = new HashMap<String,Object>();
@@ -92,18 +93,20 @@ public class ExcelDao extends CRMBaseDao{
 			}
 		} finally{
 			try {
-				if(st!=null)
-					st.close();
-				if(rs!=null)
-					rs.close();
+				if(st!=null) st.close();
+				if(rs!=null) rs.close();
+				closeConn3(conn);
 			} catch (Exception e) {
 			}
 		}
 		
+		st = null;
+		rs = null;
+		
 		Map<String, Map<String,String>> m2 = new HashMap<String,Map<String,String>>();
 		try{
-			System.out.println("query remain data!");
-			st = getConn1().createStatement();
+			//System.out.println("query remain data!");
+			
 			String sql = "SELECT F.PARTNERMSISDN,E.SERVICECODE,E.DATEACTIVATED,E.DATECANCELED,E.SERVICEID "
 					+ "FROM AVAILABLEMSISDN F,"
 					+ "		(	SELECT A.SERVICEID,A.SERVICECODE ||(CASE WHEN A.STATUS!=1 THEN '  (TERMINATED)' END) SERVICECODE, "
@@ -119,7 +122,9 @@ public class ExcelDao extends CRMBaseDao{
 			int i = 0;
 			Map<String,String> m3 = null;
 			
-			System.out.println("Execute SQL :"+sql);
+			conn = getConn1();
+			st = conn.createStatement();
+			//System.out.println("Execute SQL :"+sql);
 			rs = st.executeQuery(sql);
 			
 			while(rs.next()){
@@ -130,7 +135,6 @@ public class ExcelDao extends CRMBaseDao{
 				m3.put("DATECANCELED", rs.getString("DATECANCELED"));
 				m2.put(rs.getString("SERVICEID"), m3);
 			}
-			rs.close();
 			
 			/*for(Map<String, Object> m : result){
 				serviceids += m.get("SERVICEID")+",";
@@ -139,7 +143,7 @@ public class ExcelDao extends CRMBaseDao{
 					if(!"".equals(serviceids)){
 						serviceids = serviceids.substring(0,serviceids.length()-1);
 						String exe = sql.replace("{{SERIVCEIDS}}", serviceids);
-						System.out.println("Execute SQL :"+exe);
+						//System.out.println("Execute SQL :"+exe);
 						rs = st.executeQuery(exe);
 						
 						while(rs.next()){
@@ -161,7 +165,7 @@ public class ExcelDao extends CRMBaseDao{
 				if(!"".equals(serviceids)){
 					serviceids = serviceids.substring(0,serviceids.length()-1);
 					String exe = sql.replace("{{SERIVCEIDS}}", serviceids);
-					System.out.println("Execute SQL :"+exe);
+					//System.out.println("Execute SQL :"+exe);
 					rs = st.executeQuery(exe);
 					
 					while(rs.next()){
@@ -181,14 +185,13 @@ public class ExcelDao extends CRMBaseDao{
 			
 		}finally{
 			try {
-				if(st!=null)
-					st.close();
-				if(rs!=null)
-					rs.close();
+				if(st!=null) st.close();
+				if(rs!=null) rs.close();
+				closeConn1(conn);
 			} catch (Exception e) {
 			}
 		}
-		System.out.println("Set remain data!");
+		//System.out.println("Set remain data!");
 		Set<String> serviceids = new HashSet<String>();
 		
 		for(Map<String, Object> m : result){
@@ -214,7 +217,7 @@ public class ExcelDao extends CRMBaseDao{
 			}
 		}
 
-		System.out.println("data query finished");
+		//System.out.println("data query finished");
 		//closeConnection();
 		return sortByServiceid(result);		
 	}
@@ -222,7 +225,7 @@ public class ExcelDao extends CRMBaseDao{
 	//20160223 add 
 	public List<Map<String,Object>> sortByServiceid(List<Map<String,Object>> list){
 		
-		System.out.println("sort data.");
+		//System.out.println("sort data.");
 		List<Map<String,Object>> result = null;
 		try {
 			result = mergeSortByServiceid(list);
@@ -230,7 +233,7 @@ public class ExcelDao extends CRMBaseDao{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		System.out.println("sort data end."+list.size()+","+result.size());
+		//System.out.println("sort data end."+list.size()+","+result.size());
 		return result;
 
 	}

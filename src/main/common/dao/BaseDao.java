@@ -20,33 +20,37 @@ import main.common.action.CacheAction;
 
 public class BaseDao{
 
-	protected static Properties props =null;
-	protected static Connection conn=null;
-	protected static Connection conn2=null;
-	protected static Connection conn3=null;
-	private static Date requestTime;
+	Properties props =null;
+	Connection conn=null;
+	Connection conn2=null;
+	Connection conn3=null;
+	//private static Date requestTime;
 	
 	public BaseDao() throws Exception{
-		props=CacheAction.props;
+		/*props=CacheAction.props;
 		
 		Timer timer = new Timer();
 
 		Date now = new Date();//現在時間
 
-		timer.schedule(new taskClass(),now,1000*60*5);
+		timer.schedule(new taskClass(),now,1000*60*5);*/
 
 	}	
 	
-	class taskClass extends TimerTask{
+	/*class taskClass extends TimerTask{
 
 		public void run(){
 			if(getRequestTime() ==null || new Date().getTime()>=(getRequestTime().getTime()+1000*60*5))
 				closeConnection();
 		}
-	}
-	
+	}*/
+	public int waitTime = 0;
+	public boolean conn1State = false;
+	public boolean conn2State = false;
+	public boolean conn3State = false;
 	protected Connection getConn1() throws Exception{
-		Statement st = null;
+		return CacheAction.getConn1();
+		/*Statement st = null;
 		try {
 			st = conn.createStatement();
 			
@@ -59,10 +63,11 @@ public class BaseDao{
 			} catch (Exception e) {
 			}
 		}
-		return conn;
+		return conn;*/
 	}
 	protected Connection getConn2() throws Exception{
-		Statement st = null;
+		return CacheAction.getConn2();
+		/*Statement st = null;
 		try {
 			st = conn2.createStatement();
 		} catch (Exception e) {
@@ -75,10 +80,11 @@ public class BaseDao{
 			
 			}
 		}
-		return conn2;
+		return conn2;*/
 	}
-	protected static Connection getConn3() throws Exception{
-		Statement st = null;
+	protected Connection getConn3() throws Exception{
+		return CacheAction.getConn3();
+		/*Statement st = null;
 		try {
 			st = conn3.createStatement();
 		} catch (Exception e) {
@@ -91,9 +97,22 @@ public class BaseDao{
 			
 			}
 		}
-		return conn3;
+		return conn3;*/
 	}
-	protected void createConnection() throws Exception{
+	
+	public void closeConn1(Connection conn){
+		CacheAction.releaseConn1(conn);
+	}
+	
+	public void closeConn2(Connection conn){
+		CacheAction.releaseConn2(conn);
+	}
+	
+	public void closeConn3(Connection conn){
+		CacheAction.releaseConn3(conn);
+	}
+	
+	/*protected void createConnection() throws Exception{
 		needClose = true;
 		conn=connectDB();
 		System.out.println("Create connect1!");
@@ -107,7 +126,9 @@ public class BaseDao{
 		needClose = true;
 		conn3=connectDB3();
 		System.out.println("Create connect3!");
-	}
+	}*/
+	
+	
 	static boolean needClose = false;
 	protected void closeConnection(){
 		if(!needClose)
@@ -127,7 +148,7 @@ public class BaseDao{
 	}
 		//---------------建立DB 連結 conn1 主資料庫、conn2 Mboss----
 
-		protected Connection connectDB() throws Exception{
+	/*	protected Connection connectDB() throws Exception{
 			Connection conn = null;
 			String url=props.getProperty("Oracle.URL")
 					.replace("{{Host}}", props.getProperty("Oracle.Host"))
@@ -145,8 +166,9 @@ public class BaseDao{
 					throw new Exception("DB Connect null !");
 				}
 			return conn;
-		}
-		protected static Connection connectDB2() throws Exception {
+		}*/
+	
+		/*protected static Connection connectDB2() throws Exception {
 			Connection conn2=null;
 			String url=props.getProperty("mBOSS.URL")
 					.replace("{{Host}}", props.getProperty("mBOSS.Host"))
@@ -162,8 +184,9 @@ public class BaseDao{
 					throw new Exception("DB Connect2 null !");
 				}
 			return conn2;
-		}
-		protected static Connection connectDB3() throws Exception {
+		}*/
+	
+		/*protected static Connection connectDB3() throws Exception {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection conn3=null;
 			String url=props.getProperty("CRMDB.URL")
@@ -179,7 +202,7 @@ public class BaseDao{
 					throw new Exception("DB Connect3 null !");
 				}
 			return conn3;
-		}
+		}*/
 		
 		public static Connection connDB(String DriverClass, String URL,
 				String UserName, String PassWord) throws ClassNotFoundException, SQLException {
@@ -243,13 +266,13 @@ public class BaseDao{
 			
 			return data;
 		}
-		public static Date getRequestTime() {
+	/*	public static Date getRequestTime() {
 			return requestTime;
 		}
 		public static void setRequestTime(Date requestTime) {
 			System.out.println("setRequestTime "+new Date());
 			BaseDao.requestTime = requestTime;
-		}
+		}*/
 		
 		
 }

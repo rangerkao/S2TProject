@@ -38,8 +38,9 @@
 <!-- AngularJS -->
 	<!-- <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.19/angular.js" ></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.19/angular-route.js"></script> -->
+
 <div id="sc">
-	<script src="js/angular.js"></script>
+<script src="js/angular.js"></script>
 	<script src="js/cookies.js"></script>
 	<script src="js/cookieStore.js"></script>
 	<script src="js/cookieWriter.js"></script>
@@ -60,6 +61,7 @@
 	<script src="js/CRM/CurrentDay.js"></script>
 	<script src="js/CRM/DataRate.js"></script>
 	<script src="js/CRM/Else.js"></script>
+	<script src="js/CRM/NameVarified.js"></script>
 	
 	<script src="js/directive.js"></script>
 	

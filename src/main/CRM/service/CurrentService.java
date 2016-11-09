@@ -25,26 +25,27 @@ public class CurrentService extends BaseService {
 
 	
 	public List<CurrentMonth> queryCurrentMonth() throws Exception{
-		return currentDao.queryCurrentMonth();
+		List<CurrentMonth> result = currentDao.queryCurrentMonth();
+		return result;
 	}
 	
-	public List<CurrentMonth> queryCurrentMonth(String imsi,String from,String to,String suspend) throws Exception{
+	public List<CurrentMonth> queryCurrentMonth(String serviceId,String from,String to,String suspend) throws Exception{
 		System.out.println("ctr queryCurrentMonth..."+","+new Date());
-		if((imsi==null || "".equals(imsi))&&(from==null || "".equals(from))&&(to==null || "".equals(to))&&("".equals(suspend)||suspend==null))
-			return currentDao.queryCurrentMonth();
-		
-		return currentDao.queryCurrentMonth(imsi,from,to,suspend);
+		List<CurrentMonth> result = 
+				((serviceId==null || "".equals(serviceId))&&(from==null || "".equals(from))&&(to==null || "".equals(to))&&("".equals(suspend)||suspend==null)?
+						currentDao.queryCurrentMonth() : currentDao.queryCurrentMonth(serviceId,from,to,suspend));
+		return result;
 	}
 	
-	public List<CurrentDay> queryCurrentDay() throws Exception{
-		return currentDao.queryCurrentDay();
+	public List<CurrentDay> queryCurrentDay() throws Exception{		
+		List<CurrentDay> result = currentDao.queryCurrentDay();
+		return result;
 	}
 	
-	public List<CurrentDay> queryCurrentDay(String imsi,String from,String to) throws Exception{
-		if((imsi==null || "".equals(imsi))&&(from==null || "".equals(from))&&(to==null || "".equals(to)))
-			return currentDao.queryCurrentDay();
-		
-		return currentDao.queryCurrentDay(imsi,from,to);
+	public List<CurrentDay> queryCurrentDay(String serviceId,String from,String to) throws Exception{
+		List<CurrentDay> result = ((serviceId==null || "".equals(serviceId))&&(from==null || "".equals(from))&&(to==null || "".equals(to))?
+				currentDao.queryCurrentDay() : currentDao.queryCurrentDay(serviceId,from,to));
+		return result;
 	}
 
 

@@ -97,5 +97,7 @@
         <action name="queryCurrentDay" class="main.CRM.action.CurrentAction" method="queryCurrentDay" />
         <action name="queryCurrentMonth" class="main.CRM.action.CurrentAction" method="queryCurrentMonth" />
 
+		<action name="insertOrModifiedNameVarifiedData" class="main.CRM.action.NameVarifiedAction" method="insertOrModifiedNameVarifiedData" />
+		<action name="queeryNameVarifiedData" class="main.CRM.action.NameVarifiedAction" method="queeryNameVarifiedData" />
 	</package>
 </struts>

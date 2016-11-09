@@ -17,7 +17,7 @@
 				<span datepicker-directive selected-value = "dCtrl.dateTo" ></span> 
 			</div>
 			<div class="col-xs-3" align="left">
-				<input type="button" class="btn btn-primary btn-xs" ng-click="dCtrl.query(dCtrl.s2tIMSI)" value="查詢" ng-disabled="dCtrl.buttonDis">
+				<input type="button" class="btn btn-primary btn-xs" ng-click="dCtrl.query(dCtrl.serviceId)" value="查詢" ng-disabled="dCtrl.buttonDis">
 			</div>
 		</div>
 		<div class="col-xs-12" ng-show="sCtrl.testMode"><input type="text" ng-model="dCtrl.daytest"><input type="button" value="dayTest" ng-click="dCtrl.query(dCtrl.daytest)"></div>

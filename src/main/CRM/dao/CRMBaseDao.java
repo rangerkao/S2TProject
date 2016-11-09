@@ -1,6 +1,7 @@
 package main.CRM.dao;
 
 import java.io.UnsupportedEncodingException;
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -24,13 +25,14 @@ public class CRMBaseDao extends BaseDao{
 		
 		Statement st1 = null;
 		ResultSet rs = null ;
-		String sql = null;
-
-		try {
-			st1 = getConn1().createStatement();
-			sql = "SELECT MAX(A.SERVICEID) SERVICEID "
+		String sql = "SELECT MAX(A.SERVICEID) SERVICEID "
 					+ "FROM SERVICE A "
 					+ "where A.SERVICECODE = '"+s2tMsisdn+"' ";
+		
+		Connection conn = getConn1();
+		try {
+			st1 = conn.createStatement();
+			
 			System.out.println("sql:"+sql);
 			rs = st1.executeQuery(sql);
 			
@@ -40,10 +42,9 @@ public class CRMBaseDao extends BaseDao{
 
 		}finally{
 			try {
-				if(rs!=null)
-					rs.close();
-				if(st1!=null)
-					st1.close();
+				if(rs!=null)	rs.close();
+				if(st1!=null) st1.close();
+				closeConn1(conn);
 			} catch (Exception e) {
 			}
 		}
@@ -54,17 +55,17 @@ public class CRMBaseDao extends BaseDao{
 	public String queryServiceIdbyChtMsisdn(String chtMsisdn) throws Exception{
 		String serviceid = null;
 		
-		Statement st1 = null;
+		Statement st = null;
 		ResultSet rs = null ;
-		String sql = null;
-
-		try {
-			st1 = getConn1().createStatement();
-			sql = "select A.SERVICEID "
+		String sql = "select A.SERVICEID "
 					+ "from FOLLOWMEDATA A "
 					+ "where A.FOLLOWMENUMBER = '"+chtMsisdn+"'";
+		Connection conn = getConn1();
+		try {
+			st = conn.createStatement();
+			
 			System.out.println("sql:"+sql);
-			rs = st1.executeQuery(sql);
+			rs = st.executeQuery(sql);
 			
 			while(rs.next()){
 				serviceid = rs.getString("SERVICEID");
@@ -73,30 +74,45 @@ public class CRMBaseDao extends BaseDao{
 			if(serviceid == null){
 				
 				rs.close();
+				String time = null;
 				
-				sql = "Select  A.S2T_MSISDN,A.S2T_IMSI "
+				sql = "Select  A.S2T_MSISDN,A.S2T_IMSI,to_char(A.CMCC_OPERATIONDATE,'yyyyMMddhh24miss') TIME "
 						+ "from S2T_TB_TYPB_WO_SYNC_FILE_DTL A "
 						+ "where (A.FORWARD_TO_HOME_NO like '%"+chtMsisdn+"%' or A.FORWARD_TO_S2T_NO_1 like '%"+chtMsisdn+"%' ) "
 						+ "AND trim(A.S2T_MSISDN) is not null "
 						+ "order by A.WORK_ORDER_NBR ";
 				
 				System.out.println("sql:"+sql);
-				rs = st1.executeQuery(sql);
+				rs = st.executeQuery(sql);
 				
 				String s2tMsisdn = null;
 				while(rs.next()){
+					time = rs.getString("TIME");
 					s2tMsisdn = rs.getString("S2T_MSISDN");
 				}
 				
-				serviceid = queryServiceIdbyS2tMsisdn(s2tMsisdn);
+				rs = null;
+				
+				sql = "select A.SERVICEID "
+						+ "from service A "
+						+ "where A.servicecode = '"+s2tMsisdn+"' "
+						+ "and A.DATEACTIVATED<to_date('"+time+"','yyyyMMddhh24miss') and (A.DATECANCELED is null or A.DATECANCELED>to_date('"+time+"','yyyyMMddhh24miss')) ";
+				
+				System.out.println(sql);
+				rs = st.executeQuery(sql);
+				
+				while(rs.next()){
+					serviceid = rs.getString("SERVICEID");
+				}
+				
+				//serviceid = queryServiceIdbyS2tMsisdn(s2tMsisdn);
 			}
 
 		}finally{
 			try {
-				if(rs!=null)
-					rs.close();
-				if(st1!=null)
-					st1.close();
+				if(rs!=null) rs.close();
+				if(st!=null) st.close();
+				closeConn1(conn);
 			} catch (Exception e) {
 			}
 		}
@@ -109,9 +125,9 @@ String serviceid = null;
 		Statement st1 = null;
 		ResultSet rs = null ;
 		String sql = null;
-
+		Connection conn = getConn1();
 		try {
-			st1 = getConn1().createStatement();
+			st1 = conn.createStatement();
 			sql = "select MAX(A.SERVICEID)  SERVICEID "
 					+ "from imsi A "
 					+ "where imsi = '"+s2tImsi+"' ";
@@ -146,10 +162,9 @@ String serviceid = null;
 
 		}finally{
 			try {
-				if(rs!=null)
-					rs.close();
-				if(st1!=null)
-					st1.close();
+				if(rs!=null) rs.close();
+				if(st1!=null) st1.close();
+				closeConn1(conn);
 			} catch (Exception e) {
 			}
 		}
@@ -167,7 +182,7 @@ String serviceid = null;
 		String sql = null;
 		Subscriber s = new Subscriber();
 		try {
-			st2 = getConn2().createStatement();
+			st2 = conn.createStatement();
 			sql = "SELECT A.PRICEPLANID,B.IMSI,A.SERVICECODE,A.PRICEPLANID,A.SUBSIDIARYID,A.SERVICEID,C.FOLLOWMENUMBER MSISDN "
 					+ "FROM SERVICE A,IMSI B,FOLLOWMEDATA C "
 					+ "WHERE A.SERVICEID=B.SERVICEID AND A.SERVICECODE IS NOT NULL "
@@ -209,7 +224,7 @@ String serviceid = null;
 		Subscriber s = new Subscriber();
 
 		try {
-			st2 = getConn2().createStatement();
+			st2 = conn.createStatement();
 			
 			sql = "SELECT A.PRICEPLANID,B.IMSI,A.SERVICECODE,A.PRICEPLANID,A.SUBSIDIARYID,A.SERVICEID,C.FOLLOWMENUMBER MSISDN "
 					+ "FROM SERVICE A,IMSI B,FOLLOWMEDATA C "
@@ -251,7 +266,7 @@ String serviceid = null;
 		Subscriber s = new Subscriber();
 		try {
 			
-			st2 = getConn2().createStatement();
+			st2 = conn.createStatement();
 
 			sql = "SELECT A.PRICEPLANID,B.IMSI,A.SERVICECODE,A.PRICEPLANID,A.SUBSIDIARYID,A.SERVICEID,C.FOLLOWMENUMBER MSISDN "
 					+ "FROM SERVICE A,IMSI B,FOLLOWMEDATA C "
@@ -289,18 +304,16 @@ String serviceid = null;
 	public String queryServiceIdbyChtImsi(String chtImsi) throws Exception{
 		
 		Statement st = null;
-		Statement st2 = null;
 		ResultSet rs = null ;
 		String sql = null;
 		String serviceId = null;
-
+		Connection conn = getConn2();
 		try {
-			st = getConn1().createStatement();
-			st2 = getConn2().createStatement();
+			st = conn.createStatement();
 			
 			sql = "SELECT A.SERVICEID FROM IMSI A where A.HOMEIMSI='"+chtImsi+"'";
 			System.out.println("sql:"+sql);
-			rs = st2.executeQuery(sql);
+			rs = st.executeQuery(sql);
 
 			while(rs.next()){
 				serviceId = rs.getString("SERVICEID");
@@ -308,12 +321,9 @@ String serviceid = null;
 
 		}finally{
 			try {
-				if(rs!=null)
-					rs.close();
-				if(st!=null)
-					st.close();
-				if(st2!=null)
-					st2.close();
+				if(rs!=null) rs.close();
+				if(st!=null) st.close();
+				closeConn2(conn);
 			} catch (Exception e) {
 			}
 		}
@@ -328,12 +338,13 @@ String serviceid = null;
 		
 		Statement st = null;
 		ResultSet rs = null;
+		Connection conn = getConn1();
 		String sql = "SELECT A.EFFECTIVITY,  A.PRICEPLANID,  A.NAME,  A.ALIASES,  A.PRODUCTION,  A.DESCRIPTION "
 				+ "FROM PRICEPLAN_DETAIL A "
 				+ "WHERE A.PRICEPLANID = "+id+" ";
 		try {
 						
-			st = getConn1().createStatement();
+			st = conn.createStatement();
 			System.out.println("query serviceId detail:"+sql);
 			rs = st.executeQuery(sql);
 			
@@ -347,10 +358,9 @@ String serviceid = null;
 			}
 		} finally{
 			try {
-				if(rs!=null)
-					rs.close();
-				if(st!=null)
-					st.close();
+				if(rs!=null) rs.close();
+				if(st!=null) st.close();
+				closeConn1(conn);
 			} catch (Exception e) {
 			}
 			//closeConnection();

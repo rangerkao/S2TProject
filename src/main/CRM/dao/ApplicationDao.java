@@ -1,5 +1,6 @@
 package main.CRM.dao;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -18,7 +19,6 @@ public class ApplicationDao extends CRMBaseDao {
 
 	public List<ApplicationData> queryByS2tIMSI(String imsi) throws Exception{
 		String serviceId = null;
-		
 		return queryApplication(serviceId);
 	}
 	
@@ -26,7 +26,6 @@ public class ApplicationDao extends CRMBaseDao {
 		List<ApplicationData> result = new ArrayList<ApplicationData>();
 		String serviceId = queryServiceIdbyS2tMsisdn(s2tMsisdn);
 		result = queryApplication(serviceId);
-		//closeConnection();
 		return result;
 	}
 	
@@ -34,14 +33,12 @@ public class ApplicationDao extends CRMBaseDao {
 		List<ApplicationData> result = new ArrayList<ApplicationData>();
 		String serviceId = queryServiceIdbyChtMsisdn(chtMsisdn);
 		result = queryApplication(serviceId);
-		//closeConnection();
 		return result;
 	}
 	
 	public List<ApplicationData> queryByServiceId(String serviceId) throws Exception{
 		List<ApplicationData> result = new ArrayList<ApplicationData>();
 		result = queryApplication(serviceId);
-		//closeConnection();
 		return result;
 	}
 	public List<ApplicationData> queryApplication(String serviceId) throws Exception{
@@ -50,11 +47,11 @@ public class ApplicationDao extends CRMBaseDao {
 				+ "FROM CRM_APPLICATION A WHERE A.SERVICEID = '"+serviceId+"' ";
 		Statement st = null;
 		ResultSet rs = null;
-		
+		Connection conn = getConn3();
 		try{
-			st = getConn3().createStatement();
+			st = conn.createStatement();
 			rs = st.executeQuery(sql);
-			System.out.println("sql:"+sql);
+			//System.out.println("sql:"+sql);
 			while(rs.next()){
 				ApplicationData a = new ApplicationData();
 				a.setServiceid(rs.getString("SERVICEID"));
@@ -63,7 +60,9 @@ public class ApplicationDao extends CRMBaseDao {
 				result.add(a);
 			}
 		}finally{
-			
+			if(st!=null) st.close();
+			if(rs!=null) rs.close();
+			closeConn3(conn);
 		}
 		
 		return result;
@@ -75,11 +74,11 @@ public class ApplicationDao extends CRMBaseDao {
 				+ "FROM CRM_APPLICATION A WHERE DATE_FORMAT(A.VERIFIED_DATE,'%Y%m%d') = '"+date+"' ";
 		Statement st = null;
 		ResultSet rs = null;
-		
+		Connection conn = getConn3();
 		try{
-			st = getConn3().createStatement();
+			st = conn.createStatement();
 			rs = st.executeQuery(sql);
-			System.out.println("sql:"+sql);
+			//System.out.println("sql:"+sql);
 			while(rs.next()){
 				ApplicationData a = new ApplicationData();
 				a.setServiceid(rs.getString("SERVICEID"));
@@ -88,7 +87,9 @@ public class ApplicationDao extends CRMBaseDao {
 				result.add(a);
 			}
 		}finally{
-			
+			if(st!=null) st.close();
+			if(rs!=null) rs.close();
+			closeConn3(conn);
 		}
 		
 		return result;
@@ -99,15 +100,16 @@ public class ApplicationDao extends CRMBaseDao {
 		String sql = "INSERT INTO CRM_APPLICATION(SERVICEID,VERIFIED_DATE,CREATETIME,TYPE) "
 				+ "VALUES("+serviceid+",now(),now(),'"+type+"')";
 		Statement st = null;
-		
+		Connection conn = getConn3();
 		try{
-			st = getConn3().createStatement();
+			st = conn.createStatement();
 			int r = st.executeUpdate(sql);
 			if(r==1){
 				result = true;
 			}
 		}finally{
-			
+			if(st!=null) st.close();
+			closeConn3(conn);
 		}
 		
 		return result;

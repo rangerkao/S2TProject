@@ -5,7 +5,9 @@ angular.module('MainApp')
 		$scope.$on('querySMS',function(event,data){
 			self.s2tMsisdn=data['s2tMsisdn'];
 			self.chtMsisdn=data['chtMsisdn'];
-			self.querySMS(self.s2tMsisdn,self.chtMsisdn,null,null);
+			self.activatedDate=data['activatedDate'];
+			self.canceledDate=data['canceledDate'];
+			self.querySMS(self.s2tMsisdn,self.chtMsisdn,null,null,self.activatedDate,self.canceledDate);
 		});
 		
 		$scope.$on('subReset',function(event,data){
@@ -23,23 +25,30 @@ angular.module('MainApp')
 			if(self.s2tMsisdn==null)
 				return;
 			self.dateTo.setDate(self.dateTo.getDate()+1);
-			self.querySMS(self.s2tMsisdn,self.chtMsisdn,DateFormatString.Format(self.dateFrom),DateFormatString.Format(self.dateTo));
+			self.querySMS(self.s2tMsisdn,self.chtMsisdn,DateFormatString.Format(self.dateFrom),DateFormatString.Format(self.dateTo),self.activatedDate,self.canceledDate);
 		};
 
 		self.dateFrom = new Date();
 		self.dateTo = new Date();
 
-		self.querySMS = function(s2tMsisdn,chtMsisdn,startDate,endDate){
+		self.querySMS = function(s2tMsisdn,chtMsisdn,startDate,endDate,activatedDate,canceledDate){
+			
+			if(!canceledDate)
+				canceledDate='';
+			//alert("s2tMsisdn:"+s2tMsisdn+",chtMsisdn:"+chtMsisdn+",activatedDate:"+activatedDate+",canceledDate:"+canceledDate);
 			
 			if(!s2tMsisdn && !chtMsisdn)
 				return;
 			self.smsMsg = "查詢中...";
 			self.buttonDis = true;
-			//alert("s2tMsisdn:"+s2tMsisdn+",chtMsisdn:"+chtMsisdn+",startDate:"+startDate+",endDate:"+endDate);
+			
+			
 			AjaxService.query('querySMS',{	s2tMsisdn:s2tMsisdn,
 											chtMsisdn:chtMsisdn,
 											startDate:startDate,
-											endDate:endDate})
+											endDate:endDate,
+											activatedDate:activatedDate,
+											canceledDate:canceledDate})
 											
 			.success(function(data, status, headers, config) {  
 				if(data['error']){

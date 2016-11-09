@@ -2,7 +2,6 @@
 <%@taglib uri="/struts-tags" prefix="s"%>
 
 <div class="max_height"  >
-	
 	<div style="width: 50%;position: absolute;left: 50%;margin-left: -25%" class="div_valign_middle" align="center" >
 		<span> <font size="5px" color="red" style=""><s:property value="msg"/></font></span>
 		<div style="width: 100%">

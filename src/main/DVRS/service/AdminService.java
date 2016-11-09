@@ -20,8 +20,9 @@ public class AdminService extends BaseService{
 	@Resource
 	private AdminDao adminDao;
 	
-	public List<Admin> queryAdminList() throws SQLException{
-		return adminDao.queryAdminList();
+	public List<Admin> queryAdminList() throws Exception{
+		List<Admin>  result = adminDao.queryAdminList();
+		return result;
 	}
 /*	
 	public int addAdmin(Admin admin) throws SQLException{

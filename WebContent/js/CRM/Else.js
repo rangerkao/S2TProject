@@ -32,10 +32,9 @@ angular.module('MainApp')
 			self.privePlanId = data['privePlanId'];
 			self.activatedDate = data['activatedDate'];
 			self.canceledDate = data['canceledDate'];
-			
 			self.queryVLN(self.serviceid);
 			self.queryAddons(self.serviceid);
-			self.queryGPRS(self.s2tMsisdn);
+			self.queryGPRS(self.serviceid);
 			self.queryUSPacket(self.serviceid)
 		});
 		
@@ -97,11 +96,11 @@ angular.module('MainApp')
 		};
 		
 		//查詢GPRS狀態
-		self.queryGPRS = function(s2tMsisdn){
-			if(!s2tMsisdn || s2tMsisdn == '')
+		self.queryGPRS = function(serviceid){
+			if(!serviceid || serviceid == '')
 				return;
 			self.elseMsg = "查詢中...";
-			AjaxService.query("getGPRSStatus",{input:s2tMsisdn})
+			AjaxService.query("getGPRSStatus",{input:serviceid})
 			.success(function(data, status, headers, config) {
 				if(data['error']){
 					alert(data['error']);

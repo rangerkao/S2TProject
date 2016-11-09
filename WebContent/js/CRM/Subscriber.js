@@ -74,7 +74,8 @@ angular.module('MainApp')
 		           //{url:'web/CRM/subscriber/appeal.jsp',title:'申訴記錄',content:'申訴記錄',active:false,disabled:false},
 		           {url:'web/CRM/subscriber/currentMonth.jsp',title:'數據用量月累計',content:'數據用量月累計',active:false,disabled:false},
 		           {url:'web/CRM/subscriber/currentDay.jsp',title:'數據用量日累計',content:'數據用量日累計',active:false,disabled:false},
-		           {url:'web/CRM/subscriber/dataRate.jsp',title:'各國費率表',content:'各國費率表',active:false,disabled:false}
+		           {url:'web/CRM/subscriber/dataRate.jsp',title:'各國費率表',content:'各國費率表',active:false,disabled:false},
+		           {url:'web/CRM/subscriber/nameVarified.jsp',title:'實名制登記',content:'實名制登記',active:false,disabled:false}
 		           ];
 		
 		self.radioList=[{id:"id",name:"ID"},
@@ -382,19 +383,22 @@ angular.module('MainApp')
 			
 			angular.copy(self.custInfo,self.origincustInfo);
 			//
-			self.querySMS(self.custInfo.s2tMsisdn, self.custInfo.chtMsisdn);
+			self.querySMS(self.custInfo.s2tMsisdn, self.custInfo.chtMsisdn,self.custInfo.activatedDate,self.custInfo.canceledDate);
 			//
-			self.queryQosList(self.custInfo.s2tMsisdn);
+			self.queryQosList(self.custInfo.s2tMsisdn,self.custInfo.activatedDate,self.custInfo.canceledDate);
 			//
 			self.queryAppList(self.custInfo.serviceId);
 			//
-			self.queryMonth(self.custInfo.s2tIMSI);
+			self.queryMonth(self.custInfo.serviceId);
 			//
-			self.queryDay(self.custInfo.s2tIMSI);
+			self.queryDay(self.custInfo.serviceId);
 			//
 			self.queryElse(self.custInfo.s2tMsisdn, self.custInfo.serviceId, self.custInfo.s2tIMSI, 
 					self.custInfo.privePlanId, self.custInfo.activatedDate, self.custInfo.canceledDate, 
 					self.custInfo.homeIMSI);
+			//
+			self.queryNameVarified(self.custInfo.serviceId);
+			//
 			ActionService.unblock();
 		}
 		
@@ -415,19 +419,22 @@ angular.module('MainApp')
 						self.custInfo=data['data'];
 						angular.copy(self.custInfo,self.origincustInfo);
 						//
-						self.querySMS(self.custInfo.s2tMsisdn, self.custInfo.chtMsisdn);
+						self.querySMS(self.custInfo.s2tMsisdn, self.custInfo.chtMsisdn,self.custInfo.activatedDate,self.custInfo.canceledDate);
 						//
-						self.queryQosList(self.custInfo.s2tMsisdn);
+						self.queryQosList(self.custInfo.s2tMsisdn,activatedDate,canceledDate);
 						//
 						self.queryAppList(self.custInfo.serviceId);
 						//
-						self.queryMonth(self.custInfo.s2tIMSI);
+						self.queryMonth(self.custInfo.serviceId);
 						//
-						self.queryDay(self.custInfo.s2tIMSI);
+						self.queryDay(self.custInfo.serviceId);
 						//
 						self.queryElse(self.custInfo.s2tMsisdn, self.custInfo.serviceId, self.custInfo.s2tIMSI, 
 								self.custInfo.privePlanId, self.custInfo.activatedDate, self.custInfo.canceledDate, 
 								self.custInfo.homeIMSI);
+						//
+						self.queryNameVarified(self.custInfo.serviceId);
+						//
 					}
 				}
 					
@@ -439,25 +446,30 @@ angular.module('MainApp')
 		    });
 		};
 		
-		self.querySMS = function(s2tMsisdn,chtMsisdn){
-			$scope.$broadcast('querySMS',{s2tMsisdn:s2tMsisdn,chtMsisdn:chtMsisdn});
+		self.querySMS = function(s2tMsisdn,chtMsisdn,activatedDate,canceledDate){
+			
+			$scope.$broadcast('querySMS',{s2tMsisdn:s2tMsisdn,chtMsisdn:chtMsisdn,activatedDate:activatedDate,canceledDate:canceledDate});
 		};
-		self.queryQosList = function(s2tMsisdn){
-			$scope.$broadcast('queryQos',{s2tMsisdn:s2tMsisdn});
+		self.queryQosList = function(s2tMsisdn,activatedDate,canceledDate){
+			$scope.$broadcast('queryQos',{s2tMsisdn:s2tMsisdn,activatedDate:activatedDate,canceledDate:canceledDate});
 		};
 		self.queryAppList = function(serviceId){
 			$scope.$broadcast('queryApp',{serviceId:serviceId});
 		};
-		self.queryMonth = function(s2tIMSI){
-			$scope.$broadcast('queryMonth',{s2tIMSI:s2tIMSI});
+		self.queryMonth = function(serviceId){
+			$scope.$broadcast('queryMonth',{serviceId:serviceId});
 		};
-		self.queryDay = function(s2tIMSI){
-			$scope.$broadcast('queryDay',{s2tIMSI:s2tIMSI});
+		self.queryDay = function(serviceId){
+			$scope.$broadcast('queryDay',{serviceId:serviceId});
 		};
 		self.queryElse = function(s2tMsisdn,serviceid,s2tIMSI,privePlanId,activatedDate,canceledDate,homeIMSI){
 			$scope.$broadcast('queryElse',{s2tMsisdn:s2tMsisdn,serviceid:serviceid,s2tIMSI:s2tIMSI,
 				privePlanId:privePlanId,activatedDate:activatedDate,canceledDate:canceledDate,homeIMSI:homeIMSI});
 		};
+		self.queryNameVarified=function(serviceId){
+			$scope.$broadcast('queryNameVarified',{serviceId:serviceId});
+		}
+		//
 		
 		self.subReset = function(){
 			$scope.$broadcast('subReset',{});

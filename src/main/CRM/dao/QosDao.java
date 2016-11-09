@@ -1,5 +1,6 @@
 package main.CRM.dao;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -27,10 +28,11 @@ public class QosDao extends CRMBaseDao {
 		
 		Statement st = null;
 		ResultSet rs = null;
+		Connection conn = getConn1();
 		try {
-			st = getConn1().createStatement();
+			st = conn.createStatement();
 			rs = st.executeQuery(sql);
-			System.out.println("Execute SQL :"+sql);
+			//System.out.println("Execute SQL :"+sql);
 			while(rs.next()){
 				QosBean qosdata =new QosBean();
 				String rc = rs.getString("RESULT_CODE");
@@ -58,10 +60,9 @@ public class QosDao extends CRMBaseDao {
 			}
 		} finally{
 			try {
-				if(st!=null)
-					st.close();
-				if(rs!=null)
-					rs.close();
+				if(st!=null) st.close();
+				if(rs!=null) rs.close();
+				closeConn1(conn);
 			} catch (Exception e) {
 			}
 		}
@@ -72,49 +73,59 @@ public class QosDao extends CRMBaseDao {
 	}
 	
 	//查詢列表
-	public List<QosBean> queryQosList(String imsi,String msisdn) throws Exception{
+	public List<QosBean> queryQosList(String imsi,String msisdn,String activedate,String canceldate) throws Exception{
 		String sql=
 				"SELECT A.PROVISIONID,A.IMSI,A.MSISDN,A.PLAN,A.ACTION,A.RESPONSE_CODE,A.RESULT_CODE,to_char(A.CERATE_TIME,'yyyyMMdd hh24:mi:ss') ctime "
 				+ "FROM QOS_PROVISION_LOG A "
 				+ "WHERE 1=1 "
+				+ "AND A.CERATE_TIME > to_date('"+activedate+"','yyyy/MM/dd hh24:mi:ss') "
+				+ ("".equals(canceldate) ?"": "AND A.CERATE_TIME < to_date('"+canceldate+"','yyyy/MM/dd hh24:mi:ss') ")
 				+ (imsi!=null && !"".equals(imsi) ? "AND A.IMSI like '"+imsi+"' " : "")
 				+ (msisdn!=null && !"".equals(msisdn) ? "AND A.MSISDN like '"+msisdn+"' " : "")
 				+ "ORDER BY A.CERATE_TIME DESC ";
 
 		List<QosBean> list=new ArrayList<QosBean>();
 		
-		Statement st = getConn1().createStatement();
-		ResultSet rs=st.executeQuery(sql);
-		System.out.println("Execute SQL :"+sql);
-		while(rs.next()){
-			QosBean qosdata =new QosBean();
-			
-			String rc = rs.getString("RESULT_CODE");
-			if(rc!=null && rc.contains("RETURN_CODE=0")){
-				rc="成功";
-			}else{
-				rc="";
-			}
-			
-			String rc2 = rs.getString("RESPONSE_CODE");
-			if(rc2!=null && rc2.contains("200")){
-				rc2="正常";
-			}else{
-				rc2="";
-			}
-			
-			qosdata.setProvisionID(rs.getInt("PROVISIONID"));
-			qosdata.setImsi(rs.getString("IMSI"));
-			qosdata.setMsisdn(rs.getString("MSISDN"));
-			qosdata.setPlan(rs.getString("PLAN"));
-			qosdata.setAction(rs.getString("ACTION"));
-			qosdata.setResultCode(rc);
-			qosdata.setReturnCode(rc2);
-			qosdata.setCreateTime(rs.getString("ctime"));
-			list.add(qosdata);
+		Statement st = null;
+		ResultSet rs = null;
+		Connection conn = getConn1();
+		try {
+			st = conn.createStatement();
+			System.out.println("Execute SQL :" + sql);
+			rs = st.executeQuery(sql);
+			while (rs.next()) {
+				QosBean qosdata = new QosBean();
+
+				String rc = rs.getString("RESULT_CODE");
+				if (rc != null && rc.contains("RETURN_CODE=0")) {
+					rc = "成功";
+				} else {
+					rc = "";
+				}
+
+				String rc2 = rs.getString("RESPONSE_CODE");
+				if (rc2 != null && rc2.contains("200")) {
+					rc2 = "正常";
+				} else {
+					rc2 = "";
+				}
+
+				qosdata.setProvisionID(rs.getInt("PROVISIONID"));
+				qosdata.setImsi(rs.getString("IMSI"));
+				qosdata.setMsisdn(rs.getString("MSISDN"));
+				qosdata.setPlan(rs.getString("PLAN"));
+				qosdata.setAction(rs.getString("ACTION"));
+				qosdata.setResultCode(rc);
+				qosdata.setReturnCode(rc2);
+				qosdata.setCreateTime(rs.getString("ctime"));
+				list.add(qosdata);
+			} 
+		} finally {
+			if(st!=null) st.close();
+			if(rs!=null) rs.close();
+			closeConn1(conn);
 		}
-		st.close();
-		rs.close();
+		
 		//closeConnection();
 		return list;
 		

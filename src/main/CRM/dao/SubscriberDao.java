@@ -1,5 +1,6 @@
 package main.CRM.dao;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -36,10 +37,10 @@ public class SubscriberDao extends CRMBaseDao{
 		
 		Statement st = null ;
 		ResultSet rs = null ;
-		
+		Connection conn = getConn3();
 		try{
-			st = getConn3().createStatement();
-			System.out.println("query serviceids:"+sql1);
+			st = conn.createStatement();
+			//System.out.println("query serviceids:"+sql1);
 			rs = st.executeQuery(sql1);
 			
 			while(rs.next()){
@@ -47,12 +48,11 @@ public class SubscriberDao extends CRMBaseDao{
 			}		
 		}finally{
 			try {
-				if(rs!=null)
-					rs.close();
-				if(st!=null)
-					st.close();
+				if(rs!=null) rs.close();
+				if(st!=null) st.close();
 			} catch (Exception e) {
 			}
+			closeConn3(conn);
 		}
 		
 		for(String serviceid:serviceids){
@@ -79,10 +79,10 @@ public class SubscriberDao extends CRMBaseDao{
 		
 		Statement st = null ;
 		ResultSet rs = null ;
-		
+		Connection conn = getConn3();
 		try{
-			st = getConn3().createStatement();
-			System.out.println("query serviceids:"+sql1);
+			st = conn.createStatement();
+			//System.out.println("query serviceids:"+sql1);
 			rs = st.executeQuery(sql1);
 			
 			while(rs.next()){
@@ -90,12 +90,11 @@ public class SubscriberDao extends CRMBaseDao{
 			}		
 		}finally{
 			try {
-				if(rs!=null)
-					rs.close();
-				if(st!=null)
-					st.close();
+				if(rs!=null) rs.close();
+				if(st!=null) st.close();
+				
 			} catch (Exception e) {
-			}
+			}closeConn3(conn);
 		}
 		
 		for(String serviceid:serviceids){
@@ -116,7 +115,7 @@ public class SubscriberDao extends CRMBaseDao{
 		
 		ResultSet rs = null;
 		Statement st = null;
-		
+		Connection conn = getConn1();
 		String sql = "SELECT A.SERVICEID, A.VLN "
 				+ "FROM VLNNUMBER A "
 				+ "WHERE A.VLN = '"+VLN+"' ";
@@ -124,8 +123,8 @@ public class SubscriberDao extends CRMBaseDao{
 
 		try{
 
-			st = getConn1().createStatement();
-			System.out.println("query List:"+sql);
+			st = conn.createStatement();
+			//System.out.println("query List:"+sql);
 			rs = st.executeQuery(sql);
 			
 			while(rs.next()){
@@ -137,13 +136,10 @@ public class SubscriberDao extends CRMBaseDao{
 
 		}finally{
 			try {
-				if(st!=null)
-					st.close();
-				if(rs!=null)
-					rs.close();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+				if(st!=null) st.close();
+				if(rs!=null) rs.close();
+			} catch (Exception e) { }
+			closeConn1(conn);
 			//closeConnection();
 		}
 		return result;
@@ -228,7 +224,7 @@ public class SubscriberDao extends CRMBaseDao{
 		
 		ResultSet rs = null;
 		Statement st = null;
-		
+		Connection conn = getConn1();
 		String sql = "SELECT A.SERVICEID,A.VALUE "
 				+ "FROM PARAMETERVALUE A "
 				+ "WHERE A.VALUE = '"+mainMsisdn+"' ";
@@ -236,8 +232,8 @@ public class SubscriberDao extends CRMBaseDao{
 
 		try{
 
-			st = getConn1().createStatement();
-			System.out.println("query List:"+sql);
+			st = conn.createStatement();
+			//System.out.println("query List:"+sql);
 			rs = st.executeQuery(sql);
 			
 			while(rs.next()){
@@ -249,14 +245,11 @@ public class SubscriberDao extends CRMBaseDao{
 
 		}finally{
 			try {
-				if(st!=null)
-					st.close();
-				if(rs!=null)
-					rs.close();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			//closeConnection();
+				if(st!=null) st.close();
+				if(rs!=null) rs.close();
+				
+			} catch (Exception e) { }
+			closeConn1(conn);//closeConnection();
 		}
 		
 		
@@ -309,8 +302,8 @@ public class SubscriberDao extends CRMBaseDao{
 		ResultSet rs = null ;
 		
 		try{
-			st = getConn3().createStatement();
-			System.out.println("query List:"+sql1);
+			st = conn.createStatement();
+			//System.out.println("query List:"+sql1);
 			rs = st.executeQuery(sql1);
 			
 			while(rs.next()){
@@ -329,8 +322,8 @@ public class SubscriberDao extends CRMBaseDao{
 		}
 		
 		try{
-			st = getConn1().createStatement();
-			System.out.println("query List:"+sql2);
+			st = conn.createStatement();
+			//System.out.println("query List:"+sql2);
 			rs = st.executeQuery(sql2);
 			
 			while(rs.next()){
@@ -348,7 +341,7 @@ public class SubscriberDao extends CRMBaseDao{
 			if(result.getChtMsisdn() == null){
 				rs.close();
 				
-				System.out.println("query List:"+sql3);
+				//System.out.println("query List:"+sql3);
 				rs = st.executeQuery(sql3);
 				
 				while(rs.next()){
@@ -383,7 +376,7 @@ public class SubscriberDao extends CRMBaseDao{
 		ResultSet rs = null ;
 		
 		try{
-			st = getConn1().createStatement();
+			st = conn.createStatement();
 			rs = st.executeQuery(sql);
 			
 			while(rs.next()){
@@ -435,11 +428,11 @@ public class SubscriberDao extends CRMBaseDao{
 		
 		Statement st = null;
 		ResultSet rs = null;
-		
+		Connection conn = getConn3();
 		try {
 			
-			st = getConn3().createStatement();
-			System.out.println("query data by id:"+sql1);
+			st = conn.createStatement();
+			//System.out.println("query data by id:"+sql1);
 			rs = st.executeQuery(sql1);
 			
 			while(rs.next()){
@@ -465,12 +458,11 @@ public class SubscriberDao extends CRMBaseDao{
 			}
 		} finally{
 			try {
-				if(rs!=null)
-					rs.close();
-				if(st!=null)
-					st.close();
+				if(rs!=null) rs.close();
+				if(st!=null) st.close();
+				
 			} catch (Exception e) {
-			}
+			}closeConn3(conn);
 			//closeConnection();
 		}
 		
@@ -528,7 +520,8 @@ public class SubscriberDao extends CRMBaseDao{
 				+ "							WHEN '4' THEN 'terminated' "
 				+ "							WHEN '10' THEN 'waiting' "
 				+ "							ELSE 'else' END) STAUS, "
-				+ "			C. SERVICECODE S2TMSISDN,C.PRICEPLANID,D.FOLLOWMENUMBER CHTMSISDN,C.DATEACTIVATED,C.DATECANCELED,F.HOMEIMSI,F.IMSI "
+				+ "			C. SERVICECODE S2TMSISDN,C.PRICEPLANID,D.FOLLOWMENUMBER CHTMSISDN,"
+				+ "			to_char(C.DATEACTIVATED,'yyyy/MM/dd hh24:mi:ss') DATEACTIVATED,nvl(to_char(C.DATECANCELED,'yyyy/MM/dd hh24:mi:ss'),'') DATECANCELED,F.HOMEIMSI,F.IMSI "
 				+ "FROM SERVICE C,FOLLOWMEDATA D,IMSI F "
 				+ "WHERE  C.SERVICEID = D.SERVICEID(+) "
 				+ "AND C.SERVICEID = F.SERVICEID(+) "
@@ -542,20 +535,21 @@ public class SubscriberDao extends CRMBaseDao{
 				+ "							WHEN '4' THEN 'terminated' "
 				+ "							WHEN '10' THEN 'waiting' "
 				+ "							ELSE 'else' END) STAUS, "
-				+ "			C. SERVICECODE S2TMSISDN,C.PRICEPLANID,E.FORWARD_TO_HOME_NO CHTMSISDN,C.DATEACTIVATED,C.DATECANCELED,E.ORIGINAL_CMCC_IMSI HOMEIMSI,E.S2T_IMSI IMSI "
+				+ "			C. SERVICECODE S2TMSISDN,C.PRICEPLANID,E.FORWARD_TO_HOME_NO CHTMSISDN,"
+				+ "			to_char(C.DATEACTIVATED,'yyyy/MM/dd hh24:mi:ss') DATEACTIVATED,nvl(to_char(C.DATECANCELED,'yyyy/MM/dd hh24:mi:ss'),'') DATECANCELED,E.ORIGINAL_CMCC_IMSI HOMEIMSI,E.S2T_IMSI IMSI "
 				+ "from service C,S2T_TB_TYPB_WO_SYNC_FILE_DTL E  "
 				+ "where C.SERVICECODE = E.S2T_MSISDN(+) "
 				+ "AND C.status=4 "
-				+ "AND E.SEND_TIME between C.DATEACTIVATED AND DATECANCELED "
+				+ "AND E.SEND_TIME > C.DATEACTIVATED AND (E.SEND_TIME <C.DATECANCELED OR C.DATECANCELED is NULL) "
 				+ "AND C.SERVICEID = "+id+" ";
 				
 		Statement st = null;
 		ResultSet rs = null;
-		
+		Connection conn = getConn3();
 		try {
 			
-			st = getConn3().createStatement();
-			System.out.println("query data by service id:"+sql1);
+			st = conn.createStatement();
+			//System.out.println("query data by service id:"+sql1);
 			rs = st.executeQuery(sql1);
 			
 			while(rs.next()){
@@ -580,20 +574,21 @@ public class SubscriberDao extends CRMBaseDao{
 			}
 		} finally{
 			try {
-				if(rs!=null)
-					rs.close();
-				if(st!=null)
-					st.close();
+				if(rs!=null) rs.close();
+				if(st!=null) st.close();
+				
 			} catch (Exception e) {
-			}
+			}closeConn3(conn);
 			//closeConnection();
 		}
-		
-		
+
+		conn = null;
+		conn = getConn1();
+		String princePlanId = null;
 		try {
 			
-			st = getConn1().createStatement();
-			System.out.println("query data by id:"+sql2);
+			st = conn.createStatement();
+			//System.out.println("query data by id:"+sql2);
 			rs = st.executeQuery(sql2);
 			
 			while(rs.next()){
@@ -602,7 +597,7 @@ public class SubscriberDao extends CRMBaseDao{
 				result.setS2tMsisdn(rs.getString("S2TMSISDN"));
 				result.setS2tIMSI(rs.getString("IMSI"));
 				result.setChtMsisdn(rs.getString("CHTMSISDN"));
-				result.setPrivePlanId(queryPricePlanId(rs.getString("PRICEPLANID")));
+				princePlanId= rs.getString("PRICEPLANID");
 		
 				result.setStatus(rs.getString("STAUS"));
 				
@@ -613,14 +608,15 @@ public class SubscriberDao extends CRMBaseDao{
 			}
 		} finally{
 			try {
-				if(rs!=null)
-					rs.close();
-				if(st!=null)
-					st.close();
+				if(rs!=null) rs.close();
+				if(st!=null) st.close();
+				closeConn1(conn);
 			} catch (Exception e) {
 			}
 			//closeConnection();
 		}
+		
+		result.setPrivePlanId(queryPricePlanId(princePlanId));
 		
 		
 		
@@ -643,16 +639,16 @@ public class SubscriberDao extends CRMBaseDao{
 				+ "WHERE A.SEQ ='"+s.getSeq()+"'";
 	
 		Statement st = null;
-		
-		getConn3().setAutoCommit(false);
+		Connection conn = getConn3();
+		conn.setAutoCommit(false);
 		
 		if(s.getSeq()== null ||"".equals(s.getSeq())){
 			//如果為新資料，進行插入動作
 			result = insertSubscriber(s);
 		}else{
 			try {
-				st = getConn3().createStatement();
-				System.out.println("sql:"+sql);
+				st = conn.createStatement();
+				//System.out.println("sql:"+sql);
 				int eRow = st.executeUpdate(sql);
 				
 				if(eRow>1)
@@ -662,15 +658,15 @@ public class SubscriberDao extends CRMBaseDao{
 				result = true;
 			}finally{
 				try {
-					if(st!=null)
-						st.close();
+					if(st!=null) st.close();
+					
 				} catch (Exception e) {
-				}
+				}closeConn3(conn);
 				//closeConnection();
 			}	
 		}
 		updateSubscription(s);
-		getConn3().commit();
+		conn.commit();
 		
 		
 		
@@ -681,14 +677,14 @@ public class SubscriberDao extends CRMBaseDao{
 		boolean result = false;
 		
 		Statement st = null;
-		
+		Connection conn = getConn3();
 		try {
 
-			st = getConn3().createStatement();
+			st = conn.createStatement();
 			
 			String sql3 = "SELECT MAX(A.seq)+1 SEQ "
 					+ "FROM CRM_DB.CRM_SUBSCRIBERS A ";
-			System.out.println("sql3:"+sql3);
+			//System.out.println("sql3:"+sql3);
 			ResultSet rs = st.executeQuery(sql3);
 			
 			while(rs.next()){
@@ -704,7 +700,7 @@ public class SubscriberDao extends CRMBaseDao{
 					+ "'"+s.getName()+"','"+s.getBirthday()+"','"+s.getIdTaxid()+"','"+s.getPhone()+"','"+s.getEmail()+"',"
 					+ "'"+s.getPermanentAddress()+"','"+s.getBillingAddress()+"','"+s.getAgency()+"','"+s.getRemark()+"',"
 					+ "now(),'"+s.getType()+"','"+s.getSeq()+"') ";
-			System.out.println("sql:"+sql);
+			//System.out.println("sql:"+sql);
 			int eRow = st.executeUpdate(sql);
 
 			if(eRow!=1)
@@ -714,10 +710,10 @@ public class SubscriberDao extends CRMBaseDao{
 			result = true;
 		}finally{
 			try {
-				if(st!=null)
-					st.close();
+				if(st!=null) st.close();
+				
 			} catch (Exception e) {
-			}
+			}closeConn3(conn);
 		}	
 		return result;
 	}
@@ -725,10 +721,11 @@ public class SubscriberDao extends CRMBaseDao{
 	public boolean insertSubscription(Subscriber s) throws Exception{
 		
 		Statement st = null;
+		Connection conn = getConn3();
 		boolean result = false;
 		try {
 
-			st = getConn3().createStatement();
+			st = conn.createStatement();
 			
 			String sql = "INSERT INTO "
 					+ "CRM_DB.CRM_SUBSCRIPTION("
@@ -736,7 +733,7 @@ public class SubscriberDao extends CRMBaseDao{
 					+ "VALUES("
 					+ "'"+s.getServiceId()+"','"+s.getSeq()+"',now()) ";
 			
-			System.out.println("sql:"+sql);
+			//System.out.println("sql:"+sql);
 			int eRow = st.executeUpdate(sql);
 			
 			if(eRow!=1)
@@ -745,10 +742,10 @@ public class SubscriberDao extends CRMBaseDao{
 			result = true;
 		}finally{
 			try {
-				if(st!=null)
-					st.close();
+				if(st!=null) st.close();
+				
 			} catch (Exception e) {
-			}
+			}closeConn3(conn);
 		}
 		return result;	
 		
@@ -759,11 +756,11 @@ public class SubscriberDao extends CRMBaseDao{
 		
 		
 		boolean result = false;
-		
+		Connection conn = getConn3();
 		Statement st = null;
 		try {
 
-			st = getConn3().createStatement();
+			st = conn.createStatement();
 
 			String sql = "UPDATE CRM_DB.CRM_SUBSCRIPTION A "
 					+ "SET A.SEQ = '"+s.getSeq()+"',A.UPDATETIME = now() "
@@ -772,7 +769,7 @@ public class SubscriberDao extends CRMBaseDao{
 			if(s.getServiceId()==null || "".equals(s.getServiceId())){
 				throw new Exception("Invalid serviceid!");
 			}else{
-				System.out.println("sql:"+sql);
+				//System.out.println("sql:"+sql);
 				int eRow = st.executeUpdate(sql);
 				
 				if(eRow>1)
@@ -793,10 +790,10 @@ public class SubscriberDao extends CRMBaseDao{
 			result = true;
 		}finally{
 			try {
-				if(st!=null)
-					st.close();
+				if(st!=null) st.close();
 			} catch (Exception e) {
 			}
+			closeConn3(conn);
 		}
 		return result;	
 		
@@ -811,18 +808,18 @@ public class SubscriberDao extends CRMBaseDao{
 		
 		
 		Statement st = null;
-		
+		Connection conn = getConn3();
 		try {
-			st = getConn3().createStatement();
-			System.out.println("sql:"+sql);
+			st = conn.createStatement();
+			//System.out.println("sql:"+sql);
 			result = st.executeUpdate(sql);
 
 		}finally{
 			try {
-				if(st!=null)
-					st.close();
+				if(st!=null) st.close();
 			} catch (Exception e) {
 			}
+			closeConn3(conn);
 		}	
 		return result;
 	}
@@ -837,10 +834,10 @@ public class SubscriberDao extends CRMBaseDao{
 		
 		
 		Statement st = null;
-		
+		Connection conn = getConn3();
 		try {
-			st = getConn3().createStatement();
-			System.out.println("sql:"+sql);
+			st = conn.createStatement();
+			//System.out.println("sql:"+sql);
 			int eRow = st.executeUpdate(sql);
 			if(eRow>1)
 				throw new Exception("Update data fail! updated ChairMain "+eRow);
@@ -850,10 +847,10 @@ public class SubscriberDao extends CRMBaseDao{
 			result = true;
 		}finally{
 			try {
-				if(st!=null)
-					st.close();
+				if(st!=null) st.close();
 			} catch (Exception e) {
 			}
+			closeConn3(conn);
 		}	
 		return result;
 	}
@@ -867,19 +864,20 @@ public class SubscriberDao extends CRMBaseDao{
 		
 		
 		Statement st = null;
-		
+		Connection conn = getConn3();
 		try {
-			st = getConn3().createStatement();
-			System.out.println("sql:"+sql);
+			st = conn.createStatement();
+			//System.out.println("sql:"+sql);
 			st.executeUpdate(sql);
 			result = true;
 
 		}finally{
 			try {
-				if(st!=null)
-					st.close();
+				if(st!=null) st.close();
+				
 			} catch (Exception e) {
 			}
+			closeConn3(conn);
 		}	
 		return result;
 	}
@@ -896,15 +894,15 @@ public class SubscriberDao extends CRMBaseDao{
 
 		String sql = "SELECT A.VLN "
 				+ "FROM VLNNUMBER A "
-				+ "WHERE A.SERVICEID = '"+serviceId+"'";
+				+ "WHERE A.status = 1 AND A.SERVICEID = '"+serviceId+"'";
 				
 		Statement st = null;
 		ResultSet rs = null;
-		
+		Connection conn = getConn1();
 		try {
 			
-			st = getConn1().createStatement();
-			System.out.println("sql:"+sql);
+			st = conn.createStatement();
+			//System.out.println("sql:"+sql);
 			rs = st.executeQuery(sql);
 			
 			while(rs.next()){
@@ -914,12 +912,11 @@ public class SubscriberDao extends CRMBaseDao{
 			
 		} finally{
 			try {
-				if(rs!=null)
-					rs.close();
-				if(st!=null)
-					st.close();
+				if(rs!=null) rs.close();
+				if(st!=null) st.close();
 			} catch (Exception e) {
 			}
+			closeConn1(conn);
 			//closeConnection();
 		}
 		return result;
@@ -940,11 +937,11 @@ public class SubscriberDao extends CRMBaseDao{
 				
 		Statement st = null;
 		ResultSet rs = null;
-		
+		Connection conn = getConn1();
 		try {
 			
-			st = getConn1().createStatement();
-			System.out.println("sql:"+sql);
+			st = conn.createStatement();
+			//System.out.println("sql:"+sql);
 			rs = st.executeQuery(sql);
 			
 			while(rs.next()){
@@ -958,12 +955,11 @@ public class SubscriberDao extends CRMBaseDao{
 			}
 		} finally{
 			try {
-				if(rs!=null)
-					rs.close();
-				if(st!=null)
-					st.close();
+				if(rs!=null) rs.close();
+				if(st!=null) st.close();
 			} catch (Exception e) {
 			}
+			closeConn1(conn);
 			//closeConnection();
 		}
 		return result;
@@ -975,19 +971,19 @@ public class SubscriberDao extends CRMBaseDao{
 	 * @return
 	 * @throws Exception
 	 */
-	public String getGPRSStatus(String msisdn) throws Exception{
+	public String getGPRSStatus(String serviceid) throws Exception{
 		String result = null;
 		String sql = "SELECT nvl(PDPSUBSID,0) as status "
 				+ "FROM BASICPROFILE "
-				+ "WHERE MSISDN = '"+msisdn+"'";
+				+ "WHERE serviceid = '"+serviceid+"'";
 				
 		Statement st = null;
 		ResultSet rs = null;
-		
+		Connection conn = getConn1();
 		try {
 			
-			st = getConn1().createStatement();
-			System.out.println("sql:"+sql);
+			st = conn.createStatement();
+			//System.out.println("sql:"+sql);
 			rs = st.executeQuery(sql);
 			
 			while(rs.next()){
@@ -995,12 +991,11 @@ public class SubscriberDao extends CRMBaseDao{
 			}
 		} finally{
 			try {
-				if(rs!=null)
-					rs.close();
-				if(st!=null)
-					st.close();
+				if(rs!=null) rs.close();
+				if(st!=null) st.close();
 			} catch (Exception e) {
 			}
+			closeConn1(conn);
 			//closeConnection();
 		}
 		return result;
@@ -1024,11 +1019,11 @@ public class SubscriberDao extends CRMBaseDao{
 				
 		Statement st = null;
 		ResultSet rs = null;
-		
+		Connection conn = getConn1();
 		try {
 			
-			st = getConn1().createStatement();
-			System.out.println("sql:"+sql);
+			st = conn.createStatement();
+			//System.out.println("sql:"+sql);
 			rs = st.executeQuery(sql);
 			
 			while(rs.next()){
@@ -1044,13 +1039,12 @@ public class SubscriberDao extends CRMBaseDao{
 			}
 		} finally{
 			try {
-				if(rs!=null)
-					rs.close();
-				if(st!=null)
-					st.close();
+				if(rs!=null) rs.close();
+				if(st!=null) st.close();
 			} catch (Exception e) {
 			}
 			//closeConnection();
+			closeConn1(conn);
 		}
 		return result;
 	}

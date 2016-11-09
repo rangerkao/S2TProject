@@ -22,7 +22,8 @@ public class DataRateService extends BaseService{
 	}
 
 	public List<DataRate> queryDataRateList() throws Exception{
-		return dataRateDao.queryDataRateList();
+		List<DataRate> result = dataRateDao.queryDataRateList();
+		return result;
 	}
 
 	public DataRateDao getDataRateDao() {

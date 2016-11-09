@@ -20,19 +20,21 @@ public class SmsAction extends BaseAction {
 	}
 
 
-	public String s2tMsisdn;
-	public String chtMsisdn;
-	public String startDate;
-	public String endDate;
+	String s2tMsisdn;
+	String chtMsisdn;
+	String startDate;
+	String endDate;
+	String activatedDate;
+	String canceledDate;
 	
 	@Resource
 	SmsService smsService;
 	
 	public String querySMS(){
 		System.out.println("querySMS");
-		System.out.println(s2tMsisdn+", "+chtMsisdn+", "+startDate+", "+endDate);
+		System.out.println(s2tMsisdn+", "+chtMsisdn+", "+startDate+", "+endDate+","+activatedDate+","+canceledDate);
 		try {
-			List<SMS> list = smsService.querySMS(s2tMsisdn, chtMsisdn, startDate, endDate);
+			List<SMS> list = smsService.querySMS(s2tMsisdn, chtMsisdn, startDate, endDate,activatedDate,canceledDate);
 			setSuccess(list);
 		} catch (Exception e) {
 			errorHandle(e);
@@ -79,5 +81,22 @@ public class SmsAction extends BaseAction {
 	public void setSmsService(SmsService smsService) {
 		this.smsService = smsService;
 	}
+
+	public String getActivatedDate() {
+		return activatedDate;
+	}
+
+	public void setActivatedDate(String activatedDate) {
+		this.activatedDate = activatedDate;
+	}
+
+	public String getCanceledDate() {
+		return canceledDate;
+	}
+
+	public void setCanceledDate(String canceledDate) {
+		this.canceledDate = canceledDate;
+	}
+	
 	
 }

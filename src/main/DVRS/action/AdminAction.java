@@ -29,7 +29,7 @@ public class AdminAction extends BaseAction{
 	 private Admin admin;
 	 private String mod;
 	
-	public String queryAdmin() throws SQLException{
+	public String queryAdmin() throws Exception{
 		List<Admin> adminList=adminService.queryAdminList();
 		return setSuccess(adminList);
 	}

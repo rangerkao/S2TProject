@@ -23,6 +23,8 @@ public class QosAction extends BaseAction {
 	
 	String imsi;
 	String msisdn;
+	String activeDate;
+	String cancelDate;
 	@Resource
 	QosService qosService;
 	
@@ -30,7 +32,7 @@ public class QosAction extends BaseAction {
 		System.out.println("queryQos");
 		System.out.println("msisdn="+msisdn+",imsi="+imsi);
 		try {
-			List<QosBean> qosList = qosService.queryQos(imsi, msisdn);
+			List<QosBean> qosList = qosService.queryQos(imsi, msisdn,activeDate,cancelDate);
 			setSuccess(qosList);
 		} catch (SQLException e) {
 			errorHandle(e);
@@ -75,7 +77,31 @@ public class QosAction extends BaseAction {
 	public void setQosService(QosService qosService) {
 		this.qosService = qosService;
 	}
-	
+
+
+
+	public String getActiveDate() {
+		return activeDate;
+	}
+
+
+
+	public void setActiveDate(String activeDate) {
+		this.activeDate = activeDate;
+	}
+
+
+
+	public String getCancelDate() {
+		return cancelDate;
+	}
+
+
+
+	public void setCancelDate(String cancelDate) {
+		this.cancelDate = cancelDate;
+	}
+
 	
 	
 }

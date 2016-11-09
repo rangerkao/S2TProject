@@ -28,7 +28,7 @@ public class sessionCheckAOP{
 		/*HttpServletRequest request = SysContent.getRequest();  
         HttpServletResponse response = SysContent.getResponse();  
         HttpSession session = SysContent.getSession(); */ 
-		BaseDao.setRequestTime(new Date());
+		//BaseDao.setRequestTime(new Date());
 		ActionContext context = ActionContext.getContext();
 		Map<String, Object> session = context.getSession();
 		String account = (String) session.get("s2t.account");

@@ -19,10 +19,10 @@ public class SmsService {
 	@Resource
 	SmsDao smsDao;
 	
-	public List<SMS> querySMS(String s2tMsisdn ,String chtMsisdn,String startDate,String endDate) throws Exception, ParseException {
+	public List<SMS> querySMS(String s2tMsisdn ,String chtMsisdn,String startDate,String endDate,String activatedDate,String canceledDate) throws Exception, ParseException {
 		
 		List<SMS> result = null;
-		result = smsDao.querySMS(s2tMsisdn, chtMsisdn, startDate, endDate);
+		result = smsDao.querySMS(s2tMsisdn, chtMsisdn, startDate, endDate,activatedDate,canceledDate);
 		return result;
 	}
 

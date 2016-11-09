@@ -20,13 +20,13 @@ public class HistoryService extends BaseService{
 		super();
 	}
 
-	public List<CardChange> queryCardChangeHistory(String imsi) throws SQLException{
-		return historyDao.queryCardChangeHistory(imsi);
+	public List<CardChange> queryCardChangeHistory(String imsi) throws Exception{
+		List<CardChange> result = historyDao.queryCardChangeHistory(imsi);
+		return result;
 	}
 	
-	public List<CardChange> queryNumberChangeHistory(String imsi) throws SQLException{
+	public List<CardChange> queryNumberChangeHistory(String imsi) throws Exception{
 		return historyDao.queryNumberChangeHistory(imsi);
-		
 	}
 
 	public HistoryDao getHistoryDao() {

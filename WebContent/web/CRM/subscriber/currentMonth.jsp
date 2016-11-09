@@ -17,7 +17,7 @@
 			</span>
 		</div>
 		<div class="col-xs-2" align="left">
-			<input type="button" value="查詢" ng-click="mCtrl.queryCurrentMonth(mCtrl.s2tIMSI)" class="btn btn-primary btn-xs"  ng-disabled="mCtrl.buttonDis">
+			<input type="button" value="查詢" ng-click="mCtrl.queryCurrentMonth(mCtrl.serviceId)" class="btn btn-primary btn-xs"  ng-disabled="mCtrl.buttonDis">
 		</div>
 	</div>
 	<div class="col-xs-12" ng-show="sCtrl.testMode"><input type="text" ng-model="mCtrl.monthtes"><input type="button" value="monthtes" ng-click="mCtrl.queryCurrentMonth(mCtrl.monthtes)"></div>

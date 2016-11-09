@@ -24,6 +24,7 @@ public class CurrentAction extends BaseAction {
 	 */
 	private static final long serialVersionUID = 1L;
 
+	String serviceId;
 	String imsi;
 	String from;
 	String to;
@@ -36,8 +37,8 @@ public class CurrentAction extends BaseAction {
 	public String queryCurrentMonth(){
 		
 		try {
-			System.out.println("imsi:"+imsi+",from:"+from+",to:"+to+",suspend:"+suspend+","+new Date());
-			List<CurrentMonth> list = currentService.queryCurrentMonth(imsi,from.replace("-",""),to.replace("-",""),suspend);
+			System.out.println("imsi:"+serviceId+",from:"+serviceId+",to:"+to+",suspend:"+suspend+","+new Date());
+			List<CurrentMonth> list = currentService.queryCurrentMonth(serviceId,from.replace("-",""),to.replace("-",""),suspend);
 			return setSuccess(list);
 		} catch (SQLException e) {
 			return errorHandle(e);
@@ -49,8 +50,8 @@ public class CurrentAction extends BaseAction {
 	public String queryCurrentDay(){
 		
 		try {
-			System.out.println("imsi:"+imsi+",from:"+from+",to:"+to);
-			List<CurrentDay> list = currentService.queryCurrentDay(imsi,from.replace("-",""),to.replace("-",""));
+			System.out.println("serviceId:"+serviceId+",from:"+from+",to:"+to);
+			List<CurrentDay> list = currentService.queryCurrentDay(serviceId,from.replace("-",""),to.replace("-",""));
 			return setSuccess(list);
 		} catch (SQLException e) {
 			return errorHandle(e);
@@ -99,6 +100,14 @@ public class CurrentAction extends BaseAction {
 
 	public void setCurrentService(CurrentService currentService) {
 		this.currentService = currentService;
+	}
+
+	public String getServiceId() {
+		return serviceId;
+	}
+
+	public void setServiceId(String serviceId) {
+		this.serviceId = serviceId;
 	}
 
 

@@ -1,5 +1,6 @@
 package main.common.dao;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -20,9 +21,9 @@ public class LoginDao extends BaseDao{
 		User user = null;
 		Statement st = null;
 		ResultSet rs = null;
-		
+		Connection conn = getConn3();
 		try {
-			st = getConn3().createStatement();
+			st = conn.createStatement();
 			
 			String sql = "SELECT A.ACCOUNT,A.PASSWORD,A.ROLE FROM CRM_USER A WHERE A.ACCOUNT = '"+account+"' ";
 			
@@ -37,12 +38,11 @@ public class LoginDao extends BaseDao{
 			
 		} finally{
 			try {
-				if(st!=null)
-					st.close();
-				if(rs!=null)
-					rs.close();
+				if(st!=null) st.close();
+				if(rs!=null) rs.close();
 			} catch (SQLException e) {
 			}
+			closeConn3(conn);
 		}
 		
 		//closeConnection();

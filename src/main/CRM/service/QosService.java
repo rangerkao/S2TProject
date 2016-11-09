@@ -21,11 +21,13 @@ public class QosService extends BaseService {
 	@Resource
 	QosDao qosDao;
 	
-	public List<QosBean> queryQos(String imsi,String msisdn) throws Exception{
-		if((imsi==null||"".equals(imsi)) && (msisdn==null||"".equals(msisdn)))
-				return qosDao.queryQosList();
-		else
-			return qosDao.queryQosList(imsi, msisdn);
+	public List<QosBean> queryQos(String imsi,String msisdn,String activedate,String canceldate) throws Exception{
+		
+		List<QosBean> result =((imsi==null||"".equals(imsi)) && (msisdn==null||"".equals(msisdn))?
+				qosDao.queryQosList():qosDao.queryQosList(imsi, msisdn,activedate, canceldate));
+		return result;
+		
+		
 	}
 
 	public QosDao getQosDao() {

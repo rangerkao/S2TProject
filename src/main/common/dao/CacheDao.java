@@ -42,9 +42,9 @@ public class CacheDao extends BaseDao{
 		Statement st = null;
 		
 		ResultSet rs = null;
-		
+		Connection conn = getConn2();
 		try{
-			st = getConn2().createStatement();
+			st = conn.createStatement();
 			
 			rs = st.executeQuery(sql);
 			while(rs.next()){
@@ -52,13 +52,10 @@ public class CacheDao extends BaseDao{
 			}
 		}finally{
 			try {
-				if(rs!=null)
-					rs.close();
-				if(st!=null)
-					st.close();
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				if(rs!=null) rs.close();
+				if(st!=null) st.close();
+				closeConn2(conn);
+			} catch (Exception e) { e.printStackTrace();
 			}
 		}
 		
@@ -90,9 +87,9 @@ public class CacheDao extends BaseDao{
 				+ "		WHERE A.SERVICEID=B.SERVICEID AND A.COMPLETEDATE =B.COMPLETEDATE ";
 		Statement st = null;
 		ResultSet rs = null;
+		Connection conn = getConn2();
 		try {
-			st = getConn2().createStatement();
-			
+			st = conn.createStatement();
 			rs = st.executeQuery(sql);
 
 			while(rs.next()){
@@ -100,14 +97,11 @@ public class CacheDao extends BaseDao{
 			}
 		}finally{
 			try {
-				if(rs!=null)
-					rs.close();
-				if(st!=null)
-					st.close();
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+				if(rs!=null) rs.close();
+				if(st!=null) st.close();
+				
+			} catch (Exception e) { }
+			closeConn2(conn);
 		}
 		
 		//closeConnection();

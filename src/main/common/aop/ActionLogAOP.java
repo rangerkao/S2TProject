@@ -26,7 +26,9 @@ import com.opensymphony.xwork2.ActionContext;
 public class ActionLogAOP {
 	
 	
-	@Pointcut("execution(* main.CRM.service.ApplicationService.insertNew(..)) ||execution(* main.CRM.service.SubscriberService.updateSubscriber(..))") //定義環繞通知
+	@Pointcut("execution(* main.CRM.service.ApplicationService.insertNew(..)) ||"
+			+ "execution(* main.CRM.service.SubscriberService.updateSubscriber(..))||"
+			+ "execution(* main.CRM.service.NameVarifiedService.insertOrModifiedNameVarifiedData(..))") //定義環繞通知
 	private void pointCutMethod() {
 		
 	}
@@ -48,8 +50,7 @@ public class ActionLogAOP {
 	
 	Object object = pjp.proceed();
 	String result = object.toString();
-	
-	ActionDao.insertAction(account, params, function, result);
+	new ActionDao().insertAction(account, params, function, result); 
 	return object;
 	}
 }

@@ -26,50 +26,42 @@ public class SubscriberService extends BaseService{
 	
 	
 	public List<Subscriber> queryListById(String id) throws Exception{
-		List<Subscriber> result = null;
-		result = subscriberDao.queryListById(id);
+		List<Subscriber> result = subscriberDao.queryListById(id);
 		return result;
 	}
 	
 	public List<Subscriber> queryListByName(String name) throws Exception{
-		List<Subscriber> result = null;
-		result = subscriberDao.queryListByName(name);
+		List<Subscriber> result =  subscriberDao.queryListByName(name);
 		return result;
 	}
 	
 	public List<Subscriber> queryListByVLN(String VLN) throws Exception{
-		List<Subscriber> result = null;
-		result = subscriberDao.queryListByVLN(VLN);
+		List<Subscriber> result = subscriberDao.queryListByVLN(VLN);
 		return result;
 	}
 	
 	public List<Subscriber> queryListByS2tMisidn(String s2tMsisdn) throws Exception{
-		List<Subscriber> result = null;
-		result = subscriberDao.queryListByS2tMisidn(s2tMsisdn);
+		List<Subscriber> result = subscriberDao.queryListByS2tMisidn(s2tMsisdn);
 		return result;
 	}
 	
 	public List<Subscriber> queryListByS2tIMSI(String s2tIMSI) throws Exception{
-		List<Subscriber> result = null;
-		result = subscriberDao.queryListByS2tIMSI(s2tIMSI);
+		List<Subscriber> result = subscriberDao.queryListByS2tIMSI(s2tIMSI);
 		return result;
 	}
 	
 	public List<Subscriber> queryListByChtMsisdn(String chtMsisdn) throws Exception{
-		List<Subscriber> result = null;
-		result = subscriberDao.queryListByChtMsisdn(chtMsisdn);
+		List<Subscriber> result = subscriberDao.queryListByChtMsisdn(chtMsisdn);
 		return result;
 	}
 	
 	public List<Subscriber> queryListByMainMsisdn(String chtMsisdn) throws Exception{
-		List<Subscriber> result = null;
-		result = subscriberDao.queryListByChtMsisdn(chtMsisdn);
+		List<Subscriber> result =  subscriberDao.queryListByChtMsisdn(chtMsisdn);
 		return result;
 	}
 	
 	public Subscriber queryDataById(String id) throws Exception{
-		Subscriber result = null;
-		result = subscriberDao.queryDataById(id);
+		Subscriber result = subscriberDao.queryDataById(id);
 		return result;
 	}
 	
@@ -78,26 +70,33 @@ public class SubscriberService extends BaseService{
 	}*/
 	
 	public Subscriber queryDataByServiceId(String id) throws Exception{
-		return subscriberDao.queryDataByServiceId(id);
+		Subscriber result = subscriberDao.queryDataByServiceId(id);
+		return result;
 	}
 	
 	public boolean updateSubscriber(Subscriber s,String arg) throws Exception{
-		return subscriberDao.updateSubscriber(s);
+		boolean result = subscriberDao.updateSubscriber(s);
+		return result;
 	}
 	
 	public List<String> queryVLN(String serviceId) throws Exception{
-		return subscriberDao.queryVLN(serviceId);
+		List<String> result =  subscriberDao.queryVLN(serviceId);
+		return result;
 	}
 	
 	public List<AddonService> queryAddonService(String serviceId) throws Exception{
-		return subscriberDao.queryAddonService(serviceId);
+		List<AddonService> result = subscriberDao.queryAddonService(serviceId);
+		return result;
 	}
 	
-	public String getGPRSStatus(String msisdn) throws Exception{
-		return subscriberDao.getGPRSStatus(msisdn);
+	public String getGPRSStatus(String serviceid) throws Exception{
+		String result = subscriberDao.getGPRSStatus(serviceid);
+		return result;
 	}
+	
 	public List<USPacket> queryUSPacket(String serviceId) throws Exception{
-		return subscriberDao.queryUSPacket(serviceId);
+		List<USPacket> result = subscriberDao.queryUSPacket(serviceId);
+		return result;
 	}
 	
 	

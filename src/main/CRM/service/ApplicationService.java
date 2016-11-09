@@ -20,14 +20,17 @@ public class ApplicationService  extends BaseService{
 	ApplicationDao applicationDao;
 	
 	public List<ApplicationData> queryByServiceId(String serviceId) throws Exception{
-		return applicationDao.queryByServiceId(serviceId);
+		List<ApplicationData> result = applicationDao.queryByServiceId(serviceId);
+		return result;
 	}
 	public List<ApplicationData> queryByDate(String date) throws Exception{
-		return applicationDao.queryByDate(date);
+		List<ApplicationData> result = applicationDao.queryByDate(date);
+		return result;
 	}
 	
 	public boolean insertNew(String type,String serviceid,String verifiedDate) throws Exception{
-		return applicationDao.insertNew(type, serviceid, verifiedDate);
+		boolean result =  applicationDao.insertNew(type, serviceid, verifiedDate);
+		return result;
 	}
 
 	public ApplicationDao getApplicationDao() {
