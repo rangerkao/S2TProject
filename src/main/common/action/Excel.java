@@ -105,6 +105,7 @@ public class Excel extends BaseAction{
 		int rowN = 0;
 		int sheetN = 0;
 		HSSFWorkbook wb = null;
+		//XSSFWorkbook 建立xls
 		try {  
 			//第一步，創建webbook文件
             wb = new HSSFWorkbook();  

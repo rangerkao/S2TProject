@@ -892,7 +892,7 @@ public class SubscriberDao extends CRMBaseDao{
 	public List<String> queryVLN(String serviceId) throws Exception{
 		List<String> result = new ArrayList<String>(); 
 
-		String sql = "SELECT A.VLN "
+		String sql = "SELECT A.VLN||'('||(case A.vlntype when '1' then 'static' when '0' then 'dynamic' else '' end)||')' VLN "
 				+ "FROM VLNNUMBER A "
 				+ "WHERE A.status = 1 AND A.SERVICEID = '"+serviceId+"'";
 				

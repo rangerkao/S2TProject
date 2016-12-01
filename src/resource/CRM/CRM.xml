@@ -99,5 +99,6 @@
 
 		<action name="insertOrModifiedNameVarifiedData" class="main.CRM.action.NameVarifiedAction" method="insertOrModifiedNameVarifiedData" />
 		<action name="queeryNameVarifiedData" class="main.CRM.action.NameVarifiedAction" method="queeryNameVarifiedData" />
+		<action name="cancelNameVarifiedDataSendDate" class="main.CRM.action.NameVarifiedAction" method="cancelNameVarifiedDataSendDate" />
 	</package>
 </struts>

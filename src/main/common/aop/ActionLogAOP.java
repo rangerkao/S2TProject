@@ -4,20 +4,12 @@ package main.common.aop;
 import java.util.Date;
 import java.util.Map;
 
-import main.CRM.bean.Subscriber;
 import main.common.dao.ActionDao;
-import main.common.dao.BaseDao;
 
-import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.After;
-import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
-import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import com.opensymphony.xwork2.ActionContext;
@@ -26,9 +18,11 @@ import com.opensymphony.xwork2.ActionContext;
 public class ActionLogAOP {
 	
 	
-	@Pointcut("execution(* main.CRM.service.ApplicationService.insertNew(..)) ||"
+	@Pointcut(
+			"execution(* main.CRM.service.ApplicationService.insertNew(..)) ||"
 			+ "execution(* main.CRM.service.SubscriberService.updateSubscriber(..))||"
-			+ "execution(* main.CRM.service.NameVarifiedService.insertOrModifiedNameVarifiedData(..))") //定義環繞通知
+			+ "execution(* main.CRM.service.NameVarifiedService.insertOrModifiedNameVarifiedData(..))||"
+			+ "execution(* main.CRM.service.NameVarifiedService.cancelNameVarifiedDataSendDate(..))") //定義環繞通知
 	private void pointCutMethod() {
 		
 	}

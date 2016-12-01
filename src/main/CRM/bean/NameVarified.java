@@ -8,6 +8,11 @@ public class NameVarified {
 	String type;
 	String remark;
 	String createTime;
+	String sendDate;
+	String status;
+	
+	String chinaMsisdn;
+	String chtMsisdn;
 	
 	
 	
@@ -49,6 +54,30 @@ public class NameVarified {
 	}
 	public void setCreateTime(String createTime) {
 		this.createTime = createTime;
+	}
+	public String getSendDate() {
+		return sendDate;
+	}
+	public void setSendDate(String sendDate) {
+		this.sendDate = sendDate;
+	}
+	public String getChinaMsisdn() {
+		return chinaMsisdn;
+	}
+	public void setChinaMsisdn(String chinaMsisdn) {
+		this.chinaMsisdn = chinaMsisdn;
+	}
+	public String getChtMsisdn() {
+		return chtMsisdn;
+	}
+	public void setChtMsisdn(String chtMsisdn) {
+		this.chtMsisdn = chtMsisdn;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
 	}
 	
 	

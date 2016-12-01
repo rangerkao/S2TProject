@@ -381,6 +381,10 @@ angular.module('MainApp')
 			self.custInfo=item;
 			$("#companyModal").modal('hide');
 			
+			if(self.selectedType=='chtm'&&self.input!=self.custInfo.chtMsisdn){
+				alert("輸入門號與查詢結果中華號不相同，請留意資料正確性！");
+			}
+			
 			angular.copy(self.custInfo,self.origincustInfo);
 			//
 			self.querySMS(self.custInfo.s2tMsisdn, self.custInfo.chtMsisdn,self.custInfo.activatedDate,self.custInfo.canceledDate);
@@ -397,7 +401,7 @@ angular.module('MainApp')
 					self.custInfo.privePlanId, self.custInfo.activatedDate, self.custInfo.canceledDate, 
 					self.custInfo.homeIMSI);
 			//
-			self.queryNameVarified(self.custInfo.serviceId);
+			self.queryNameVarified(self.custInfo.serviceId,self.custInfo.chtMsisdn,self.custInfo.s2tMsisdn);
 			//
 			ActionService.unblock();
 		}
@@ -433,7 +437,7 @@ angular.module('MainApp')
 								self.custInfo.privePlanId, self.custInfo.activatedDate, self.custInfo.canceledDate, 
 								self.custInfo.homeIMSI);
 						//
-						self.queryNameVarified(self.custInfo.serviceId);
+						self.queryNameVarified(self.custInfo.serviceId,self.custInfo.chtMsisdn,self.custInfo.s2tMsisdn);
 						//
 					}
 				}
@@ -466,8 +470,8 @@ angular.module('MainApp')
 			$scope.$broadcast('queryElse',{s2tMsisdn:s2tMsisdn,serviceid:serviceid,s2tIMSI:s2tIMSI,
 				privePlanId:privePlanId,activatedDate:activatedDate,canceledDate:canceledDate,homeIMSI:homeIMSI});
 		};
-		self.queryNameVarified=function(serviceId){
-			$scope.$broadcast('queryNameVarified',{serviceId:serviceId});
+		self.queryNameVarified=function(serviceId,chtMsisdn,s2tMsisdn){
+			$scope.$broadcast('queryNameVarified',{serviceId:serviceId,chtMsisdn:chtMsisdn,s2tMsisdn:s2tMsisdn});
 		}
 		//
 		

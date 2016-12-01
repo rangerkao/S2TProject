@@ -1,6 +1,7 @@
 package main.CRM.action;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -38,7 +39,7 @@ public class NameVarifiedAction extends BaseAction{
 			reflectSet(c,p);
 			
 			
-			nameVarifiedService.insertOrModifiedNameVarifiedData(c);
+			nameVarifiedService.insertOrModifiedNameVarifiedData(c,input);
 			setSuccess("Insert Success!");
 		} catch (Exception e) {
 			return errorHandle(e);
@@ -51,7 +52,21 @@ public class NameVarifiedAction extends BaseAction{
 	public String queeryNameVarifiedData(){
 		
 		try {
-			NameVarified result = nameVarifiedService.queeryNameVarifiedData(input);
+			List<NameVarified> result = nameVarifiedService.queeryNameVarifiedData(input);
+			
+			setSuccess(result);
+			
+		} catch (Exception e) {
+			return errorHandle(e);
+		}
+	
+		return SUCCESS;
+	}
+	
+	public String cancelNameVarifiedDataSendDate(){
+		
+		try {
+			String result = nameVarifiedService.cancelNameVarifiedDataSendDate(input);
 			setSuccess(result);
 			
 		} catch (Exception e) {
