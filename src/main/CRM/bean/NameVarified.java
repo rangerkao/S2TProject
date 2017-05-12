@@ -11,10 +11,10 @@ public class NameVarified {
 	String sendDate;
 	String status;
 	
-	String chinaMsisdn;
-	String chtMsisdn;
+	String vln;
+	String msisdn;
 	
-	
+	String  usedCount;
 	
 	
 	
@@ -61,17 +61,18 @@ public class NameVarified {
 	public void setSendDate(String sendDate) {
 		this.sendDate = sendDate;
 	}
-	public String getChinaMsisdn() {
-		return chinaMsisdn;
+
+	public String getVln() {
+		return vln;
 	}
-	public void setChinaMsisdn(String chinaMsisdn) {
-		this.chinaMsisdn = chinaMsisdn;
+	public void setVln(String vln) {
+		this.vln = vln;
 	}
-	public String getChtMsisdn() {
-		return chtMsisdn;
+	public String getMsisdn() {
+		return msisdn;
 	}
-	public void setChtMsisdn(String chtMsisdn) {
-		this.chtMsisdn = chtMsisdn;
+	public void setMsisdn(String msisdn) {
+		this.msisdn = msisdn;
 	}
 	public String getStatus() {
 		return status;
@@ -79,6 +80,13 @@ public class NameVarified {
 	public void setStatus(String status) {
 		this.status = status;
 	}
+	public String getUsedCount() {
+		return usedCount;
+	}
+	public void setUsedCount(String usedCount) {
+		this.usedCount = usedCount;
+	}
+
 	
 	
 

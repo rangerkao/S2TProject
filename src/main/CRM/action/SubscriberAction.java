@@ -30,6 +30,19 @@ public class SubscriberAction extends BaseAction{
 	@Resource
 	SubscriberService subscriberService;
 	
+	public String queryListByPassPortId(){
+		System.out.println("queryListByPassPortId...");
+		System.out.println("input="+input);
+		try {
+			List<Subscriber> sList = subscriberService.queryListByPassPortId(input);
+			setSuccess(sList);
+		} catch (Exception e) {
+			errorHandle(e);
+		}
+		
+		return SUCCESS;
+	}
+	
 	public String queryListById(){
 		System.out.println("queryListById...");
 		System.out.println("input="+input);

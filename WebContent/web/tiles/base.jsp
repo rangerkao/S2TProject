@@ -5,6 +5,12 @@
 <html ng-app="MainApp" style="background-color:  rgba(45, 41, 41, 0.36);">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<META HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE">
+<!-- IE可能不見得有效 -->
+<META HTTP-EQUIV="EXPIRES" CONTENT="0">
+<!-- 設定成馬上就過期 -->
+<META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
+<!-- 與第一行是同樣的作用 -->
 <title>Sim2Travel 維運管理系統(New)</title>
 <!-- CSS -->
 <!-- Latest compiled and minified CSS -->
@@ -50,10 +56,10 @@
 	
 	
 	
-	<script src="js/service.js"></script>
+	<script src="js/service.js?20170419"></script>
 	<script src="js/common.js"></script>
 	<script src="js/CRM/Menu.js"></script>
-	<script src="js/CRM/Subscriber.js"></script>
+	<script src="js/CRM/Subscriber.js?20170424"></script>
 	<script src="js/CRM/SMS.js"></script>
 	<script src="js/CRM/Qos.js"></script>
 	<script src="js/CRM/Application.js"></script>
@@ -61,7 +67,8 @@
 	<script src="js/CRM/CurrentDay.js"></script>
 	<script src="js/CRM/DataRate.js"></script>
 	<script src="js/CRM/Else.js"></script>
-	<script src="js/CRM/NameVarified.js"></script>
+	<script src="js/CRM/NameVarified.js?20170426"></script>
+	<script src="js/CRM/QueryNameVarified.js"></script>
 	
 	<script src="js/directive.js"></script>
 	

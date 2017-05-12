@@ -25,8 +25,8 @@ public class SmsDao extends CRMBaseDao{
 				+ ("".equals(canceledDate) ?"": "AND SENDTIME < to_date('"+canceledDate+"','yyyy/MM/dd hh24:mi:ss') ");
 		
 		if(startDate!=null && endDate !=null && !"".equals(startDate) && !"".equals(endDate) && !"NULL".equalsIgnoreCase(startDate) && !"NULL".equalsIgnoreCase(endDate)){
-			dateCondiyion += " SENDTIME >= to_date("+startDate+",'yyyyMMddhh24miss') "
-					+ "AND SENDTIME <= to_date("+endDate+",'yyyyMMddhh24miss')";
+			dateCondiyion += "AND SENDTIME >= to_date("+startDate+",'yyyyMMddhh24miss') "
+					+ "AND SENDTIME <= to_date("+endDate+",'yyyyMMddhh24miss') ";
 		}
 		
 		List<SMS> result = new ArrayList<SMS>();
@@ -44,15 +44,17 @@ public class SmsDao extends CRMBaseDao{
 					+ "FROM( "
 					+ "		SELECT 'DVRS' SCLASS ,A.SEND_NUMBER,A.MSG,A.SEND_DATE  SENDTIME "
 					+ "		FROM HUR_SMS_LOG A "
-					+ "		WHERE A.SEND_NUMBER = '"+S2TMSISDN+"'"
-					+ "		UNION "
+					+ "		WHERE (A.SEND_NUMBER = '"+S2TMSISDN+"' OR A.SEND_NUMBER = '"+CHTMSISDN+"' ) "
+/*					+ "		UNION "
 					+ "		SELECT 'DVRS' SCLASS ,B.SEND_NUMBER,B.MSG,B.SEND_DATE  SENDTIME "
 					+ "		FROM HUR_SMS_LOG B "
-					+ "		WHERE B.SEND_NUMBER = '"+CHTMSISDN+"'"
-					+ "		UNION "
+					+ "		WHERE B.SEND_NUMBER = '"+CHTMSISDN+"'"*/
+					+ (S2TMSISDN.equalsIgnoreCase(CHTMSISDN)? "" : 
+					 "		UNION "
 					+ "		SELECT 'TWNLD' SCLASS,C.PHONENUMBER SEND_NUMBER,C.CONTENT MSG,C.CREATETIME SENDTIME "
 					+ "		FROM S2T_BL_SMS_LOG C "
 					+ "		WHERE C.PHONENUMBER = '"+CHTMSISDN+"' "
+					)
 					+ "		UNION "
 					+ "		SELECT 'Landing' SCLASS,D.PHONENUMBER SEND_NUMBER,D.CONTENT MSG,D.CREATETIME SENDTIME "
 					+ "		FROM S2T_BL_SMS_LOG D "
@@ -80,19 +82,19 @@ public class SmsDao extends CRMBaseDao{
 					+ "FROM( "
 					+ "		SELECT 'LocalNumber' SCLASS,A.SERVICECODE SEND_NUMBER,A.MSGCONTENT MSG,A.LASTSUCCESSTIME SENDTIME "
 					+ "		FROM MSSENDINGTASK A "
-					+ "		WHERE A.SERVICECODE = '"+S2TMSISDN+"' "
-					+ "		UNION "
+					+ "		WHERE (A.SERVICECODE = '"+S2TMSISDN+"'  OR A.SERVICECODE = '"+CHTMSISDN+"' ) "
+				/*	+ "		UNION "
 					+ "		SELECT 'LocalNumber' SCLASS,B.SERVICECODE SEND_NUMBER,B.MSGCONTENT MSG,B.LASTSUCCESSTIME SENDTIME "
 					+ "		FROM MSSENDINGTASK B "
-					+ "		WHERE B.SERVICECODE = '"+CHTMSISDN+"' "
+					+ "		WHERE B.SERVICECODE = '"+CHTMSISDN+"' "*/
 					+ "		UNION "
 					+ "		SELECT 'LocalNumber' SCLASS,C.SERVICECODE SEND_NUMBER,C.MSGCONTENT MSG,C.LASTSUCCESSTIME SENDTIME "
 					+ "		FROM MESSAGETASK C "
-					+ "		WHERE C.SERVICECODE = '"+S2TMSISDN+"' "
-					+ "		UNION "
+					+ "		WHERE (C.SERVICECODE = '"+S2TMSISDN+"' OR C.SERVICECODE = '"+CHTMSISDN+"' )  "
+					/*+ "		UNION "
 					+ "		SELECT 'LocalNumber' SCLASS,D.SERVICECODE SEND_NUMBER,D.MSGCONTENT MSG,D.LASTSUCCESSTIME SENDTIME "
 					+ "		FROM MESSAGETASK D "
-					+ "		WHERE D.SERVICECODE = '"+CHTMSISDN+"' "
+					+ "		WHERE D.SERVICECODE = '"+CHTMSISDN+"' "*/
 					+ ") "
 					+dateCondiyion
 					+ " ORDER BY SENDTIME DESC ";

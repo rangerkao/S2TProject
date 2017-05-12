@@ -20,9 +20,11 @@ public class ActionLogAOP {
 	
 	@Pointcut(
 			"execution(* main.CRM.service.ApplicationService.insertNew(..)) ||"
-			+ "execution(* main.CRM.service.SubscriberService.updateSubscriber(..))||"
-			+ "execution(* main.CRM.service.NameVarifiedService.insertOrModifiedNameVarifiedData(..))||"
-			+ "execution(* main.CRM.service.NameVarifiedService.cancelNameVarifiedDataSendDate(..))") //定義環繞通知
+			/*+ "execution(* main.CRM.service.SubscriberService.updateSubscriber(..))||"*/
+			+ "execution(* main.CRM.service.NameVarifiedService.updateNameVarifiedData(..))||"
+			+ "execution(* main.CRM.service.NameVarifiedService.addNameVarifiedData(..))||"
+			+ "execution(* main.CRM.service.ExcelService.getExcel(..))||"
+			+ "execution(* main.CRM.service.SubscriberService.*(..))") //定義環繞通知
 	private void pointCutMethod() {
 		
 	}
@@ -43,7 +45,7 @@ public class ActionLogAOP {
 	String function = pjp.getStaticPart().toString();
 	
 	Object object = pjp.proceed();
-	String result = object.toString();
+	String result = (object==null ?"":object.toString());
 	new ActionDao().insertAction(account, params, function, result); 
 	return object;
 	}

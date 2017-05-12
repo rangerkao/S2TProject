@@ -79,13 +79,13 @@ public class ExcelDao extends CRMBaseDao{
 				//m.put("DATEACTIVATED", rs.getString("DATEACTIVATED"));
 				//m.put("DATECANCELED", rs.getString("DATECANCELED"));
 				m.put("SUBS_NAME", rs.getString("SUBS_NAME"));
-				m.put("SUBS_ID_TAXID", rs.getString("SUBS_ID_TAXID"));
+				m.put("SUBS_ID_TAXID", hideData(rs.getString("SUBS_ID_TAXID")));
 				m.put("CHAIRMAN", rs.getString("CHAIRMAN"));
-				m.put("CHAIRMAN_ID", rs.getString("CHAIRMAN_ID"));
-				m.put("SUBS_PHONE", rs.getString("SUBS_PHONE"));
+				m.put("CHAIRMAN_ID", hideData(rs.getString("CHAIRMAN_ID")));
+				m.put("SUBS_PHONE", hideData(rs.getString("SUBS_PHONE")));
 				m.put("SUBS_BIRTHDAY", rs.getString("SUBS_BIRTHDAY"));
-				m.put("SUBS_PERMANENT_ADDRESS", rs.getString("SUBS_PERMANENT_ADDRESS"));
-				m.put("SUBS_BILLING_ADDRESS", rs.getString("SUBS_BILLING_ADDRESS"));
+				m.put("SUBS_PERMANENT_ADDRESS", hideData(rs.getString("SUBS_PERMANENT_ADDRESS")));
+				m.put("SUBS_BILLING_ADDRESS", hideData(rs.getString("SUBS_BILLING_ADDRESS")));
 				m.put("SUBS_EMAIL", rs.getString("SUBS_EMAIL"));
 				m.put("AGENCY_ID", rs.getString("AGENCY_ID"));
 				m.put("REMARK", rs.getString("REMARK"));
@@ -293,6 +293,14 @@ public class ExcelDao extends CRMBaseDao{
 
 		}
 		return list;
+	}
+	private String hideData(String data){
+		if(data==null || "".equals(data))
+			return "";
+		
+		if(data.length()<=3) return "***";
+		
+		return data.substring(0,2)+"*****"+data.substring(data.length()-1,data.length());
 	}
 	
 	

@@ -64,6 +64,48 @@ public class SubscriberDao extends CRMBaseDao{
 	}
 	
 	/**
+	 * 以護照ID查詢客戶清單
+	 * @param id
+	 * @return
+	 * @throws Exception
+	 */
+	public List<Subscriber> queryListByPassPortId(String id) throws Exception{
+		List<Subscriber> result = new ArrayList<Subscriber>();
+		Set<String> serviceids = new HashSet<String>();
+		//CRM DB
+		String sql1 ="SELECT  A.SUBS_ID_TAXID ID,A.SUBS_NAME,A.SUBS_PERMANENT_ADDRESS,B.SERVICEID "
+				+ "FROM  CRM_DB.CRM_SUBSCRIBERS A LEFT JOIN CRM_DB.CRM_SUBSCRIPTION B ON A.SEQ =B.SEQ "
+				+ "WHERE B.PASSPORT_ID = '"+id+"' ";
+		
+		Statement st = null ;
+		ResultSet rs = null ;
+		Connection conn = getConn3();
+		try{
+			st = conn.createStatement();
+			//System.out.println("query serviceids:"+sql1);
+			rs = st.executeQuery(sql1);
+			
+			while(rs.next()){
+				serviceids.add(rs.getString("SERVICEID"));
+			}		
+		}finally{
+			try {
+				if(rs!=null) rs.close();
+				if(st!=null) st.close();
+			} catch (Exception e) {
+			}
+			closeConn3(conn);
+		}
+		
+		for(String serviceid:serviceids){
+			if(!"".equals(serviceid))
+				result.add(queryDataByServiceId(serviceid));
+		}
+	
+		return result;
+	}
+	
+	/**
 	 * 以名稱查詢客戶清單
 	 * @param name
 	 * @return
@@ -422,7 +464,7 @@ public class SubscriberDao extends CRMBaseDao{
 		String sql1="SELECT A.SUBS_ID_TAXID ID,A.SUBS_NAME,A.SUBS_BIRTHDAY,A.SUBS_PHONE,A.SUBS_EMAIL,A.SEQ, "
 				+ "A.SUBS_PERMANENT_ADDRESS,A.SUBS_BILLING_ADDRESS,A.AGENCY_ID,A.REMARK, "
 				+ "DATE_FORMAT(A.CREATETIME,'%Y/%m/%d %H:%m:%s') CREATETIME,DATE_FORMAT(A.UPDATETIME,'%Y/%m/%d %H:%m:%s') UPDATETIME, "
-				+ "A.SUBS_TYPE,B. SERVICEID,E.CHAIRMAN,E.CHAIRMAN_ID "
+				+ "A.SUBS_TYPE,B. SERVICEID,E.CHAIRMAN,E.CHAIRMAN_ID, B.PASSPORT_ID,B.PASSPORT_NAME "
 				+ "FROM CRM_DB.CRM_SUBSCRIBERS A left join CRM_DB.CRM_SUBSCRIPTION B on A.seq =B.seq left join CRM_DB.CRM_CHAIRMAN E on A.seq = E.seq "
 				+ "WHERE A.SUBS_ID_TAXID = '"+id+"' ";
 		
@@ -451,10 +493,14 @@ public class SubscriberDao extends CRMBaseDao{
 				result.setType(processData(rs.getString("SUBS_TYPE")));
 				
 				result.setChair(rs.getString("CHAIRMAN"));
-				result.setChairID(rs.getString("CHAIRMAN_ID"));
+				result.setChairId(rs.getString("CHAIRMAN_ID"));
 				
 				result.setSeq(rs.getString("SEQ"));
 				result.setServiceId(rs.getString("SERVICEID"));
+				
+				//20170317 add
+				result.setPassportId(rs.getString("PASSPORT_ID"));
+				result.setPassportName(rs.getString("PASSPORT_NAME"));
 			}
 		} finally{
 			try {
@@ -495,7 +541,7 @@ public class SubscriberDao extends CRMBaseDao{
 		String sql1="SELECT A.SUBS_ID_TAXID ID,A.SUBS_NAME,A.SUBS_BIRTHDAY,A.SUBS_PHONE,A.SUBS_EMAIL,A.SEQ, "
 				+ "A.SUBS_PERMANENT_ADDRESS,A.SUBS_BILLING_ADDRESS,A.AGENCY_ID,A.REMARK, "
 				+ "DATE_FORMAT(A.CREATETIME,'%Y/%m/%d %H:%m:%s') CREATETIME,DATE_FORMAT(A.UPDATETIME,'%Y/%m/%d %H:%m:%s') UPDATETIME, "
-				+ "A.SUBS_TYPE,B. SERVICEID,E.CHAIRMAN,E.CHAIRMAN_ID "
+				+ "A.SUBS_TYPE,B. SERVICEID,E.CHAIRMAN,E.CHAIRMAN_ID,B.PASSPORT_ID,B.PASSPORT_NAME "
 				+ "FROM CRM_DB.CRM_SUBSCRIBERS A left join CRM_DB.CRM_SUBSCRIPTION B on A.seq =B.seq left join CRM_DB.CRM_CHAIRMAN E on A.seq = E.seq "
 				+ "WHERE B.SERVICEID = "+id+" ";
 		
@@ -514,7 +560,24 @@ public class SubscriberDao extends CRMBaseDao{
 				+ "AND C.SERVICEID = "+id+" ";
 		*/
 		//S2T DB
-		String sql2 ="SELECT C.SERVICEID, "
+		String sql2 = ""
+				+ "SELECT C.SERVICEID, "
+				+ " 				(CASE C.STATUS WHEN '1' THEN 'normal'  "
+				+ "					WHEN '3' THEN 'suspended' "
+				+ "					WHEN '4' THEN 'terminated' "
+				+ "					WHEN '10' THEN 'waiting' "
+				+ "					ELSE 'else' END) STAUS, "
+				+ "					C. SERVICECODE S2TMSISDN,C.PRICEPLANID, "
+				+ "					to_char(C.DATEACTIVATED,'yyyy/MM/dd hh24:mi:ss') DATEACTIVATED,nvl(to_char(C.DATECANCELED,'yyyy/MM/dd hh24:mi:ss'),'') DATECANCELED,F.HOMEIMSI,F.IMSI "
+				+ "FROM SERVICE C,IMSI F "
+				+ "WHERE C.SERVICEID = F.SERVICEID(+) AND C.SERVICEID = "+id+" ";
+		
+		
+		
+		
+		
+		
+		/*String sql2 ="SELECT C.SERVICEID, "
 				+ "			(CASE C.STATUS WHEN '1' THEN 'normal'  "
 				+ "							WHEN '3' THEN 'suspended' "
 				+ "							WHEN '4' THEN 'terminated' "
@@ -527,7 +590,7 @@ public class SubscriberDao extends CRMBaseDao{
 				+ "AND C.SERVICEID = F.SERVICEID(+) "
 				+ "AND D.FOLLOWMENUMBER(+)  LIKE '886%' "
 				+ "AND C.status!=4 "
-				+ "AND C.SERVICEID = "+id+" "
+				+ "AND C.SERVICEID = "+id+" ";
 				+ "UNION "			
 				+ "select C.SERVICEID, "
 				+ "			(CASE C.STATUS WHEN '1' THEN 'normal'  "
@@ -540,9 +603,34 @@ public class SubscriberDao extends CRMBaseDao{
 				+ "from service C,S2T_TB_TYPB_WO_SYNC_FILE_DTL E  "
 				+ "where C.SERVICECODE = E.S2T_MSISDN(+) "
 				+ "AND C.status=4 "
-				+ "AND E.SEND_TIME > C.DATEACTIVATED AND (E.SEND_TIME <C.DATECANCELED OR C.DATECANCELED is NULL) "
-				+ "AND C.SERVICEID = "+id+" ";
+				+ "AND E.SEND_TIME(+) > C.DATEACTIVATED AND E.SEND_TIME(+) <C.DATECANCELED "
+				+ "AND C.SERVICEID = "+id+" ";*/
 				
+		//MBOSS
+		String sql3 = "SELECT A.SERVICEID, A.SERVICECODE, A.STATUS, "
+				+ "to_char(A.DATEACTIVATED,'yyyy/MM/dd hh24:mi:ss') DATEACTIVATED,nvl(to_char(B.COMPLETEDATE,'yyyy/MM/dd hh24:mi:ss'),'') DATECANCELED "
+				+ "FROM SERVICE A, TERMINATIONORDER B "
+				+ "WHERE A.SERVICEID=B.TERMOBJID and serviceid = "+id+" ";
+		
+		//20170310 add 查詢CHTMSISDN
+		//20170510 mod 以環球卡Table查詢
+		String sql4 = 
+				"			 select A.FOLLOWMENUMBER CHTMSISDN "
+				+ "		from FOLLOWMEDATA A"
+				+ "    	where A.serviceid = "+id+" AND A.FOLLOWMENUMBER LIKE '%886%'"
+				+ "		union all "
+				+ "       select * from (	"
+				+ "								select replace(A.FORWARD_TO_HOME_NO,'+','') CHTMSISDN "
+				+ "								from S2T_TB_TYPB_WO_SYNC_FILE_DTL A,SERVICE B "
+				+ "								where A.S2T_MSISDN = B.SERVICECODE "
+				+ "								AND A.SEND_TIME > B.DATEACTIVATED AND  (B.DATECANCELED is null  OR A.SEND_TIME <= B.DATECANCELED) "
+				+ "								AND B.SERVICEID ="+id+"  ORDER BY A.SEND_TIME DESC"
+				+ "						) WHERE rownum = 1 "
+				+ "		union all "
+				+ "		 select A.PARTNERMSISDN CHTMSISDN "
+				+ "		from AVAILABLEMSISDN A ,service B "
+				+ "		where B.serviceid = "+id+" and A.S2TMSISDN = B.servicecode ";
+		
 		Statement st = null;
 		ResultSet rs = null;
 		Connection conn = getConn3();
@@ -568,7 +656,11 @@ public class SubscriberDao extends CRMBaseDao{
 				result.setType(processData(rs.getString("SUBS_TYPE")));
 	
 				result.setChair(rs.getString("CHAIRMAN"));
-				result.setChairID(rs.getString("CHAIRMAN_ID"));
+				result.setChairId(rs.getString("CHAIRMAN_ID"));
+				
+				//20170317 add
+				result.setPassportId(rs.getString("PASSPORT_ID"));
+				result.setPassportName(rs.getString("PASSPORT_NAME"));
 	
 				result.setSeq(rs.getString("SEQ"));
 			}
@@ -590,21 +682,63 @@ public class SubscriberDao extends CRMBaseDao{
 			st = conn.createStatement();
 			//System.out.println("query data by id:"+sql2);
 			rs = st.executeQuery(sql2);
-			
+			System.out.println("Execute SQL:"+sql2);
 			while(rs.next()){
 
 				result.setServiceId(rs.getString("SERVICEID"));
 				result.setS2tMsisdn(rs.getString("S2TMSISDN"));
 				result.setS2tIMSI(rs.getString("IMSI"));
-				result.setChtMsisdn(rs.getString("CHTMSISDN"));
+				//result.setChtMsisdn(rs.getString("CHTMSISDN"));
 				princePlanId= rs.getString("PRICEPLANID");
 		
 				result.setStatus(rs.getString("STAUS"));
 				
 				result.setActivatedDate(rs.getString("DATEACTIVATED"));
-				result.setCanceledDate(rs.getString("DATECANCELED"));
+				//result.setCanceledDate(rs.getString("DATECANCELED"));
 				
 				result.setHomeIMSI(rs.getString("HOMEIMSI"));
+			}
+		} finally{
+			try {
+				if(rs!=null) rs.close();
+				if(st!=null) st.close();
+				closeConn1(conn);
+			} catch (Exception e) {
+			}
+			//closeConnection();
+		}
+		
+		//20170110
+		conn = null;
+		conn = getConn2();
+		try {
+			st = conn.createStatement();
+			rs = st.executeQuery(sql3);
+			System.out.println("Execute SQL:"+sql3);
+			if(rs.next()){
+				//只有已退租才會記錄
+				//result.setActivatedDate(rs.getString("DATEACTIVATED"));
+				result.setCanceledDate(rs.getString("DATECANCELED"));
+			}
+		} finally{
+			try {
+				if(rs!=null) rs.close();
+				if(st!=null) st.close();
+				closeConn2(conn);
+			} catch (Exception e) {
+			}
+			//closeConnection();
+		}
+		
+		//20170310
+		conn = null;
+		conn = getConn1();
+		try {
+			st = conn.createStatement();
+			rs = st.executeQuery(sql4);
+			System.out.println("Execute SQL:"+sql4);
+			while(rs.next()){
+				result.setChtMsisdn(rs.getString("CHTMSISDN"));
 			}
 		} finally{
 			try {
@@ -632,10 +766,11 @@ public class SubscriberDao extends CRMBaseDao{
 	public boolean updateSubscriber(Subscriber s) throws Exception{
 		boolean result = false;
 		String sql = "UPDATE CRM_DB.CRM_SUBSCRIBERS A "
-				+ "SET A.SUBS_ID_TAXID='"+s.getIdTaxid()+"',A.SUBS_NAME='"+s.getName()+"',A.SUBS_BIRTHDAY='"+s.getBirthday()+"', "
-				+ "A.SUBS_PHONE='"+s.getPhone()+"',A.SUBS_EMAIL='"+s.getEmail()+"', "
-				+ "A.SUBS_PERMANENT_ADDRESS='"+s.getPermanentAddress()+"',A.SUBS_BILLING_ADDRESS='"+s.getBillingAddress()+"', "
-				+ "A.AGENCY_ID='"+s.getAgency()+"',A.REMARK='"+s.getRemark()+"',A.UPDATETIME=now() ,A.SUBS_TYPE = '"+s.getType()+"' "
+				+ "SET A.SUBS_ID_TAXID='"+s.getIdTaxid()+"',A.SUBS_NAME='"+s.getName()+"',A.SUBS_BIRTHDAY='"+s.getBirthday()+"'  "
+				+ ",A.SUBS_PHONE='"+s.getPhone()+"',A.SUBS_EMAIL='"+s.getEmail()+"'  "
+				+ ",A.SUBS_PERMANENT_ADDRESS='"+s.getPermanentAddress()+"',A.SUBS_BILLING_ADDRESS='"+s.getBillingAddress()+"'  "
+				+ ",A.AGENCY_ID='"+s.getAgency()+"',A.REMARK='"+s.getRemark()+"',A.UPDATETIME=now() ,A.SUBS_TYPE = '"+s.getType()+"'  "
+				//+ ",A.PASSPORT_ID = '"+s.getPassportId()+"',A.PASSPORT_NAME = '"+s.getPassportName()+"'  "
 				+ "WHERE A.SEQ ='"+s.getSeq()+"'";
 	
 		Statement st = null;
@@ -695,11 +830,15 @@ public class SubscriberDao extends CRMBaseDao{
 					+ "CRM_DB.CRM_SUBSCRIBERS("
 					+ "SUBS_NAME, SUBS_BIRTHDAY, SUBS_ID_TAXID, SUBS_PHONE, SUBS_EMAIL,"
 					+ "SUBS_PERMANENT_ADDRESS,SUBS_BILLING_ADDRESS,AGENCY_ID,REMARK,"
-					+ "CREATETIME,SUBS_TYPE,SEQ) "
+					+ "CREATETIME,SUBS_TYPE,SEQ"
+					//+ ",PASSPORT_ID,PASSPORT_NAME"
+					+ ") "
 					+ "VALUES("
 					+ "'"+s.getName()+"','"+s.getBirthday()+"','"+s.getIdTaxid()+"','"+s.getPhone()+"','"+s.getEmail()+"',"
 					+ "'"+s.getPermanentAddress()+"','"+s.getBillingAddress()+"','"+s.getAgency()+"','"+s.getRemark()+"',"
-					+ "now(),'"+s.getType()+"','"+s.getSeq()+"') ";
+					+ "now(),'"+s.getType()+"','"+s.getSeq()+"' "
+					//+ ",'"+s.getPassportId()+"','"+s.getPassportName()+"' "
+					+ ") ";
 			//System.out.println("sql:"+sql);
 			int eRow = st.executeUpdate(sql);
 
@@ -729,9 +868,13 @@ public class SubscriberDao extends CRMBaseDao{
 			
 			String sql = "INSERT INTO "
 					+ "CRM_DB.CRM_SUBSCRIPTION("
-					+ "SERVICEID,SEQ,CREATETIME) "
+					+ "SERVICEID,SEQ,CREATETIME"
+					+ ",PASSPORT_ID,PASSPORT_NAME"
+					+ ") "
 					+ "VALUES("
-					+ "'"+s.getServiceId()+"','"+s.getSeq()+"',now()) ";
+					+ " '"+s.getServiceId()+"','"+s.getSeq()+"',now()"
+					+",'"+s.getPassportId()+"','"+s.getPassportName()+"' "
+					+ ") ";
 			
 			//System.out.println("sql:"+sql);
 			int eRow = st.executeUpdate(sql);
@@ -764,6 +907,7 @@ public class SubscriberDao extends CRMBaseDao{
 
 			String sql = "UPDATE CRM_DB.CRM_SUBSCRIPTION A "
 					+ "SET A.SEQ = '"+s.getSeq()+"',A.UPDATETIME = now() "
+					+ ",A.PASSPORT_ID = '"+s.getPassportId()+"',A.PASSPORT_NAME = '"+s.getPassportName()+"'  "
 					+ "WHERE A.SERVICEID = '"+s.getServiceId()+"'";
 			
 			if(s.getServiceId()==null || "".equals(s.getServiceId())){
@@ -804,7 +948,7 @@ public class SubscriberDao extends CRMBaseDao{
 		
 		
 		String sql = "INSERT INTO CRM_DB.CRM_CHAIRMAN(SEQ,CHAIRMAN,CHAIRMAN_ID,CREATETIME) "
-				+ "VALUES('"+s.getSeq()+"','"+s.getChair()+"','"+s.getChairID()+"',now())";
+				+ "VALUES('"+s.getSeq()+"','"+s.getChair()+"','"+s.getChairId()+"',now())";
 		
 		
 		Statement st = null;
@@ -829,7 +973,7 @@ public class SubscriberDao extends CRMBaseDao{
 		
 		
 		String sql = "UPDATE CRM_DB.CRM_CHAIRMAN A "
-				+ "SET A.CHAIRMAN = '"+s.getChair()+"', A.CHAIRMAN_ID = '"+s.getChairID()+"' "
+				+ "SET A.CHAIRMAN = '"+s.getChair()+"', A.CHAIRMAN_ID = '"+s.getChairId()+"' "
 				+ "WHERE A.SEQ = '"+s.getSeq()+"'";
 		
 		
@@ -894,8 +1038,9 @@ public class SubscriberDao extends CRMBaseDao{
 
 		String sql = "SELECT A.VLN||'('||(case A.vlntype when '1' then 'static' when '0' then 'dynamic' else '' end)||')' VLN "
 				+ "FROM VLNNUMBER A "
-				+ "WHERE A.status = 1 AND A.SERVICEID = '"+serviceId+"'";
+				+ "WHERE A.status = 1 AND A.SERVICEID = '"+serviceId+"' ";
 				
+		//String s2tIMSI = null,chtMsisdn = null;
 		Statement st = null;
 		ResultSet rs = null;
 		Connection conn = getConn1();
@@ -909,7 +1054,86 @@ public class SubscriberDao extends CRMBaseDao{
 				result.add(rs.getString("VLN"));
 			}
 			
+			/*sql = "select a.imsi,c.PARTNERMSISDN "
+					+ "from IMSI A,service B,AVAILABLEMSISDN c "
+					+ "where A.serviceid = B.serviceid and B.servicecode = c.s2tMsisdn and a.serviceid = "+serviceId+" ";
 			
+			rs = st.executeQuery(sql);
+			while(rs.next()){
+				s2tIMSI = rs.getString("IMSI");
+				chtMsisdn = rs.getString("PARTNERMSISDN");
+			}*/
+			
+			
+			/*sql = "select instr(A.content,'CHNA') CD "
+					+ "from PROVLOG A "
+					+ "where A.CONTENT like '%S2T_IMSI="+s2tIMSI+"%' AND A.CONTENT like '%Req_Status=07%' "
+					+ "order by A.REQTIME desc ";*/
+			
+			/*sql = "select instr(A.content,'CHNA') CD "
+					+ "from PROVLOG A "
+					+ "where (A.CONTENT like '%TWNLD_MSISDN="+chtMsisdn+"%' or A.CONTENT like '%S2T_IMSI="+s2tIMSI+"%'  )"
+					+ "AND (A.CONTENT like '%Req_Status=07%' or A.CONTENT like '%Req_Status=99%') "
+					+ "order by A.REQTIME desc ";
+			rs = st.executeQuery(sql);
+			
+			//只取最後一筆
+			if(rs.next()){
+				int cd = rs.getInt("CD");
+				if(cd!=0)
+					result.add("＊已申請中國固定號");
+			}*/
+
+			
+		} finally{
+			try {
+				if(rs!=null) rs.close();
+				if(st!=null) st.close();
+			} catch (Exception e) {
+			}
+			closeConn1(conn);
+			//closeConnection();
+		}
+		return result;
+	}
+	
+	public List<String> queryWhetherAppliedCHNA(String serviceId) throws Exception{
+		List<String> result = new ArrayList<String>(); 
+		String sql = "";
+				
+		String s2tIMSI = null,chtMsisdn = null;
+		Statement st = null;
+		ResultSet rs = null;
+		Connection conn = getConn1();
+		try {
+				
+			sql = "select a.imsi,c.PARTNERMSISDN "
+					+ "from IMSI A,service B,AVAILABLEMSISDN c "
+					+ "where A.serviceid = B.serviceid and B.servicecode = c.s2tMsisdn and a.serviceid = "+serviceId+" ";
+			st = conn.createStatement();		
+			rs = st.executeQuery(sql);
+			while(rs.next()){
+				s2tIMSI = rs.getString("IMSI");
+				chtMsisdn = rs.getString("PARTNERMSISDN");
+			}
+			/*sql = "select instr(A.content,'CHNA') CD "
+					+ "from PROVLOG A "
+					+ "where A.CONTENT like '%S2T_IMSI="+s2tIMSI+"%' AND A.CONTENT like '%Req_Status=07%' "
+					+ "order by A.REQTIME desc ";*/
+			
+			sql = "select instr(A.content,'CHNA') CD "
+					+ "from PROVLOG A "
+					+ "where (A.CONTENT like '%TWNLD_MSISDN="+chtMsisdn+"%' or A.CONTENT like '%S2T_IMSI="+s2tIMSI+"%'  )"
+					+ "AND (A.CONTENT like '%Req_Status=07%' or A.CONTENT like '%Req_Status=99%') "
+					+ "order by A.REQTIME desc ";
+			rs = st.executeQuery(sql);
+			
+			//只取最後一筆
+			if(rs.next()){
+				int cd = rs.getInt("CD");
+				if(cd!=0)
+					result.add("＊已申請中國固定號");
+			}
 		} finally{
 			try {
 				if(rs!=null) rs.close();

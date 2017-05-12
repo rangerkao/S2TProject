@@ -17,12 +17,16 @@ public class Subscriber {
 	String createtime = "";
 	String updatetime = "";
 	
+	//20170317 add
+	String passportId = "";
+	String passportName = "";
+	
 	String s2tMsisdn = "";
 	String chtMsisdn = "";
 	String serviceId = "";
 	
 	String chair = "";
-	String chairID = "";
+	String chairId = "";
 	
 	String s2tIMSI = "";
 	PricePlanID privePlanId = null;
@@ -76,12 +80,16 @@ public class Subscriber {
 				this.serviceId = j.getString(name);
 			}else if("chair".equalsIgnoreCase(name)){
 				this.chair = j.getString(name);
-			}else if("chairID".equalsIgnoreCase(name)){
-				this.chairID = j.getString(name);
+			}else if("chairId".equalsIgnoreCase(name)){
+				this.chairId = j.getString(name);
 			}else if("seq".equalsIgnoreCase(name)){
 				this.seq = j.getString(name);
 			}else if("homeIMSI".equalsIgnoreCase(name)){
 				this.homeIMSI = j.getString(name);
+			}else if("passportId".equalsIgnoreCase(name)){
+				this.passportId = j.getString(name);
+			}else if("passportName".equalsIgnoreCase(name)){
+				this.passportName = j.getString(name);
 			}
 		};
 		
@@ -186,12 +194,12 @@ public class Subscriber {
 		this.chair = chair;
 	}
 
-	public String getChairID() {
-		return chairID;
+	public String getChairId() {
+		return chairId;
 	}
 
-	public void setChairID(String chairID) {
-		this.chairID = chairID;
+	public void setChairId(String chairId) {
+		this.chairId = chairId;
 	}
 
 	public String getS2tIMSI() {
@@ -248,6 +256,22 @@ public class Subscriber {
 
 	public void setHomeIMSI(String homeIMSI) {
 		this.homeIMSI = homeIMSI;
+	}
+
+	public String getPassportId() {
+		return passportId;
+	}
+
+	public void setPassportId(String passportId) {
+		this.passportId = passportId;
+	}
+
+	public String getPassportName() {
+		return passportName;
+	}
+
+	public void setPassportName(String passportName) {
+		this.passportName = passportName;
 	}
 
 	

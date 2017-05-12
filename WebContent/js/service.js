@@ -7,6 +7,7 @@ angular.module('mService',[])
 					method:'POST',
 					url:url,
 					data:params,
+				    cache: false,
 					headers:{
 						'Content-Type':'application/x-www-form-urlencoded',
 						'Accept': 'application/json'},

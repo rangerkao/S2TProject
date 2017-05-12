@@ -43,7 +43,7 @@ angular.module('MainApp')
 			
 			country.sort();
 			pricePlanId.sort();
-			console.log(log);
+			//console.log(log);
 			self.country=country;
 			self.pricePlanId=pricePlanId;
 		}

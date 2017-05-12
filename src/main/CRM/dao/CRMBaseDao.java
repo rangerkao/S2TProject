@@ -25,19 +25,34 @@ public class CRMBaseDao extends BaseDao{
 		
 		Statement st1 = null;
 		ResultSet rs = null ;
-		String sql = "SELECT MAX(A.SERVICEID) SERVICEID "
+		
+		String sql1 = " SELECT SERVICEID  from service where SERVICECODE = '"+s2tMsisdn+"' and DateCanceled is null ";
+		
+		
+		String sql2 = "SELECT MAX(A.SERVICEID) SERVICEID "
 					+ "FROM SERVICE A "
 					+ "where A.SERVICECODE = '"+s2tMsisdn+"' ";
 		
 		Connection conn = getConn1();
+
 		try {
 			st1 = conn.createStatement();
 			
-			System.out.println("sql:"+sql);
-			rs = st1.executeQuery(sql);
-			
+			System.out.println("sql:"+sql1);
+			rs = st1.executeQuery(sql1);
 			while(rs.next()){
 				serviceid = rs.getString("SERVICEID");
+			}
+			
+			if(serviceid==null||"".equals(serviceid)){
+				rs.close();
+				
+				System.out.println("sql:"+sql2);
+				rs = st1.executeQuery(sql2);
+				
+				while(rs.next()){
+					serviceid = rs.getString("SERVICEID");
+				}
 			}
 
 		}finally{
@@ -59,7 +74,7 @@ public class CRMBaseDao extends BaseDao{
 		ResultSet rs = null ;
 		String sql = "select A.SERVICEID "
 					+ "from FOLLOWMEDATA A "
-					+ "where A.FOLLOWMENUMBER = '"+chtMsisdn+"'";
+					+ "where A.FOLLOWMENUMBER = '"+chtMsisdn+"' ";
 		Connection conn = getConn1();
 		try {
 			st = conn.createStatement();

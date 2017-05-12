@@ -79,8 +79,8 @@ public class QosDao extends CRMBaseDao {
 				+ "FROM QOS_PROVISION_LOG A "
 				+ "WHERE 1=1 "
 				+ "AND A.CERATE_TIME > to_date('"+activedate+"','yyyy/MM/dd hh24:mi:ss') "
-				+ ("".equals(canceldate) ?"": "AND A.CERATE_TIME < to_date('"+canceldate+"','yyyy/MM/dd hh24:mi:ss') ")
-				+ (imsi!=null && !"".equals(imsi) ? "AND A.IMSI like '"+imsi+"' " : "")
+				+ ("".equals(canceldate) ?"": "AND A.CERATE_TIME <= to_date('"+canceldate+"','yyyy/MM/dd hh24:mi:ss')+1 ")
+				//+ (imsi!=null && !"".equals(imsi) ? "AND A.IMSI like '"+imsi+"' " : "")
 				+ (msisdn!=null && !"".equals(msisdn) ? "AND A.MSISDN like '"+msisdn+"' " : "")
 				+ "ORDER BY A.CERATE_TIME DESC ";
 

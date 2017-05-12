@@ -34,14 +34,14 @@ public class CurrentDao extends BaseDao {
 	
 	public List<CurrentMonth> queryCurrentMonth() throws Exception{
 		
-		imsitoServiceID = CacheAction.getImsitoServiceID();
+		/*imsitoServiceID = CacheAction.getImsitoServiceID();
 		serviceIDtoIMSI = CacheAction.getServiceIDtoIMSI();
 		if(imsitoServiceID.size()==0){
 			CacheAction.reloadServiceIDwithIMSIMappingCache();
 			imsitoServiceID = CacheAction.getImsitoServiceID();
 			serviceIDtoIMSI = CacheAction.getServiceIDtoIMSI();
 			//createConnection();
-		}
+		}*/
 		
 		String sql=
 				"SELECT A.MONTH,A.SERVICEID,A.CHARGE,A.VOLUME,A.SMS_TIMES,A.LAST_ALERN_THRESHOLD,A.LAST_ALERN_VOLUME,A.EVER_SUSPEND,A.LAST_FILEID "
@@ -196,14 +196,14 @@ public class CurrentDao extends BaseDao {
 	}
 	
 	public List<CurrentDay> queryCurrentDay() throws Exception{
-		imsitoServiceID = CacheAction.getImsitoServiceID();
+		/*imsitoServiceID = CacheAction.getImsitoServiceID();
 		serviceIDtoIMSI = CacheAction.getServiceIDtoIMSI();
 		if(imsitoServiceID.size()==0){
 			CacheAction.reloadServiceIDwithIMSIMappingCache();
 			imsitoServiceID = CacheAction.getImsitoServiceID();
 			serviceIDtoIMSI = CacheAction.getServiceIDtoIMSI();
 			//createConnection();
-		}
+		}*/
 		
 		String sql=				
 				"SELECT A.DAY,SUBSTR(MCCMNC,4)||'('||(case when B.NAME is not null then  B.NAME else substr(A.MCCMNC,0,3) end)||')' MCCMNC,A.SERVICEID,A.CHARGE,A.VOLUME,A.ALERT,A.LAST_FILEID "

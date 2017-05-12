@@ -1,5 +1,5 @@
 angular.module('MainApp')
-	.controller('SubscriberCtrl',['AjaxService','ActionService','$scope',function(AjaxService,ActionService,$scope){
+	.controller('SubscriberCtrl',['AjaxService','ActionService','$rootScope',function(AjaxService,ActionService,$rootScope){
 		var self=this;
 		self.testMode = false;
 		self.hideNotNecessary = false;
@@ -30,7 +30,9 @@ angular.module('MainApp')
 					'createtime':'',
 					'updatetime':'',
 					'chair':'',
-					'chairID':''
+					'chairId':'',
+					'passportId':'',
+					'passportName':''
 				};
 			angular.copy(self.custInfo,self.origincustInfo);
 			//Customer column edit show control
@@ -57,7 +59,11 @@ angular.module('MainApp')
 					'updatetime':false,
 					
 					'chair':false,
-					'chairID':false
+					'chairId':false,
+					
+					'passportId':false,
+					'passportName':false
+					
 				};
 		};
 		
@@ -75,10 +81,12 @@ angular.module('MainApp')
 		           {url:'web/CRM/subscriber/currentMonth.jsp',title:'數據用量月累計',content:'數據用量月累計',active:false,disabled:false},
 		           {url:'web/CRM/subscriber/currentDay.jsp',title:'數據用量日累計',content:'數據用量日累計',active:false,disabled:false},
 		           {url:'web/CRM/subscriber/dataRate.jsp',title:'各國費率表',content:'各國費率表',active:false,disabled:false},
-		           {url:'web/CRM/subscriber/nameVarified.jsp',title:'實名制登記',content:'實名制登記',active:false,disabled:false}
+		           {url:'web/CRM/subscriber/nameVarified.jsp',title:'實名制登記',content:'實名制登記',active:false,disabled:false},
+		           {url:'web/CRM/subscriber/queryNameVarified.jsp',title:'實名制登記查詢',content:'實名制登記查詢',active:false,disabled:false}
 		           ];
 		
-		self.radioList=[{id:"id",name:"ID"},
+		self.radioList=[{id:"psid",name:"護照ID"},
+						{id:"id",name:"ID"},
 		                {id:"name",name:"名稱"},
 		                {id:"s2tm",name:"香港號"},
 		                {id:"main",name:"Home MSISDN"},
@@ -95,7 +103,7 @@ angular.module('MainApp')
 		self.show = true;
 		//Edit column control
 		self.infoEditMod = function(col){
-			if(self.role=='noc')
+			if($rootScope.role=='noc'||$rootScope.role=='noc')
 				return;
 			self.show = !self.show;
 			/*if(self.infoEditable){
@@ -118,12 +126,11 @@ angular.module('MainApp')
 				
 			}
 			
-			
+			//console.log(self.custInfo[col]+":"+self.origincustInfo[col]);
 			if(self.custInfo[col]!=self.origincustInfo[col]){
 				self.infoCahnge[col]=true;
 			}else{
 				self.infoCahnge[col]=false;
-			
 			}
 
 			self.showSave = false;
@@ -164,16 +171,16 @@ angular.module('MainApp')
 					if(self.session.length==0){
 						alert("查無Session資料");
 					}else{
-						self.role=self.session["s2t.role"];
-						//alert(self.role);
+						$rootScope.role = self.session["s2t.role"];
+						//alert($rootScope.role);
 						self.infoEditable = true;
 						self.appEditable = true;
-						/*if(self.role =='admin'){
+						/*if($rootScope.role =='admin'){
 							self.infoEditable = true;
 							self.appEditable = true;
 						}*/
 						
-						if(self.role =='apply_Proccesser'){
+						if($rootScope.role =='apply_Proccesser'){
 							self.showControl(false);
 						}else{
 							self.showControl(true);
@@ -298,8 +305,14 @@ angular.module('MainApp')
 						self.custInfo.seq=data['data'].seq;
 					if(data['data'].chair)
 						self.custInfo.chair=data['data'].chair;
-					if(data['data'].chairID)
-						self.custInfo.chairID=data['data'].chairID;
+					if(data['data'].chairId)
+						self.custInfo.chairId=data['data'].chairId;
+					
+					if(data['data'].passportId)
+						self.custInfo.passportId=data['data'].passportId;
+					
+					if(data['data'].passportName)
+						self.custInfo.passportName=data['data'].passportName;
 				};
 		    }).error(function(data, status, headers, config) {   
 		           alert("error");
@@ -332,13 +345,15 @@ angular.module('MainApp')
 				action='queryListByVLN';
 			else if(self.selectedType=='imsi')
 				action='queryListByS2tIMSI';
+			else if(self.selectedType=='psid')
+				action='queryListByPassPortId';
 			
 			self.custInfo = [];
 			self.IDList=[];
 			self.subReset();
 			AjaxService.query(action,{input:self.input})
 			.success(function(data, status, headers, config) {
-				console.log(data);
+				//console.log(data);
 				if(data['error']){
 					alert(data['error']);
 					ActionService.unblock();
@@ -352,7 +367,7 @@ angular.module('MainApp')
 						ActionService.unblock();
 					}else{
 						if(self.IDList.length==1){
-							console.log(self.IDList[0].serviceId);
+//							console.log(self.IDList[0].serviceId);
 							if(self.IDList[0].serviceId && self.IDList[0].serviceId != ''){
 								/*self.chooseServiceId(self.IDList[0].serviceId);*/
 								self.chooseItem(self.IDList[0]);
@@ -401,7 +416,8 @@ angular.module('MainApp')
 					self.custInfo.privePlanId, self.custInfo.activatedDate, self.custInfo.canceledDate, 
 					self.custInfo.homeIMSI);
 			//
-			self.queryNameVarified(self.custInfo.serviceId,self.custInfo.chtMsisdn,self.custInfo.s2tMsisdn);
+			self.queryNameVarified(self.custInfo.serviceId,self.custInfo.chtMsisdn,self.custInfo.s2tMsisdn,self.custInfo.privePlanId.id,
+					self.custInfo.passportName,self.custInfo.passportId);
 			//
 			ActionService.unblock();
 		}
@@ -416,7 +432,7 @@ angular.module('MainApp')
 				if(data['error']){
 					alert(data['error']);
 				}else{
-					console.log(data['data']);
+//					console.log(data['data']);
 					if(data['data'].length==0)
 						alert("無此客戶！");
 					else{
@@ -437,7 +453,8 @@ angular.module('MainApp')
 								self.custInfo.privePlanId, self.custInfo.activatedDate, self.custInfo.canceledDate, 
 								self.custInfo.homeIMSI);
 						//
-						self.queryNameVarified(self.custInfo.serviceId,self.custInfo.chtMsisdn,self.custInfo.s2tMsisdn);
+						self.queryNameVarified(self.custInfo.serviceId,self.custInfo.chtMsisdn,self.custInfo.s2tMsisdn,self.custInfo.privePlanId.id,
+								self.custInfo.passportName,self.custInfo.passportId);
 						//
 					}
 				}
@@ -451,32 +468,35 @@ angular.module('MainApp')
 		};
 		
 		self.querySMS = function(s2tMsisdn,chtMsisdn,activatedDate,canceledDate){
-			
-			$scope.$broadcast('querySMS',{s2tMsisdn:s2tMsisdn,chtMsisdn:chtMsisdn,activatedDate:activatedDate,canceledDate:canceledDate});
+			$rootScope.$broadcast('querySMS',{
+				s2tMsisdn:s2tMsisdn,chtMsisdn:chtMsisdn,activatedDate:activatedDate,canceledDate:canceledDate
+			});
 		};
 		self.queryQosList = function(s2tMsisdn,activatedDate,canceledDate){
-			$scope.$broadcast('queryQos',{s2tMsisdn:s2tMsisdn,activatedDate:activatedDate,canceledDate:canceledDate});
+			$rootScope.$broadcast('queryQos',{s2tMsisdn:s2tMsisdn,activatedDate:activatedDate,canceledDate:canceledDate});
 		};
 		self.queryAppList = function(serviceId){
-			$scope.$broadcast('queryApp',{serviceId:serviceId});
+			$rootScope.$broadcast('queryApp',{serviceId:serviceId});
 		};
 		self.queryMonth = function(serviceId){
-			$scope.$broadcast('queryMonth',{serviceId:serviceId});
+			$rootScope.$broadcast('queryMonth',{serviceId:serviceId});
 		};
 		self.queryDay = function(serviceId){
-			$scope.$broadcast('queryDay',{serviceId:serviceId});
+			$rootScope.$broadcast('queryDay',{serviceId:serviceId});
 		};
 		self.queryElse = function(s2tMsisdn,serviceid,s2tIMSI,privePlanId,activatedDate,canceledDate,homeIMSI){
-			$scope.$broadcast('queryElse',{s2tMsisdn:s2tMsisdn,serviceid:serviceid,s2tIMSI:s2tIMSI,
+			$rootScope.$broadcast('queryElse',{s2tMsisdn:s2tMsisdn,serviceid:serviceid,s2tIMSI:s2tIMSI,
 				privePlanId:privePlanId,activatedDate:activatedDate,canceledDate:canceledDate,homeIMSI:homeIMSI});
 		};
-		self.queryNameVarified=function(serviceId,chtMsisdn,s2tMsisdn){
-			$scope.$broadcast('queryNameVarified',{serviceId:serviceId,chtMsisdn:chtMsisdn,s2tMsisdn:s2tMsisdn});
+		self.queryNameVarified=function(serviceId,chtMsisdn,s2tMsisdn,priceplanId,passportName,passportId){
+			$rootScope.$broadcast('queryNameVarified',{
+				serviceId:serviceId,chtMsisdn:chtMsisdn,s2tMsisdn:s2tMsisdn,priceplanId:priceplanId,passportName:passportName,passportId:passportId
+			});
 		}
 		//
 		
 		self.subReset = function(){
-			$scope.$broadcast('subReset',{});
+			$rootScope.$broadcast('subReset',{});
 		}
 		
 
@@ -490,7 +510,7 @@ angular.module('MainApp')
 			
 			if(self.custInfo.type == 'P'){
 				self.custInfo.chair = '';
-				self.custInfo.chairID = '';
+				self.custInfo.chairId = '';
 			}
 			
 			var updateInfo={		
@@ -506,7 +526,9 @@ angular.module('MainApp')
 					'agency':self.custInfo['agency'],
 					'type':self.custInfo['type'],
 					'chair':self.custInfo['chair'],
-					'chairID':self.custInfo['chairID']
+					'chairId':self.custInfo['chairId'],
+					'passportId':self.custInfo['passportId'],
+					'passportName':self.custInfo['passportName']
 				};
 				
 			AjaxService.query('updateSubscriber',{input:angular.toJson(updateInfo)})
@@ -530,7 +552,9 @@ angular.module('MainApp')
 					self.custInfo['agency'] = info['agency'];
 					self.custInfo['type'] = info['type'];
 					self.custInfo['chair'] = info['chair'];
-					self.custInfo['chairID'] = info['chairID'];
+					self.custInfo['chairId'] = info['chairId'];
+					self.custInfo['passportId'] = info['passportId'];
+					self.custInfo['passportName'] = info['passportName'];
 					angular.copy(self.custInfo,self.origincustInfo);
 					
 				}
@@ -551,4 +575,23 @@ angular.module('MainApp')
 			self.init();			
 		});	
 		
+	}])
+	.filter('hideData',['$rootScope',function($rootScope){
+		return function(data){
+			
+			if(!data) return '';
+			
+			if($rootScope.role=="helen") return data;
+			
+			var s = '';
+		
+			data = ""+data;
+			
+			s = data.substring(0,1)+"*****"+ data.substring(data.length-1,data.length);
+			/*for(var i = 0 ; i < data.length ; i++){
+				s+= '*';
+			}*/
+			
+			return s;
+		};	
 	}]);

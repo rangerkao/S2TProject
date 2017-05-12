@@ -48,12 +48,12 @@ angular.module('MainApp')
 			if(!serviceId || serviceId == '')
 				return;
 			self.elseMsg = "查詢中...";
-			AjaxService.query("queryVLN",{input:serviceId})
+			AjaxService.query("queryVLNStatus",{input:serviceId})
 			.success(function(data, status, headers, config) {
 				if(data['error']){
 					alert(data['error']);
 				}else{
-					console.log(data['data']);
+//					console.log(data['data']);
 					self.VLNs=data['data'];
 						for(var i = 0 ;i<self.VLNs.length;i++){
 							self.VLN += self.VLNs[i]+',';
@@ -81,8 +81,8 @@ angular.module('MainApp')
 				}else{
 					
 					self.addons=data['data'];
-					console.log(self.addons);
-					console.log(self.addons.length);
+//					console.log(self.addons);
+//					console.log(self.addons.length);
 					/*angular.forEach(data['data'][0],function(obj,key){
 						alert(obj+","+key);
 					});*/
@@ -127,8 +127,8 @@ angular.module('MainApp')
 				}else{
 					
 					self.USPackets=data['data'];
-					console.log(self.USPackets);
-					console.log(self.USPackets.length);
+//					console.log(self.USPackets);
+//					console.log(self.USPackets.length);
 					/*angular.forEach(data['data'][0],function(obj,key){
 						alert(obj+","+key);
 					});*/

@@ -100,15 +100,15 @@ public class BaseDao{
 		return conn3;*/
 	}
 	
-	public void closeConn1(Connection conn){
+	public void closeConn1(Connection conn) throws SQLException{
 		CacheAction.releaseConn1(conn);
 	}
 	
-	public void closeConn2(Connection conn){
+	public void closeConn2(Connection conn) throws SQLException{
 		CacheAction.releaseConn2(conn);
 	}
 	
-	public void closeConn3(Connection conn){
+	public void closeConn3(Connection conn) throws SQLException{
 		CacheAction.releaseConn3(conn);
 	}
 	

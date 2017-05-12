@@ -24,9 +24,13 @@ public class SubscriberService extends BaseService{
 	@Resource
 	SubscriberDao subscriberDao;
 	
-	
 	public List<Subscriber> queryListById(String id) throws Exception{
 		List<Subscriber> result = subscriberDao.queryListById(id);
+		return result;
+	}
+	
+	public List<Subscriber> queryListByPassPortId(String id) throws Exception{
+		List<Subscriber> result = subscriberDao.queryListByPassPortId(id);
 		return result;
 	}
 	
@@ -81,6 +85,7 @@ public class SubscriberService extends BaseService{
 	
 	public List<String> queryVLN(String serviceId) throws Exception{
 		List<String> result =  subscriberDao.queryVLN(serviceId);
+		result.addAll(subscriberDao.queryWhetherAppliedCHNA(serviceId));
 		return result;
 	}
 	

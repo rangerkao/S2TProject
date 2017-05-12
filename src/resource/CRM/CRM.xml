@@ -65,6 +65,7 @@
 		</global-results>
 		
 		<action name="queryListById" class="main.CRM.action.SubscriberAction" method="queryListById"></action>
+		<action name="queryListByPassPortId" class="main.CRM.action.SubscriberAction" method="queryListByPassPortId"></action>
         <action name="queryListByName" class="main.CRM.action.SubscriberAction" method="queryListByName"></action>
         <action name="queryListByVLN" class="main.CRM.action.SubscriberAction" method="queryListByVLN"></action>
         <action name="queryListByS2tMisidn" class="main.CRM.action.SubscriberAction" method="queryListByS2tMisidn"></action>
@@ -74,7 +75,7 @@
         
         <action name="queryDataById" class="main.CRM.action.SubscriberAction" method="queryDataById"></action>
         <action name="queryDataByServiceId" class="main.CRM.action.SubscriberAction" method="queryDataByServiceId"></action>
-        <action name="queryVLN" class="main.CRM.action.SubscriberAction" method="queryVLN"></action>
+        <action name="queryVLNStatus" class="main.CRM.action.SubscriberAction" method="queryVLN"></action>
         <action name="queryAddonService" class="main.CRM.action.SubscriberAction" method="queryAddonService"></action>
         <action name="getGPRSStatus" class="main.CRM.action.SubscriberAction" method="getGPRSStatus"></action>
         <action name="queryUSPacket" class="main.CRM.action.SubscriberAction" method="queryUSPacket"></action>
@@ -97,8 +98,9 @@
         <action name="queryCurrentDay" class="main.CRM.action.CurrentAction" method="queryCurrentDay" />
         <action name="queryCurrentMonth" class="main.CRM.action.CurrentAction" method="queryCurrentMonth" />
 
-		<action name="insertOrModifiedNameVarifiedData" class="main.CRM.action.NameVarifiedAction" method="insertOrModifiedNameVarifiedData" />
 		<action name="queeryNameVarifiedData" class="main.CRM.action.NameVarifiedAction" method="queeryNameVarifiedData" />
-		<action name="cancelNameVarifiedDataSendDate" class="main.CRM.action.NameVarifiedAction" method="cancelNameVarifiedDataSendDate" />
+		<action name="updateNameVarifiedData" class="main.CRM.action.NameVarifiedAction" method="updateNameVarifiedData" />
+		<action name="addNameVarifiedData" class="main.CRM.action.NameVarifiedAction" method="addNameVarifiedData" />
+		<action name="queryVLN" class="main.CRM.action.NameVarifiedAction" method="queryVLN" />
 	</package>
 </struts>

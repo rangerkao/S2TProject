@@ -41,7 +41,7 @@
 					  	</tr>
 					</table>
 				</modal>	
-				<input type="button" value="產生客戶總表" class="btn btn-success btn-xs"  ng-click="sCtrl.downLoadExcel()" >
+				<input type="button" value="產生客戶總表" class="btn btn-success btn-xs"  ng-click="sCtrl.downLoadExcel()" ng-disabled="(role!='helen' && role != 'admin')" >
 				<input type="button" value="save" class="btn btn-danger btn-xs" style="margin-left: 50px;" ng-click="sCtrl.updateSubscriber()"  ng-show="sCtrl.showSave&&!sCtrl.hideNotNecessary">
 			<!-- 	<button data-toggle="modal" data-target="#serviceidModal" class="btn btn-success btn-xs" >choose serviceId</button>
 				<modal title="Choose a serviceid" id="serviceidModal">
@@ -81,12 +81,12 @@
 				</div>
 				<div class="col-sm-3" align="left" ng-dblclick="sCtrl.infoEditMod('name')" ng-hide="sCtrl.hideNotNecessary">
 					<label>姓名　　　　　：</label>
-					<span ng-bind="sCtrl.custInfo.name" ng-show="sCtrl.show"></span>
+					<span ng-show="sCtrl.show">{{sCtrl.custInfo.name}}</span>
 					<input id="T1" type="text" ng-model = "sCtrl.custInfo.name" ng-show="!sCtrl.show"" ng-change="sCtrl.whenInfoCahnge('name')"  >
 				</div>
 				<div class="col-sm-6" align="left" ng-dblclick="sCtrl.infoEditMod('idTaxid')" ng-hide="sCtrl.hideNotNecessary">
 					<label>統一編號／證號：</label>
-					<span ng-bind="sCtrl.custInfo.idTaxid" ng-show="sCtrl.show""></span>
+					<span ng-show="sCtrl.show"">{{sCtrl.custInfo.idTaxid | hideData}}</span>
 					<input id="T2" ng-keydown="sCtrl.onDataKeyDownToBringData($event)" type="text" ng-model = "sCtrl.custInfo.idTaxid" ng-show="!sCtrl.show" ng-change="sCtrl.whenInfoCahnge('idTaxid')">
 					<a type="button" value="帶入資料" ng-click="sCtrl.queryInfo()" class="btn btn-danger btn-xs" ng-show="!sCtrl.show">帶入資料</a>
 				</div>
@@ -96,15 +96,15 @@
 					<span ng-bind="sCtrl.custInfo.chair" ng-show="sCtrl.show"></span>
 					<input type="text" ng-model = "sCtrl.custInfo.chair" ng-show="!sCtrl.show" ng-change="sCtrl.whenInfoCahnge('chair')">
 				</div>
-				<div class="col-sm-3" align="left" ng-dblclick="sCtrl.infoEditMod('chairID')" ng-show="!sCtrl.hideNotNecessary">
+				<div class="col-sm-3" align="left" ng-dblclick="sCtrl.infoEditMod('chairId')" ng-show="!sCtrl.hideNotNecessary">
 					<label>負責人ＩＤ　　：</label>
-					<span ng-bind="sCtrl.custInfo.chairID" ng-show="sCtrl.show"></span>
-					<input type="text" ng-model = "sCtrl.custInfo.chairID" ng-show="!sCtrl.show" ng-change="sCtrl.whenInfoCahnge('chairID')">
+					<span ng-show="sCtrl.show">{{sCtrl.custInfo.chairId | hideData}}</span>
+					<input type="text" ng-model = "sCtrl.custInfo.chairId" ng-show="!sCtrl.show" ng-change="sCtrl.whenInfoCahnge('chairId')">
 				</div>
 				
 				<div class="col-sm-3" align="left" ng-dblclick="sCtrl.infoEditMod('phone')" ng-hide="sCtrl.hideNotNecessary">
 					<label>聯絡電話　　　：</label>
-					<span ng-bind="sCtrl.custInfo.phone" ng-show="sCtrl.show""></span>
+					<span ng-show="sCtrl.show">{{sCtrl.custInfo.phone | hideData}}</span>
 					<input type="text" ng-model = "sCtrl.custInfo.phone" ng-show="!sCtrl.show" ng-change="sCtrl.whenInfoCahnge('phone')">
 				</div>
 				<div class="col-sm-3" align="left" ng-dblclick="sCtrl.infoEditMod('birthday')" ng-hide="sCtrl.hideNotNecessary">
@@ -115,13 +115,13 @@
 				
 				<div class="col-sm-6" align="left" ng-dblclick="sCtrl.infoEditMod('permanentAddress')" ng-hide="sCtrl.hideNotNecessary">
 					<label>戶籍地址　　　：</label> 
-					<span ng-bind="sCtrl.custInfo.permanentAddress" ng-show="sCtrl.show"></span>
+					<span ng-show="sCtrl.show">{{sCtrl.custInfo.permanentAddress | hideData}}</span>
 					<input type="text" ng-model = "sCtrl.custInfo.permanentAddress" ng-show="!sCtrl.show" ng-change="sCtrl.whenInfoCahnge('permanentAddress')">
 				</div>
 				
 				<div class="col-sm-6" align="left" ng-dblclick="sCtrl.infoEditMod('billingAddress')" ng-hide="sCtrl.hideNotNecessary">
 					<label>帳單地址　　　：</label>
-					<span ng-bind="sCtrl.custInfo.billingAddress" ng-show="sCtrl.show""></span>
+					<span  ng-show="sCtrl.show">{{sCtrl.custInfo.billingAddress | hideData}}</span>
 					<input type="text" ng-model = "sCtrl.custInfo.billingAddress" ng-show="!sCtrl.show" ng-change="sCtrl.whenInfoCahnge('billingAddress')">
 				</div>
 				<div class="col-sm-3" align="left" ng-dblclick="sCtrl.infoEditMod('email')" ng-hide="sCtrl.hideNotNecessary">
@@ -135,6 +135,17 @@
 						<input type="radio" name="type" ng-model="sCtrl.custInfo.type" ng-disabled="sCtrl.show.type" ng-change="sCtrl.whenInfoCahnge('type')" value="P">個人
 						<input type="radio" name="type" ng-model="sCtrl.custInfo.type" ng-disabled="sCtrl.show.type" ng-change="sCtrl.whenInfoCahnge('type')" value="E">公司
 					</label>
+				</div>
+				<!-- 20170321 add -->
+				<div class="col-sm-3" align="left" ng-dblclick="sCtrl.infoEditMod('passportName')" ng-hide="sCtrl.hideNotNecessary">
+					<label>護照姓名　	　：</label>
+					<span ng-bind="sCtrl.custInfo.passportName" ng-show="sCtrl.show"></span>
+					<input type="text" ng-model = "sCtrl.custInfo.passportName" ng-show="!sCtrl.show" ng-change="sCtrl.whenInfoCahnge('passportName')">
+				</div>
+				<div class="col-sm-3" align="left" ng-dblclick="sCtrl.infoEditMod('passportId')" ng-hide="sCtrl.hideNotNecessary">
+					<label>護照ID		　　：</label>
+					<span ng-show="sCtrl.show">{{sCtrl.custInfo.passportId | hideData}}</span>
+					<input type="text" ng-model = "sCtrl.custInfo.passportId" ng-show="!sCtrl.show" ng-change="sCtrl.whenInfoCahnge('passportId')">
 				</div>
 				
 	
