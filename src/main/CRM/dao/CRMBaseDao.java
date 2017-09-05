@@ -90,20 +90,22 @@ public class CRMBaseDao extends BaseDao{
 				
 				rs.close();
 				String time = null;
+				String workType = null;
 				
-				sql = "Select  A.S2T_MSISDN,A.S2T_IMSI,to_char(A.CMCC_OPERATIONDATE,'yyyyMMddhh24miss') TIME "
+				sql = "Select  A.S2T_MSISDN,A.S2T_IMSI,to_char(A.CMCC_OPERATIONDATE,'yyyyMMddhh24miss') TIME,A.WORK_TYPE "
 						+ "from S2T_TB_TYPB_WO_SYNC_FILE_DTL A "
 						+ "where (A.FORWARD_TO_HOME_NO like '%"+chtMsisdn+"%' or A.FORWARD_TO_S2T_NO_1 like '%"+chtMsisdn+"%' ) "
 						+ "AND trim(A.S2T_MSISDN) is not null "
-						+ "order by A.WORK_ORDER_NBR ";
+						+ "order by A.WORK_ORDER_NBR DESC ";
 				
 				System.out.println("sql:"+sql);
 				rs = st.executeQuery(sql);
 				
 				String s2tMsisdn = null;
-				while(rs.next()){
+				if(rs.next()){
 					time = rs.getString("TIME");
 					s2tMsisdn = rs.getString("S2T_MSISDN");
+					workType = rs.getString("WORK_TYPE");
 				}
 				
 				rs = null;
@@ -111,8 +113,8 @@ public class CRMBaseDao extends BaseDao{
 				sql = "select A.SERVICEID "
 						+ "from service A "
 						+ "where A.servicecode = '"+s2tMsisdn+"' "
-						+ "and A.DATEACTIVATED<to_date('"+time+"','yyyyMMddhh24miss') and (A.DATECANCELED is null or A.DATECANCELED>to_date('"+time+"','yyyyMMddhh24miss')) ";
-				
+						+ "and A.DATEACTIVATED<to_date('"+time+"','yyyyMMddhh24miss') "
+						+ "and "+("99".equals(workType)?"A.DATECANCELED>to_date('"+time+"','yyyyMMddhh24miss')" : "A.DATECANCELED is null");				
 				System.out.println(sql);
 				rs = st.executeQuery(sql);
 				

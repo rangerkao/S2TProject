@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8"%>
 <div ng-controller="CRMNameVarified as nCtrl">
 	<h4>{{tab.title}}({{nCtrl.nvMsg}})</h4>
+	<h1 id="msg" style="color: red; "></h1>
+	
 	<table class="dataTable" style="width: 80%;">
 		<tr class="chinaArea">
 			<th colspan="{{nCtrl.dataHeader1.length}}"  bgcolor="#ff9933">中國</th>
@@ -74,6 +76,14 @@
 		</tr>
 		
 		<tr ng-repeat-start="item in nCtrl.history.sgp"  style="background-color: rgb(200, 200, 200);border-bottom-color: black;border-bottom-style: solid;border-bottom-width: 0.5px;">
+			<td ng-repeat="header in nCtrl.dataHeader1" >{{item[header.col]}}</td>
+		</tr>
+		<tr ng-repeat-end style="background-color: rgb(200, 200, 200);border-bottom-color: black;border-bottom-style: solid;border-bottom-width: 2px;">
+			<td ng-repeat="header in nCtrl.dataHeader2"  colspan="{{header.colSize}}">{{item[header.col]}}</td>
+			<td></td>
+		</tr>
+		
+		<tr ng-repeat-start="item in nCtrl.history.msisdn"  style="background-color: rgb(200, 200, 200);border-bottom-color: black;border-bottom-style: solid;border-bottom-width: 0.5px;">
 			<td ng-repeat="header in nCtrl.dataHeader1" >{{item[header.col]}}</td>
 		</tr>
 		<tr ng-repeat-end style="background-color: rgb(200, 200, 200);border-bottom-color: black;border-bottom-style: solid;border-bottom-width: 2px;">

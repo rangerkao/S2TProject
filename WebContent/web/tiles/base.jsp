@@ -22,6 +22,17 @@
 <!-- CommonCss -->
 <link rel="stylesheet" href="css/common.css">
 
+<style type="text/css">
+.custInfo label{
+	/*width: 75px;*/
+}
+.custInfo{
+}
+
+
+
+</style>
+
 </head>
 <body>
 	<tiles:insertAttribute name="page"/>
@@ -66,7 +77,7 @@
 	<script src="js/CRM/CurrentMonth.js"></script>
 	<script src="js/CRM/CurrentDay.js"></script>
 	<script src="js/CRM/DataRate.js"></script>
-	<script src="js/CRM/Else.js"></script>
+	<script src="js/CRM/Else.js?20170608"></script>
 	<script src="js/CRM/NameVarified.js?20170426"></script>
 	<script src="js/CRM/QueryNameVarified.js"></script>
 	

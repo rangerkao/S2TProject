@@ -111,6 +111,50 @@ public class NameVarifiedDao extends CRMBaseDao{
 		
 		return list;
 	}
+	
+	public List<NameVarified>  queeryNameVarifiedDataSameMsisdn(String msisdn) throws Exception{
+		List<NameVarified> list = new ArrayList<NameVarified>();
+		String sql =""
+				+ "select A.SERVICEID,A.NAME,A.ID,A.TYPE,A.REMARK,DATE_FORMAT(A.create_time,'%Y/%m/%d %H:%i:%s') TIME,A.send_date,A.msisdn,A.vln,A.status ,IFNULL(B.cou,0) cou "
+				+ "from CRM_DB.CRM_NAME_VERIFIED A left outer join (select id,count(1) cou from CRM_DB.CRM_NAME_VERIFIED  where status = 1  group by id) B on   A.id = B.id  "
+				+ "where A.msisdn = '"+msisdn+"' "
+				+ "order by status desc,TIME desc ";
+		
+		Statement st = null;
+		ResultSet rs = null;
+		Connection conn = null;
+		try {
+			conn =getConn3();
+			st = conn.createStatement();
+			System.out.println("sql : "+sql);
+			rs = st.executeQuery(sql);
+			while(rs.next()){
+				NameVarified c = new NameVarified();
+				c.setServiceid(processData(rs.getString("SERVICEID")));
+				c.setName(processData(rs.getString("NAME")));
+				c.setId(processData(rs.getString("ID")));
+				c.setType(processData(rs.getString("TYPE")));
+				c.setRemark(processData(rs.getString("REMARK")));
+				c.setCreateTime(processData(rs.getString("TIME")));
+				c.setSendDate(processData(rs.getString("send_date")));
+				c.setVln(processData(rs.getString("vln")));
+				c.setMsisdn(processData(rs.getString("msisdn")));
+				c.setStatus(rs.getString("status"));
+				c.setUsedCount(rs.getString("cou"));
+				list.add(c);
+			}
+		
+		}finally{
+			try {
+				if(st!=null) st.close();
+				if(rs!=null) rs.close();
+				
+			} catch (Exception e) { }
+			closeConn3(conn);//closeConnection();
+		}
+		return list;
+	}
+	
 	public List<NameVarified> queeryNameVarifiedData(String input,String type) throws Exception{
 		List<NameVarified> result = new ArrayList<NameVarified>();
 		
@@ -319,5 +363,4 @@ public class NameVarifiedDao extends CRMBaseDao{
 
 		return "SUCCESS";
 	}
-
 }

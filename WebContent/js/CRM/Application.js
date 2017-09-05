@@ -1,10 +1,11 @@
 angular.module('MainApp')
-	.controller('CRMAppCtrl',['AjaxService','DateFormatString','$scope',function(AjaxService,DateFormatString,$scope){
+	.controller('CRMAppCtrl',['AjaxService','DateFormatString','$scope','$rootScope',function(AjaxService,DateFormatString,$scope,$rootScope){
 		var self = this;
 		self.date = new Date();
 		$scope.$on('queryApp',function(event,data){
 			self.serviceId=data['serviceId'];
 			self.queryAppList(self.serviceId);
+			$rootScope.isAppliacted = false;
 		});
 		
 		$scope.$on('subReset',function(event,data){
@@ -33,6 +34,10 @@ angular.module('MainApp')
 					alert(data['error']);
 				}else{
 					self.appList=data['data'];
+					console.log(self.appList.length);
+					if(self.appList.length>0){
+						$rootScope.isAppliacted = true;
+					}
 					//alert("success");
 				}
 		    }).error(function(data, status, headers, config) {   

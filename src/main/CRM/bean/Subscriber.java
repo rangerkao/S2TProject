@@ -40,6 +40,9 @@ public class Subscriber {
 	
 	String homeIMSI="";
 	
+	
+	String nowS2tActivated = "0";
+	
 	public Subscriber(){
 		
 	}
@@ -272,6 +275,14 @@ public class Subscriber {
 
 	public void setPassportName(String passportName) {
 		this.passportName = passportName;
+	}
+
+	public String getNowS2tActivated() {
+		return nowS2tActivated;
+	}
+
+	public void setNowS2tActivated(String nowS2tActivated) {
+		this.nowS2tActivated = nowS2tActivated;
 	}
 
 	

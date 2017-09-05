@@ -58,7 +58,7 @@
 				</div>
 			</div>
 			<div class="form-group elseInfoList" style="width: 100%">
-				<label class="col-sm-2 control-label">華人上網包:</label>
+				<label class="col-sm-2 control-label">加值服務(華人上網包:SX001、SX002；美國流量包:SX003):</label>
 				<div class="col-sm-10">
 					<div class="col-xs-12" ng-show="sCtrl.testMode"><input type="text" ng-model="eCtrl.addontest"><input type="button" value="addontest" ng-click="eCtrl.queryAddons(eCtrl.addontest)"></div>
 					<p ng-show="eCtrl.addons.length==0" class="form-control-static">無</p>
@@ -82,10 +82,10 @@
 					<div class="form-control-static">
 						<table border="1" style="width: 80%;" ng-show="eCtrl.USPackets.length>0">					
 							<tr>
-								<th>STARTDATE</th><th>ENDDATE</th><th>CREATETIME</th><th>CANCELTIME</th><th>ALERTED</th>
+								<th>STARTDATE</th><th>ENDDATE</th><th>CREATETIME</th><!-- <th>CANCELTIME</th> --><th>ALERTED</th>
 							</tr>
 							<tr ng-repeat="USPacket in eCtrl.USPackets">
-								<td>{{USPacket.startDate}}</td><td>{{USPacket.endDate}}</td><td>{{USPacket.createTime}}</td><td>{{USPacket.cancelTime}}</td><td>{{USPacket.alerted}}</td>
+								<td>{{USPacket.startDate}}</td><td>{{USPacket.endDate}}</td><td>{{USPacket.createTime}}</td><!-- <td>{{USPacket.cancelTime}}</td> --><td>{{USPacket.alerted}}</td>
 							</tr>
 						</table>
 					</div>

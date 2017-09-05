@@ -75,10 +75,12 @@
         
         <action name="queryDataById" class="main.CRM.action.SubscriberAction" method="queryDataById"></action>
         <action name="queryDataByServiceId" class="main.CRM.action.SubscriberAction" method="queryDataByServiceId"></action>
-        <action name="queryVLNStatus" class="main.CRM.action.SubscriberAction" method="queryVLN"></action>
-        <action name="queryAddonService" class="main.CRM.action.SubscriberAction" method="queryAddonService"></action>
-        <action name="getGPRSStatus" class="main.CRM.action.SubscriberAction" method="getGPRSStatus"></action>
-        <action name="queryUSPacket" class="main.CRM.action.SubscriberAction" method="queryUSPacket"></action>
+        
+        
+        <action name="queryVLNStatus" class="main.CRM.action.ElseAction" method="queryVLN"></action>
+        <action name="queryAddonService" class="main.CRM.action.ElseAction" method="queryAddonService"></action>
+        <action name="getGPRSStatus" class="main.CRM.action.ElseAction" method="getGPRSStatus"></action>
+        <action name="queryUSPacket" class="main.CRM.action.ElseAction" method="queryUSPacket"></action>
 
         <action name="updateSubscriber" class="main.CRM.action.SubscriberAction" method="updateSubscriber"></action>
         
@@ -99,6 +101,7 @@
         <action name="queryCurrentMonth" class="main.CRM.action.CurrentAction" method="queryCurrentMonth" />
 
 		<action name="queeryNameVarifiedData" class="main.CRM.action.NameVarifiedAction" method="queeryNameVarifiedData" />
+		<action name="queeryNameVarifiedDataSameMsisdn" class="main.CRM.action.NameVarifiedAction" method="queeryNameVarifiedDataSameMsisdn" />
 		<action name="updateNameVarifiedData" class="main.CRM.action.NameVarifiedAction" method="updateNameVarifiedData" />
 		<action name="addNameVarifiedData" class="main.CRM.action.NameVarifiedAction" method="addNameVarifiedData" />
 		<action name="queryVLN" class="main.CRM.action.NameVarifiedAction" method="queryVLN" />

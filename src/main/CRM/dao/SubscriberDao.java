@@ -22,7 +22,7 @@ public class SubscriberDao extends CRMBaseDao{
 	}
 
 	/**
-	 * 以ID查詢客戶清單
+	 * 以CRM ID查詢客戶清單
 	 * @param id
 	 * @return
 	 * @throws Exception
@@ -160,7 +160,7 @@ public class SubscriberDao extends CRMBaseDao{
 		Connection conn = getConn1();
 		String sql = "SELECT A.SERVICEID, A.VLN "
 				+ "FROM VLNNUMBER A "
-				+ "WHERE A.VLN = '"+VLN+"' ";
+				+ "WHERE A.vlnid <> A.serviceid AND A.VLN = '"+VLN+"' ";
 		String serviceId = null;
 
 		try{
@@ -232,13 +232,13 @@ public class SubscriberDao extends CRMBaseDao{
 		}
 		return result;
 	}
+	
 	/**
 	 * 以中華號查詢客戶清單
 	 * @param chtMsisdn
 	 * @return
 	 * @throws Exception
 	 */
-	
 	public List<Subscriber> queryListByChtMsisdn(String chtMsisdn) throws Exception{
 		List<Subscriber> result = new ArrayList<Subscriber>();
 		
@@ -255,6 +255,7 @@ public class SubscriberDao extends CRMBaseDao{
 		}
 		return result;
 	}
+	
 	/**
 	 * 以主號查詢客戶清單
 	 * @param mainMsisdn
@@ -612,24 +613,7 @@ public class SubscriberDao extends CRMBaseDao{
 				+ "FROM SERVICE A, TERMINATIONORDER B "
 				+ "WHERE A.SERVICEID=B.TERMOBJID and serviceid = "+id+" ";
 		
-		//20170310 add 查詢CHTMSISDN
-		//20170510 mod 以環球卡Table查詢
-		String sql4 = 
-				"			 select A.FOLLOWMENUMBER CHTMSISDN "
-				+ "		from FOLLOWMEDATA A"
-				+ "    	where A.serviceid = "+id+" AND A.FOLLOWMENUMBER LIKE '%886%'"
-				+ "		union all "
-				+ "       select * from (	"
-				+ "								select replace(A.FORWARD_TO_HOME_NO,'+','') CHTMSISDN "
-				+ "								from S2T_TB_TYPB_WO_SYNC_FILE_DTL A,SERVICE B "
-				+ "								where A.S2T_MSISDN = B.SERVICECODE "
-				+ "								AND A.SEND_TIME > B.DATEACTIVATED AND  (B.DATECANCELED is null  OR A.SEND_TIME <= B.DATECANCELED) "
-				+ "								AND B.SERVICEID ="+id+"  ORDER BY A.SEND_TIME DESC"
-				+ "						) WHERE rownum = 1 "
-				+ "		union all "
-				+ "		 select A.PARTNERMSISDN CHTMSISDN "
-				+ "		from AVAILABLEMSISDN A ,service B "
-				+ "		where B.serviceid = "+id+" and A.S2TMSISDN = B.servicecode ";
+		
 		
 		Statement st = null;
 		ResultSet rs = null;
@@ -676,7 +660,6 @@ public class SubscriberDao extends CRMBaseDao{
 
 		conn = null;
 		conn = getConn1();
-		String princePlanId = null;
 		try {
 			
 			st = conn.createStatement();
@@ -689,8 +672,9 @@ public class SubscriberDao extends CRMBaseDao{
 				result.setS2tMsisdn(rs.getString("S2TMSISDN"));
 				result.setS2tIMSI(rs.getString("IMSI"));
 				//result.setChtMsisdn(rs.getString("CHTMSISDN"));
-				princePlanId= rs.getString("PRICEPLANID");
-		
+				//princePlanId= rs.getString("PRICEPLANID");
+				result.setPrivePlanId(queryPricePlanId(rs.getString("PRICEPLANID")));
+				
 				result.setStatus(rs.getString("STAUS"));
 				
 				result.setActivatedDate(rs.getString("DATEACTIVATED"));
@@ -731,15 +715,73 @@ public class SubscriberDao extends CRMBaseDao{
 		}
 		
 		//20170310
+		//20170626 mod
 		conn = null;
 		conn = getConn1();
+		String chtMsisdn = null;
 		try {
+			
+			//20170310 add 查詢CHTMSISDN
+			//20170510 mod 以環球卡Table查詢
+			
+			String sql4 = "select Followmenumber from FOLLOWMEDATA A where serviceid = "+id+" AND Followmenumber like '886%' ";
+			st = conn.createStatement();
+			System.out.println("Execute SQL:"+sql4);
+			rs = st.executeQuery(sql4);
+			
+			if(rs.next()){
+				chtMsisdn = rs.getString("Followmenumber");
+			}
+			
+			if(chtMsisdn == null || "".equals(chtMsisdn)){
+				sql4 = "select Replace(nvl(A.FORWARD_TO_HOME_NO,A.FORWARD_TO_S2T_NO_1),'+','') MSISDN "
+						+ "from S2T_TB_TYPB_WO_SYNC_FILE_DTL A "
+						+ "where A.S2T_MSISDN = '"+result.getS2tMsisdn()+"' "
+						+ "and A.S2T_OPERATIONDATE > to_date('"+result.getActivatedDate()+"','yyyy/MM/dd hh24:mi:ss') "
+						+ (result.getCanceledDate() == null || "".equals(result.getCanceledDate() ) ? "" : "AND A.S2T_OPERATIONDATE < to_date('"+result.getCanceledDate()+"','yyyy/MM/dd hh24:mi:ss') " )
+						+ "order by A.S2T_OPERATIONDATE DESC";
+				
+				rs = null;
+				System.out.println("Execute SQL:"+sql4);
+				rs = st.executeQuery(sql4);
+				if(rs.next()){
+					chtMsisdn = rs.getString("MSISDN");
+				}
+			}
+			
+			
+	/*		String sql4 = ""
+					+ "       select * from (	"
+					+ "								select replace(A.FORWARD_TO_HOME_NO,'+','') CHTMSISDN "
+					+ "								from S2T_TB_TYPB_WO_SYNC_FILE_DTL A,SERVICE B "
+					+ "								where A.S2T_MSISDN = B.SERVICECODE "
+					+ "								AND A.SEND_TIME > B.DATEACTIVATED AND  (B.DATECANCELED is null  OR A.SEND_TIME <= B.DATECANCELED) "
+					+ ("139".equals(result.getPrivePlanId().getId())?" AND replace(A.FORWARD_TO_HOME_NO,'+','') like '886%' ":"")
+					+ "								AND B.SERVICEID ="+id+"  ORDER BY A.SEND_TIME DESC"
+					+ "						) WHERE rownum = 1 "
+					+ "		union all "
+					+ "		 select A.PARTNERMSISDN CHTMSISDN "
+					+ "		from AVAILABLEMSISDN A ,service B "
+					+ "		where B.serviceid = "+id+" and A.S2TMSISDN = B.servicecode "
+					+ "		union all "
+					+ "		 select A.FOLLOWMENUMBER CHTMSISDN "
+					+ "		from FOLLOWMEDATA A"
+					+ "    	where A.serviceid = "+id+" AND A.FOLLOWMENUMBER LIKE '%886%'"
+					+ " ";
+			
 			st = conn.createStatement();
 			rs = st.executeQuery(sql4);
 			System.out.println("Execute SQL:"+sql4);
-			while(rs.next()){
-				result.setChtMsisdn(rs.getString("CHTMSISDN"));
-			}
+			String chtMsisdn = null;
+			while(rs.next()){				
+				chtMsisdn = rs.getString("CHTMSISDN");
+				if(chtMsisdn!=null )
+					break;
+			}*/
+			
+			
+			result.setChtMsisdn(chtMsisdn);
+			
 		} finally{
 			try {
 				if(rs!=null) rs.close();
@@ -750,9 +792,7 @@ public class SubscriberDao extends CRMBaseDao{
 			//closeConnection();
 		}
 		
-		result.setPrivePlanId(queryPricePlanId(princePlanId));
-		
-		
+		result.setNowS2tActivated(queryS2TMsisdnNowStatus(result.getS2tMsisdn()));
 		
 		return result;
 	}
@@ -1026,252 +1066,33 @@ public class SubscriberDao extends CRMBaseDao{
 		return result;
 	}
 	
-	
-	/**
-	 * 查詢VLN
-	 * @param serviceId
-	 * @return
-	 * @throws Exception
-	 */
-	public List<String> queryVLN(String serviceId) throws Exception{
-		List<String> result = new ArrayList<String>(); 
-
-		String sql = "SELECT A.VLN||'('||(case A.vlntype when '1' then 'static' when '0' then 'dynamic' else '' end)||')' VLN "
-				+ "FROM VLNNUMBER A "
-				+ "WHERE A.status = 1 AND A.SERVICEID = '"+serviceId+"' ";
-				
-		//String s2tIMSI = null,chtMsisdn = null;
-		Statement st = null;
-		ResultSet rs = null;
-		Connection conn = getConn1();
-		try {
-			
-			st = conn.createStatement();
-			//System.out.println("sql:"+sql);
-			rs = st.executeQuery(sql);
-			
-			while(rs.next()){
-				result.add(rs.getString("VLN"));
-			}
-			
-			/*sql = "select a.imsi,c.PARTNERMSISDN "
-					+ "from IMSI A,service B,AVAILABLEMSISDN c "
-					+ "where A.serviceid = B.serviceid and B.servicecode = c.s2tMsisdn and a.serviceid = "+serviceId+" ";
-			
-			rs = st.executeQuery(sql);
-			while(rs.next()){
-				s2tIMSI = rs.getString("IMSI");
-				chtMsisdn = rs.getString("PARTNERMSISDN");
-			}*/
-			
-			
-			/*sql = "select instr(A.content,'CHNA') CD "
-					+ "from PROVLOG A "
-					+ "where A.CONTENT like '%S2T_IMSI="+s2tIMSI+"%' AND A.CONTENT like '%Req_Status=07%' "
-					+ "order by A.REQTIME desc ";*/
-			
-			/*sql = "select instr(A.content,'CHNA') CD "
-					+ "from PROVLOG A "
-					+ "where (A.CONTENT like '%TWNLD_MSISDN="+chtMsisdn+"%' or A.CONTENT like '%S2T_IMSI="+s2tIMSI+"%'  )"
-					+ "AND (A.CONTENT like '%Req_Status=07%' or A.CONTENT like '%Req_Status=99%') "
-					+ "order by A.REQTIME desc ";
-			rs = st.executeQuery(sql);
-			
-			//只取最後一筆
-			if(rs.next()){
-				int cd = rs.getInt("CD");
-				if(cd!=0)
-					result.add("＊已申請中國固定號");
-			}*/
-
-			
-		} finally{
-			try {
-				if(rs!=null) rs.close();
-				if(st!=null) st.close();
-			} catch (Exception e) {
-			}
-			closeConn1(conn);
-			//closeConnection();
-		}
-		return result;
-	}
-	
-	public List<String> queryWhetherAppliedCHNA(String serviceId) throws Exception{
-		List<String> result = new ArrayList<String>(); 
-		String sql = "";
-				
-		String s2tIMSI = null,chtMsisdn = null;
-		Statement st = null;
-		ResultSet rs = null;
-		Connection conn = getConn1();
-		try {
-				
-			sql = "select a.imsi,c.PARTNERMSISDN "
-					+ "from IMSI A,service B,AVAILABLEMSISDN c "
-					+ "where A.serviceid = B.serviceid and B.servicecode = c.s2tMsisdn and a.serviceid = "+serviceId+" ";
-			st = conn.createStatement();		
-			rs = st.executeQuery(sql);
-			while(rs.next()){
-				s2tIMSI = rs.getString("IMSI");
-				chtMsisdn = rs.getString("PARTNERMSISDN");
-			}
-			/*sql = "select instr(A.content,'CHNA') CD "
-					+ "from PROVLOG A "
-					+ "where A.CONTENT like '%S2T_IMSI="+s2tIMSI+"%' AND A.CONTENT like '%Req_Status=07%' "
-					+ "order by A.REQTIME desc ";*/
-			
-			sql = "select instr(A.content,'CHNA') CD "
-					+ "from PROVLOG A "
-					+ "where (A.CONTENT like '%TWNLD_MSISDN="+chtMsisdn+"%' or A.CONTENT like '%S2T_IMSI="+s2tIMSI+"%'  )"
-					+ "AND (A.CONTENT like '%Req_Status=07%' or A.CONTENT like '%Req_Status=99%') "
-					+ "order by A.REQTIME desc ";
-			rs = st.executeQuery(sql);
-			
-			//只取最後一筆
-			if(rs.next()){
-				int cd = rs.getInt("CD");
-				if(cd!=0)
-					result.add("＊已申請中國固定號");
-			}
-		} finally{
-			try {
-				if(rs!=null) rs.close();
-				if(st!=null) st.close();
-			} catch (Exception e) {
-			}
-			closeConn1(conn);
-			//closeConnection();
-		}
-		return result;
-	}
-	/**
-	 * 查詢華人上網包資料
-	 * @param serviceId
-	 * @return
-	 * @throws Exception
-	 */
-	public List<AddonService> queryAddonService(String serviceId) throws Exception{
-		List<AddonService> result = new ArrayList<AddonService>(); 
-
-		String sql = "SELECT A.SERVICEID,A.SERVICECODE,A.STATUS,A.STARTDATE,A.ENDDATE "
-				+ "FROM ADDONSERVICE_N A "
-				+ "WHERE A.SERVICEID = '"+serviceId+"' "
-				+ "ORDER BY A.STARTDATE DESC";
-				
-		Statement st = null;
-		ResultSet rs = null;
-		Connection conn = getConn1();
-		try {
-			
-			st = conn.createStatement();
-			//System.out.println("sql:"+sql);
-			rs = st.executeQuery(sql);
-			
-			while(rs.next()){
-				AddonService a = new AddonService();
-				a.setServiceId(rs.getString("SERVICEID"));
-				a.setServiceCode(rs.getString("SERVICECODE"));
-				a.setStatus(rs.getString("STATUS"));
-				a.setStartDate(rs.getString("STARTDATE"));
-				a.setEndDate(rs.getString("ENDDATE"));
-				result.add(a);
-			}
-		} finally{
-			try {
-				if(rs!=null) rs.close();
-				if(st!=null) st.close();
-			} catch (Exception e) {
-			}
-			closeConn1(conn);
-			//closeConnection();
-		}
-		return result;
-	}
-	
-	/**
-	 * 取得數據狀態
-	 * @param msisdn
-	 * @return
-	 * @throws Exception
-	 */
-	public String getGPRSStatus(String serviceid) throws Exception{
-		String result = null;
-		String sql = "SELECT nvl(PDPSUBSID,0) as status "
-				+ "FROM BASICPROFILE "
-				+ "WHERE serviceid = '"+serviceid+"'";
-				
-		Statement st = null;
-		ResultSet rs = null;
-		Connection conn = getConn1();
-		try {
-			
-			st = conn.createStatement();
-			//System.out.println("sql:"+sql);
-			rs = st.executeQuery(sql);
-			
-			while(rs.next()){
-				result = rs.getString("status");
-			}
-		} finally{
-			try {
-				if(rs!=null) rs.close();
-				if(st!=null) st.close();
-			} catch (Exception e) {
-			}
-			closeConn1(conn);
-			//closeConnection();
-		}
-		return result;
-	}
-	/**
-	 * 取的華人上網包資料
-	 * @param serviceId
-	 * @return
-	 * @throws Exception
-	 */
-	public List<USPacket> queryUSPacket(String serviceId) throws Exception{
-		List<USPacket> result = new ArrayList<USPacket>(); 
-
-		String sql = "select A.SERVICEID,A.START_DATE,A.END_DATE,"
-				+ "to_char(A.CREATE_TIME,'yyyy/MM/dd hh24:mi:ss') CREATE_TIME,"
-				+ "to_char(A.CANCEL_TIME,'yyyy/MM/dd hh24:mi:ss') CANCEL_TIME,A.ALERTED||'%' ALERTED "
-				+ "from HUR_VOLUME_POCKET A "
-				+ "where A.TYPE = 0 AND A.SERVICEID = '"+serviceId+"' "
-				+ "ORDER by A.START_DATE DESC ";
+	private String queryS2TMsisdnNowStatus(String S2TMsisdn) throws Exception{
+		String result = "0"; 
 		
-				
 		Statement st = null;
 		ResultSet rs = null;
-		Connection conn = getConn1();
+		Connection conn = null;
+
 		try {
-			
+			conn =getConn1();
 			st = conn.createStatement();
-			//System.out.println("sql:"+sql);
-			rs = st.executeQuery(sql);
 			
-			while(rs.next()){
-				USPacket a = new USPacket();
-				a.setServiceid(rs.getString("SERVICEID"));
-				a.setStartDate(rs.getString("START_DATE"));
-				a.setEndDate(rs.getString("END_DATE"));
-				a.setCreateTime(rs.getString("CREATE_TIME"));
-				a.setCancelTime(rs.getString("CANCEL_TIME"));
-				a.setAlerted(rs.getString("ALERTED"));
-			
-				result.add(a);
+			String sql = "select count(1) CD from service where servicecode='"+S2TMsisdn+"' and datecanceled is null ";
+			System.out.println("sql : "+sql);
+			rs =  st.executeQuery(sql);
+			if(rs.next()){
+				result = rs.getString("CD");
 			}
-		} finally{
+
+		}finally{
 			try {
-				if(rs!=null) rs.close();
 				if(st!=null) st.close();
-			} catch (Exception e) {
-			}
-			//closeConnection();
-			closeConn1(conn);
+				if(rs!=null) rs.close();
+			} catch (Exception e) { }
+			closeConn3(conn);//closeConnection();
 		}
+		
 		return result;
-	}
-	
+	}	
 	
 }
