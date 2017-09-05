@@ -25,6 +25,11 @@ public class NameVarifiedService extends BaseService{
 		List<NameVarified>  result = nameVarifiedDao.queeryNameVarifiedData(c.getVln());
 		return result;
 	}
+	public List<NameVarified>  queeryNameVarifiedDataSameMsisdn(String input) throws Exception{
+		//Query China VLN Data
+		List<NameVarified>  result = nameVarifiedDao.queeryNameVarifiedDataSameMsisdn(input);
+		return result;
+	}
 	public List<NameVarified> queeryNameVarifiedData(String input,String type) throws Exception{
 		List<NameVarified> result = nameVarifiedDao.queeryNameVarifiedData(input,type);
 		return result;

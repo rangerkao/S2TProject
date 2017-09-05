@@ -52,6 +52,7 @@ angular.module('MainApp')
 					alert(data['error']);
 				}else{
 					self.qosList=data['data'];
+					console.log(self.qosList);
 					//alert("success");
 				}
 		    }).error(function(data, status, headers, config) {   

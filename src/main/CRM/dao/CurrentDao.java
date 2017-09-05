@@ -15,8 +15,7 @@ import java.util.Set;
 
 import org.springframework.stereotype.Repository;
 
-import main.CRM.bean.CurrentMonth;
-import main.DVRS.bean.CurrentDay;
+import main.CRM.bean.*;
 import main.common.action.CacheAction;
 import main.common.dao.BaseDao;
 

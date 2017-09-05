@@ -39,14 +39,14 @@ public class QosDao extends CRMBaseDao {
 				if(rc!=null && rc.contains("RETURN_CODE=0")){
 					rc="成功";
 				}else{
-					rc="";
+					//rc="";
 				}
 				
 				String rc2 = rs.getString("RESPONSE_CODE");
 				if(rc2!=null && rc2.contains("200")){
 					rc2="正常";
 				}else{
-					rc2="";
+					//rc2="";
 				}
 				qosdata.setProvisionID(rs.getInt("PROVISIONID"));
 				qosdata.setImsi(rs.getString("IMSI"));
@@ -97,17 +97,17 @@ public class QosDao extends CRMBaseDao {
 				QosBean qosdata = new QosBean();
 
 				String rc = rs.getString("RESULT_CODE");
-				if (rc != null && rc.contains("RETURN_CODE=0")) {
+				if (rc != null && "0".equals(rc)){
 					rc = "成功";
 				} else {
-					rc = "";
+					//rc = "";
 				}
 
 				String rc2 = rs.getString("RESPONSE_CODE");
 				if (rc2 != null && rc2.contains("200")) {
 					rc2 = "正常";
 				} else {
-					rc2 = "";
+					//rc2 = "";
 				}
 
 				qosdata.setProvisionID(rs.getInt("PROVISIONID"));

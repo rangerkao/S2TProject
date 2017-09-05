@@ -183,53 +183,7 @@ public class SubscriberAction extends BaseAction{
 		return SUCCESS;
 	}
 	
-	public String queryVLN(){
-		System.out.println("queryVLN...");
-		System.out.println("input="+input);
-		try {
-			List<String> vlns = subscriberService.queryVLN(input);
-			setSuccess(vlns);
-		} catch (Exception e) {
-			errorHandle(e);
-		} 
-		return SUCCESS;
-	}
 	
-	public String queryAddonService(){
-		System.out.println("queryAddonService...");
-		System.out.println("input="+input);
-		try {
-			List<AddonService> addons = subscriberService.queryAddonService(input);
-			setSuccess(addons);
-		} catch (Exception e) {
-			errorHandle(e);
-		} 
-		return SUCCESS;
-	}
-	
-	public String getGPRSStatus(){
-		System.out.println("getGPRSStatus...");
-		System.out.println("input="+input);
-		try {
-			String status = subscriberService.getGPRSStatus(input);
-			setSuccess(status);
-		} catch (Exception e) {
-			errorHandle(e);
-		}
-		return SUCCESS;
-	}
-	
-	public String queryUSPacket(){
-		System.out.println("queryUSPacket...");
-		System.out.println("input="+input);
-		try {
-			List<USPacket> uSPacket = subscriberService.queryUSPacket(input);
-			setSuccess(uSPacket);
-		} catch (Exception e) {
-			errorHandle(e);
-		} 
-		return SUCCESS;
-	}
 
 	/******************************************************************/
 	

@@ -90,29 +90,75 @@ public class CRMBaseDao extends BaseDao{
 				
 				rs.close();
 				String time = null;
+				String workType = null;
 				
-				sql = "Select  A.S2T_MSISDN,A.S2T_IMSI,to_char(A.CMCC_OPERATIONDATE,'yyyyMMddhh24miss') TIME "
+				sql = "Select  A.S2T_MSISDN,A.S2T_IMSI,to_char(A.CMCC_OPERATIONDATE,'yyyyMMddhh24miss') TIME,A.WORK_TYPE "
 						+ "from S2T_TB_TYPB_WO_SYNC_FILE_DTL A "
-						+ "where (A.FORWARD_TO_HOME_NO like '%"+chtMsisdn+"%' or A.FORWARD_TO_S2T_NO_1 like '%"+chtMsisdn+"%' ) "
+						+ "where A.ORIGINAL_CMCC_MSISDN like '%"+chtMsisdn+"%' "
 						+ "AND trim(A.S2T_MSISDN) is not null "
-						+ "order by A.WORK_ORDER_NBR ";
+						+ "order by A.WORK_ORDER_NBR DESC ";
 				
 				System.out.println("sql:"+sql);
 				rs = st.executeQuery(sql);
 				
 				String s2tMsisdn = null;
-				while(rs.next()){
+				String s2tIMSI = null;
+				if(rs.next()){
 					time = rs.getString("TIME");
 					s2tMsisdn = rs.getString("S2T_MSISDN");
+					workType = rs.getString("WORK_TYPE");
+					s2tIMSI = rs.getString("S2T_IMSI");
 				}
-				
+				System.out.println("workType:"+workType);
+				//20170921 確認是否換過號
+				if(!"99".equals(workType)) {
+					
+					
+					rs = null;
+					
+					
+					String sql2 = "Select  A.S2T_MSISDN,A.S2T_IMSI,to_char(A.CMCC_OPERATIONDATE,'yyyyMMddhh24miss') TIME,A.WORK_TYPE,A.ORIGINAL_CMCC_MSISDN " + 
+							"from S2T_TB_TYPB_WO_SYNC_FILE_DTL A " + 
+							"where A.S2T_IMSI = '"+s2tIMSI+"' " + 
+							"and A.CMCC_OPERATIONDATE > to_date('"+time+"','yyyyMMddhh24miss')" + 
+							"order by A.WORK_ORDER_NBR ";
+					System.out.println("sql:"+sql2);
+					rs = st.executeQuery(sql2);
+
+					if(rs.next()) {
+						workType = rs.getString("WORK_TYPE");
+						chtMsisdn = rs.getString("ORIGINAL_CMCC_MSISDN");
+					}
+					System.out.println("workType:"+workType);
+					//如果同imsi之後的第一筆為05，表示有換號，重新查詢最後一筆的紀錄
+					if("05".equals(workType)) {
+						rs = null;
+						
+						sql = "Select  A.S2T_MSISDN,A.S2T_IMSI,to_char(A.CMCC_OPERATIONDATE,'yyyyMMddhh24miss') TIME,A.WORK_TYPE "
+								+ "from S2T_TB_TYPB_WO_SYNC_FILE_DTL A "
+								+ "where A.ORIGINAL_CMCC_MSISDN like '%"+chtMsisdn+"%' "
+								+ "AND trim(A.S2T_MSISDN) is not null "
+								+ "order by A.WORK_ORDER_NBR DESC ";
+						
+						System.out.println("sql:"+sql);
+						rs = st.executeQuery(sql);
+						
+						if(rs.next()){
+							time = rs.getString("TIME");
+							s2tMsisdn = rs.getString("S2T_MSISDN");
+							workType = rs.getString("WORK_TYPE");
+							s2tIMSI = rs.getString("S2T_IMSI");
+						}
+					}
+				}
+
 				rs = null;
 				
 				sql = "select A.SERVICEID "
 						+ "from service A "
 						+ "where A.servicecode = '"+s2tMsisdn+"' "
-						+ "and A.DATEACTIVATED<to_date('"+time+"','yyyyMMddhh24miss') and (A.DATECANCELED is null or A.DATECANCELED>to_date('"+time+"','yyyyMMddhh24miss')) ";
-				
+						+ "and A.DATEACTIVATED<to_date('"+time+"','yyyyMMddhh24miss') "
+						+ "and "+("99".equals(workType)?"A.DATECANCELED>to_date('"+time+"','yyyyMMddhh24miss')" : "A.DATECANCELED is null");				
 				System.out.println(sql);
 				rs = st.executeQuery(sql);
 				

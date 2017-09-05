@@ -12,6 +12,7 @@ angular.module('MainApp')
 			}
 		};
 		
+		$rootScope.isAppliacted = false;
 		self.origincustInfo={};
 		//initial
 		self.init = function(){
@@ -71,8 +72,8 @@ angular.module('MainApp')
 		           {url:'web/CRM/subscriber/elseInfo.jsp',title:'供裝資訊',content:'供裝資訊',active:false,disabled:false},
 		           //{url:'web/CRM/subscriber/addon.jsp',title:'供裝記錄',content:'供裝記錄',active:false,disabled:false},
 		           {url:'web/CRM/subscriber/QosProvision.jsp',title:'CMHK QoS查詢',content:'CMHK QoS查詢',active:false,disabled:false},
-		           {url:'web/CRM/subscriber/application.jsp',title:'申請書回收查詢',content:'申請書回收查詢',active:true,disabled:false},
 		           {url:'web/CRM/subscriber/sms.jsp',title:'系統簡訊(開通、落地、超量)',content:'系統簡訊(開通、落地、超量)',active:false,disabled:false},
+		           {url:'web/CRM/subscriber/application.jsp',title:'申請書回收查詢',content:'申請書回收查詢',active:true,disabled:false},
 		           //{url:'web/CRM/subscriber/bill.jsp',title:'月出帳記錄(含明細)',content:'月出帳記錄(含明細)',active:false,disabled:false},
 		           //{url:'web/CRM/subscriber/using.jsp',title:'使用記錄',content:'使用記錄',active:false,disabled:false},
 		           //{url:'web/CRM/subscriber/receive.jsp',title:'付款記錄',content:'付款記錄',active:false,disabled:false},
@@ -160,6 +161,8 @@ angular.module('MainApp')
 		self.getSession = function(){
 			AjaxService.query("querySession",{})
 			.success(function(data, status, headers, config) {
+				
+				console.log(data);
 				if(data['error']){
 					alert(data['error']);
 					ActionService.unblock();
@@ -171,6 +174,11 @@ angular.module('MainApp')
 					if(self.session.length==0){
 						alert("查無Session資料");
 					}else{
+						console.log("1"+self.session["s2t.role"]);
+						if(!self.session["s2t.role"]){
+							document.getElementById('logoutLink').click();
+						}
+						
 						$rootScope.role = self.session["s2t.role"];
 						//alert($rootScope.role);
 						self.infoEditable = true;
@@ -356,6 +364,10 @@ angular.module('MainApp')
 				//console.log(data);
 				if(data['error']){
 					alert(data['error']);
+					if(data['error'].indexOf("登入")){
+						//document.location.href=document.host+"/S2TProject";
+						document.getElementById('logoutLink').click();
+					}
 					ActionService.unblock();
 				}else{
 					self.IDList=data['data'];
@@ -417,7 +429,7 @@ angular.module('MainApp')
 					self.custInfo.homeIMSI);
 			//
 			self.queryNameVarified(self.custInfo.serviceId,self.custInfo.chtMsisdn,self.custInfo.s2tMsisdn,self.custInfo.privePlanId.id,
-					self.custInfo.passportName,self.custInfo.passportId);
+					self.custInfo.passportName,self.custInfo.passportId,self.custInfo.nowS2tActivated, self.custInfo.canceledDate);
 			//
 			ActionService.unblock();
 		}
@@ -454,7 +466,7 @@ angular.module('MainApp')
 								self.custInfo.homeIMSI);
 						//
 						self.queryNameVarified(self.custInfo.serviceId,self.custInfo.chtMsisdn,self.custInfo.s2tMsisdn,self.custInfo.privePlanId.id,
-								self.custInfo.passportName,self.custInfo.passportId);
+								self.custInfo.passportName,self.custInfo.passportId,self.custInfo.nowS2tActivated, self.custInfo.canceledDate);
 						//
 					}
 				}
@@ -488,9 +500,9 @@ angular.module('MainApp')
 			$rootScope.$broadcast('queryElse',{s2tMsisdn:s2tMsisdn,serviceid:serviceid,s2tIMSI:s2tIMSI,
 				privePlanId:privePlanId,activatedDate:activatedDate,canceledDate:canceledDate,homeIMSI:homeIMSI});
 		};
-		self.queryNameVarified=function(serviceId,chtMsisdn,s2tMsisdn,priceplanId,passportName,passportId){
+		self.queryNameVarified=function(serviceId,chtMsisdn,s2tMsisdn,priceplanId,passportName,passportId,nowS2tActivated,canceledDate){
 			$rootScope.$broadcast('queryNameVarified',{
-				serviceId:serviceId,chtMsisdn:chtMsisdn,s2tMsisdn:s2tMsisdn,priceplanId:priceplanId,passportName:passportName,passportId:passportId
+				serviceId:serviceId,chtMsisdn:chtMsisdn,s2tMsisdn:s2tMsisdn,priceplanId:priceplanId,passportName:passportName,passportId:passportId,canceledDate:canceledDate,nowS2tActivated:nowS2tActivated
 			});
 		}
 		//
@@ -503,6 +515,11 @@ angular.module('MainApp')
 		self.updateSubscriber = function(){
 			if(!self.custInfo.serviceId){
 				alert("請先進行查詢！");
+				return;
+			}
+			
+			if($rootScope.role=='apply_Proccesser' && !$rootScope.isAppliacted){
+				alert("未更新申請書狀態！");
 				return;
 			}
 			self.showControl(true);
@@ -564,11 +581,37 @@ angular.module('MainApp')
 		    }).then(function(){
 		    });
 		};
+		
+		
 		self.downLoadExcel = function(){
 			self.buttonDis =true;
 			createExcel2('getSubscribersExcel');
 			//self.buttonDis = false;
 		};
+		
+		self.insertApp = function(){
+			var type = '供裝';
+			if(!self.custInfo.serviceId){
+				alert("No serviceid!");
+				return;
+			}
+				
+			self.buttonDis = true;
+			AjaxService.query('insertNew',{	serviceid:self.custInfo.serviceId,type:type})				
+			.success(function(data, status, headers, config) {  
+				if(data['error']){
+					alert(data['error']);
+				}else{
+					alert(data['data']);
+					self.queryAppList(self.custInfo.serviceId);
+					//alert("success");
+				}
+		    }).error(function(data, status, headers, config) {   
+		    	alert("error");
+		    }).then(function(){
+		    	self.buttonDis = false;
+		    });
+		};	
 		
 		$(document).ready(function () {
 			self.getSession();

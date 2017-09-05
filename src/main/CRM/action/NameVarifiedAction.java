@@ -55,6 +55,18 @@ public class NameVarifiedAction extends BaseAction{
 		return SUCCESS;
 	}
 	
+	public String queeryNameVarifiedDataSameMsisdn(){
+		System.out.println("input:"+input);
+		try {
+				List<NameVarified>  result = nameVarifiedService.queeryNameVarifiedDataSameMsisdn(input);
+				setSuccess(result);
+		} catch (Exception e) {
+			return errorHandle(e);
+		}
+	
+		return SUCCESS;
+	}
+	
 	public String queryVLN(){
 		System.out.println("input:"+input+":type:"+type);
 		try {				

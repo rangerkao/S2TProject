@@ -83,26 +83,7 @@ public class SubscriberService extends BaseService{
 		return result;
 	}
 	
-	public List<String> queryVLN(String serviceId) throws Exception{
-		List<String> result =  subscriberDao.queryVLN(serviceId);
-		result.addAll(subscriberDao.queryWhetherAppliedCHNA(serviceId));
-		return result;
-	}
 	
-	public List<AddonService> queryAddonService(String serviceId) throws Exception{
-		List<AddonService> result = subscriberDao.queryAddonService(serviceId);
-		return result;
-	}
-	
-	public String getGPRSStatus(String serviceid) throws Exception{
-		String result = subscriberDao.getGPRSStatus(serviceid);
-		return result;
-	}
-	
-	public List<USPacket> queryUSPacket(String serviceId) throws Exception{
-		List<USPacket> result = subscriberDao.queryUSPacket(serviceId);
-		return result;
-	}
 	
 	
 	protected SubscriberDao getSubscriberDao() {

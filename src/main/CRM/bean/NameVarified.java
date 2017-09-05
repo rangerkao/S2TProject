@@ -17,8 +17,6 @@ public class NameVarified {
 	String  usedCount;
 	
 	
-	
-	
 	public String getServiceid() {
 		return serviceid;
 	}
@@ -87,7 +85,5 @@ public class NameVarified {
 		this.usedCount = usedCount;
 	}
 
-	
-	
 
 }

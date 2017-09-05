@@ -5,6 +5,5 @@
 <struts>
 	<!-- 路徑預設從class開始 -->
 	<include file="resource/common.xml"/>
-	<include file="resource/DVRS/DVRS.xml"/>
-	<include file="resource/CRM/CRM.xml"/>
+	<include file="resource/CRM.xml"/>
 </struts>

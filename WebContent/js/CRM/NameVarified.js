@@ -10,10 +10,20 @@ angular.module('MainApp')
 			
 			self.init();
 			
+			
+			self.canceledDate = data['canceledDate'];
+			self.nowS2tActivated = data['nowS2tActivated'];
+			
+			if(self.canceledDate != null  && !self.canceledDate=="" && self.nowS2tActivated!="0"){
+				//alert("客戶歷史門號已有其他用戶使用中！不可認證");
+				$("#msg").html("客戶歷史門號已有其他用戶使用中！不可認證");
+				return;
+			}
+			
 			self.serviceId = data['serviceId'];
 			self.s2tMsisdn = data['s2tMsisdn'];
 			self.chtMsisdn = data['chtMsisdn'];
-
+			
 			//alert(self.chtMsisdn+":"+self.s2tMsisdn);
 			if(!self.chtMsisdn||data['priceplanId']!=139){
 				self.chtMsisdn = self.s2tMsisdn;
@@ -34,7 +44,18 @@ angular.module('MainApp')
 				self.chinaMsisdn = s2tNumber.replace("8526640","861391048");
 			else if(s2tNumber.match(/^8526947.+/g))
 				self.chinaMsisdn = s2tNumber.replace("8526947","861391037");
-			
+			//20170517 add
+//			8618411045xxx	85252215xxx
+//			8618411046xxx	85252216xxx
+//			8618411040xxx	85253940xxx
+
+			else if(s2tNumber.match(/^85252215.+/g))
+				self.chinaMsisdn = s2tNumber.replace("85252215","8618411045");
+			else if(s2tNumber.match(/^85252216.+/g))
+				self.chinaMsisdn = s2tNumber.replace("85252216","8618411046");
+			else if(s2tNumber.match(/^85253940.+/g))
+				self.chinaMsisdn = s2tNumber.replace("85253940","8618411040");
+
 			if(!self.chinaMsisdn){
 				alert("中國門號無法對應規則");
 				$(".chinaArea input,.chinaArea button").attr("disabled","true");
@@ -43,6 +64,9 @@ angular.module('MainApp')
 			}
 			
 			self.queryVLN();
+			self.querySameMsisdn(self.chtMsisdn);
+			
+			
 		});
 		
 		
@@ -86,7 +110,7 @@ angular.module('MainApp')
 		
 		self.sgpShow = false;
 		self.nvMsg="";
-		self.history = {'china':{},'sgp':{}};
+		self.history = {'china':{},'sgp':{},'msisdn':{}};
 		self.vlns=[];
 		self.data = {china:{},sgp:{}};
 		self.oData = {china:{},sgp:{}};
@@ -107,6 +131,7 @@ angular.module('MainApp')
 			self.data.sgp={type:'Passport',name:self.passportName,id:self.passportId};
 			self.chinaMsisdn = '';
 			self.currentChinaMsisdn = '';
+			$("#msg").html("");
 		};
 		
 		$(document).ready(function () {
@@ -143,6 +168,42 @@ angular.module('MainApp')
 					}					
 				}
 		    }).error(function(data, status, headers, config) {   
+		    	alert("queryVLN Error:");
+		    	self.nvMsg = "查詢完成!"
+		    }).then(function(){
+		    	self.nvMsg = "查詢完成!"
+		    		self.buttonDis = false;
+		    });
+		}
+		//*************    Query  Same Msisdn *************//
+		self.querySameMsisdn = function(msisdn){
+			if(!msisdn || msisdn==''){
+				alert("No msisdn!");
+				return;
+			}
+			
+			AjaxService.query('queeryNameVarifiedDataSameMsisdn',
+					{	"input":msisdn})
+			.success(function(data, status, headers, config) {  
+				if(data['error']){
+					alert(data['error']);
+				}else{
+					if(data['data']){
+						//console.log(data['data']);
+						var history = [];
+						angular.forEach(data['data'], function(value) {
+							  if(value.vln === self.chinaMsisdn  || value.vln === self.sgp){
+							  }
+							  else{
+								  //self.history.push(value);
+								  history.push(value);
+							  }
+						});						
+						self.history.msisdn = history
+					}			
+					
+				}
+		    }).error(function(data, status, headers, config) {   
 		    	alert("Error:");
 		    	self.nvMsg = "查詢完成!"
 		    }).then(function(){
@@ -151,11 +212,11 @@ angular.module('MainApp')
 		    });
 		}
 		
-		
-		
-		
 		//*************    Query *************//
 		self.query = function(country,currentVLN){
+			
+			$("#msg").html("");
+			
 			if(!self.serviceId || self.serviceId==''){
 				alert("No Serviceid!");
 				return;
@@ -199,6 +260,12 @@ angular.module('MainApp')
 						}
 						angular.copy(ndata, self.oData.china);
 						self.history.china=history;
+						
+						if(self.data.china.usedCount>=6){
+							$("#msg").html("同證件已認證門號數已超過5門！");
+							alert("同證件已認證門號數已超過5門！");
+						};
+						
 					}else if(country=='sgp'){
 						self.data.sgp = ndata;
 						//console.log(self.data.sgp);
@@ -349,6 +416,7 @@ angular.module('MainApp')
 					//alert(data['data']);
 					//self.clear();
 					self.query(country,currentVLN);
+					self.querySameMsisdn(self.chtMsisdn);
 				}
 		    }).error(function(data, status, headers, config) {   
 		    	alert("Error:");
@@ -477,6 +545,7 @@ angular.module('MainApp')
 						alert(data['data']);
 						//self.clear();
 						self.query(country,currentVLN);
+						self.querySameMsisdn(self.chtMsisdn);
 					}
 			    }).error(function(data, status, headers, config) {   
 			    	alert("Error:");

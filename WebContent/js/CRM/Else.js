@@ -25,6 +25,7 @@ angular.module('MainApp')
 		
 		//外部觸發
 		$scope.$on('queryElse',function(event,data){			
+			self.init();
 			self.s2tMsisdn = data['s2tMsisdn'];
 			self.serviceid = data['serviceid'];
 			self.s2tIMSI = data['s2tIMSI'];
@@ -45,6 +46,7 @@ angular.module('MainApp')
 			
 		//查詢VLN
 		self.queryVLN = function(serviceId){
+			self.VLN = '';
 			if(!serviceId || serviceId == '')
 				return;
 			self.elseMsg = "查詢中...";

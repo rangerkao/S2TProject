@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8"%>
 <div ng-controller="CRMNameVarified as nCtrl">
 	<h4>{{tab.title}}({{nCtrl.nvMsg}})</h4>
+	<h1 id="msg" style="color: red; "></h1>
+	
 	<table class="dataTable" style="width: 80%;">
 		<tr class="chinaArea">
 			<th colspan="{{nCtrl.dataHeader1.length}}"  bgcolor="#ff9933">中國</th>
@@ -10,7 +12,7 @@
 		</tr>
 		<tr class="chinaArea">
 			<td ng-repeat="item in nCtrl.dataHeader1"  ng-switch on="item.type" colspan="{{item.colSize}}">
-				<select ng-switch-when="selector" ng-model="nCtrl.data.china[item.col]"  ng-options="type.value as type.name for type in nCtrl.identityTypes"  ng-focus="nCtrl.focus('id')"  ng-change="nCtrl.defocus('id')" size="{{item._width}}" ></select>
+				<select ng-switch-when="selector" ng-model="nCtrl.data.china[item.col]"  ng-options="type.value as type.name for type in nCtrl.identityTypes"  ng-focus="nCtrl.focus('id')"  ng-change="nCtrl.defocus('id')" style="width:{{item._width}}" ></select>
 				<input ng-switch-when="input" ng-model="nCtrl.data.china[item.col]"  ng-blur="nCtrl.defocus(item.col)" ng-focus="nCtrl.focus(item.col)" style="width: 90%"	>
 				<div ng-switch-default >{{nCtrl.data.china[item.col]}}</div>
 			</td>
@@ -26,9 +28,9 @@
 				<div ng-switch-default >{{nCtrl.data.china[item.col]}}</div>
 			</td>
 			<td colspan="1" align="right">
-				<!-- <input class="btn btn-primary btn-xs"  type="button"  ng-click="nCtrl.query()" value="查詢" ng-disabled="nCtrl.buttonDis"> -->
+				<input style="display: none;" class="btn btn-primary btn-xs"  type="button"  ng-click="nCtrl.query()" value="查詢" ng-disabled="nCtrl.buttonDis">
 				<input class="btn btn-primary btn-xs"  type="button"  ng-click="nCtrl.update('china',nCtrl.data.china,nCtrl.oData.china,nCtrl.chinaMsisdn)" value="更新" >
-				<!-- <input class="btn btn-primary btn-xs"  type="button"  ng-click="nCtrl.clear()" value="清除"  > -->
+				<input style="display: none;" class="btn btn-primary btn-xs"  type="button"  ng-click="nCtrl.clear()" value="清除"  >
 				<input class="btn btn-primary btn-xs"  type="button"  ng-click="nCtrl.varify('china',nCtrl.data.china,nCtrl.oData.china,nCtrl.chinaMsisdn)" value="認證"  >
 			</td>
 		</tr>
@@ -74,6 +76,14 @@
 		</tr>
 		
 		<tr ng-repeat-start="item in nCtrl.history.sgp"  style="background-color: rgb(200, 200, 200);border-bottom-color: black;border-bottom-style: solid;border-bottom-width: 0.5px;">
+			<td ng-repeat="header in nCtrl.dataHeader1" >{{item[header.col]}}</td>
+		</tr>
+		<tr ng-repeat-end style="background-color: rgb(200, 200, 200);border-bottom-color: black;border-bottom-style: solid;border-bottom-width: 2px;">
+			<td ng-repeat="header in nCtrl.dataHeader2"  colspan="{{header.colSize}}">{{item[header.col]}}</td>
+			<td></td>
+		</tr>
+		
+		<tr ng-repeat-start="item in nCtrl.history.msisdn"  style="background-color: rgb(200, 200, 200);border-bottom-color: black;border-bottom-style: solid;border-bottom-width: 0.5px;">
 			<td ng-repeat="header in nCtrl.dataHeader1" >{{item[header.col]}}</td>
 		</tr>
 		<tr ng-repeat-end style="background-color: rgb(200, 200, 200);border-bottom-color: black;border-bottom-style: solid;border-bottom-width: 2px;">

@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE struts PUBLIC
    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
    "http://struts.apache.org/dtds/struts-2.0.dtd">
@@ -10,7 +9,7 @@
         <action name="index" class="main.common.action.IndexAction" method="index">
     		<result name="success">/web/login.jsp</result>
 		</action>  
-	</package>	
+	</package>
 	
 	<!-- tiles 可選擇繼承或設定 result type 進行使用 -->
 	<package name="tiles" extends="tiles-default">
@@ -22,8 +21,8 @@
             <result name="success" type="tiles">login</result>
 		</action>
 		<action name="login" class="main.common.action.LoginAction" method="login">
-            <result name="success" type="tiles">systemMenu</result>
-            <!-- <result name="success" type="tiles">CRM_welcome</result> -->
+            <!-- <result name="success" type="tiles">systemMenu</result> -->
+            <result name="success" type="tiles">CRM_welcome</result>
             <result name="error" type="tiles">login</result>
 		</action>
 		<action name="*System" class="main.common.action.SystemMenuAction" method="{1}" >
