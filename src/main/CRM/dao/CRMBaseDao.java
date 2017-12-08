@@ -102,12 +102,18 @@ public class CRMBaseDao extends BaseDao{
 				rs = st.executeQuery(sql);
 				
 				String s2tMsisdn = null;
+<<<<<<< HEAD
 				String s2tIMSI = null;
+=======
+>>>>>>> refs/remotes/origin/master
 				if(rs.next()){
 					time = rs.getString("TIME");
 					s2tMsisdn = rs.getString("S2T_MSISDN");
 					workType = rs.getString("WORK_TYPE");
+<<<<<<< HEAD
 					s2tIMSI = rs.getString("S2T_IMSI");
+=======
+>>>>>>> refs/remotes/origin/master
 				}
 				System.out.println("workType:"+workType);
 				//20170921 確認是否換過號

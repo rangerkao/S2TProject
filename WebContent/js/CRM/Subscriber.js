@@ -518,7 +518,11 @@ angular.module('MainApp')
 				return;
 			}
 			
+<<<<<<< HEAD
 			if($rootScope.role=='apply_Proccesser' && !$rootScope.isAppliacted){
+=======
+			if(!$rootScope.isAppliacted){
+>>>>>>> refs/remotes/origin/master
 				alert("未更新申請書狀態！");
 				return;
 			}
