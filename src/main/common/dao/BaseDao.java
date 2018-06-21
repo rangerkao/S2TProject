@@ -13,8 +13,6 @@ import java.util.Properties;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import org.springframework.jdbc.core.support.*;
-
 import main.CRM.bean.SMS;
 import main.common.action.CacheAction;
 

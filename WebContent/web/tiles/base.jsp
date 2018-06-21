@@ -57,7 +57,7 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.19/angular-route.js"></script> -->
 
 <div id="sc">
-<script src="js/angular.js"></script>
+	<script src="js/angular.js"></script>
 	<script src="js/cookies.js"></script>
 	<script src="js/cookieStore.js"></script>
 	<script src="js/cookieWriter.js"></script>

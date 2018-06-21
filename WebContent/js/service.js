@@ -24,6 +24,12 @@ angular.module('mService',[])
 					},
 					transformResponse:function(data,headersGetter){
 						//轉兩次才會成為Object
+						
+						try {
+					        JSON.parse(data);
+					    } catch (e) {
+					        return data;
+					    }
 						var temp = angular.fromJson(data);
 						return angular.fromJson(temp);
 					}

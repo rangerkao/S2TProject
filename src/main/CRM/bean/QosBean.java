@@ -10,6 +10,8 @@ public class QosBean {
 	String returnCode;
 	String resultCode;
 	String createTime;
+	//20180319
+	String type;
 	public Integer getProvisionID() {
 		return provisionID;
 	}
@@ -57,6 +59,12 @@ public class QosBean {
 	}
 	public void setCreateTime(String createTime) {
 		this.createTime = createTime;
+	}
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
 	}
 	
 	

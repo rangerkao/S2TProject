@@ -82,9 +82,12 @@ angular.module('MainApp')
 		           {url:'web/CRM/subscriber/currentMonth.jsp',title:'數據用量月累計',content:'數據用量月累計',active:false,disabled:false},
 		           {url:'web/CRM/subscriber/currentDay.jsp',title:'數據用量日累計',content:'數據用量日累計',active:false,disabled:false},
 		           {url:'web/CRM/subscriber/dataRate.jsp',title:'各國費率表',content:'各國費率表',active:false,disabled:false},
+		           {url:'web/CRM/subscriber/HKChinaCompare.jsp',title:'香港與中國門號對應表',content:'香港與中國門號對應表',active:false,disabled:false},
 		           {url:'web/CRM/subscriber/nameVarified.jsp',title:'實名制登記',content:'實名制登記',active:false,disabled:false},
 		           {url:'web/CRM/subscriber/queryNameVarified.jsp',title:'實名制登記查詢',content:'實名制登記查詢',active:false,disabled:false}
 		           ];
+		
+		
 		
 		self.radioList=[{id:"psid",name:"護照ID"},
 						{id:"id",name:"ID"},
@@ -518,14 +521,10 @@ angular.module('MainApp')
 				return;
 			}
 			
-<<<<<<< HEAD
-			if($rootScope.role=='apply_Proccesser' && !$rootScope.isAppliacted){
-=======
-			if(!$rootScope.isAppliacted){
->>>>>>> refs/remotes/origin/master
+			/*if(($rootScope.role=='apply_Proccesser' || $rootScope.role=='customerService') && !$rootScope.isAppliacted){
 				alert("未更新申請書狀態！");
 				return;
-			}
+			}*/
 			self.showControl(true);
 			self.showSave = false;
 			

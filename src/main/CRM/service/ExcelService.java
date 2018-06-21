@@ -71,6 +71,7 @@ public class ExcelService extends BaseService {
 		head.add(mapSetting("E-Mail","SUBS_EMAIL"));
 		head.add(mapSetting("代辦處代號","AGENCY_ID"));
 		head.add(mapSetting("其他備註","REMARK"));
+		head.add(mapSetting("資費方案","PRICEPLANID_ALIASES"));
 
 		HSSFWorkbook wb = Excel.createExcel(head, data);
 		

@@ -15,11 +15,12 @@ angular.module('MainApp')
 			self.qosList = [];
 		});
 		
-		self.qosHeader = [{name:"provision ID",col:"provisionID",_width:"20%"},
+		self.qosHeader = [{name:"provision ID",col:"provisionID",_width:"15%"},
 					      {name:"IMSI",col:"imsi",_width:"20%"},
 					      {name:"門號",col:"msisdn",_width:"15%"},
 					      {name:"動作",col:"action",_width:"5%"},
 					      {name:"方案",col:"plan",_width:"5%"},
+					      {name:"類型",col:"type",_width:"5%"},
 					      {name:"連線結果",col:"returnCode",_width:"10%"},
 					      {name:"供裝結果",col:"resultCode",_width:"10%"},
 					      {name:"供裝時間",col:"createTime",_width:"15%"}];
@@ -39,9 +40,12 @@ angular.module('MainApp')
 			if(!msisdn)
 				return ;			
 
-			var numberSize = 8;
-			if(msisdn.length > numberSize){
-				msisdn = msisdn.substring(msisdn.length-numberSize,msisdn.length);
+			//var numberSize = 8;
+			
+			//if(msisdn.length > numberSize){
+			if(msisdn.length > 3){
+				//msisdn = msisdn.substring(msisdn.length-numberSize,msisdn.length);
+				msisdn = msisdn.substring(3,msisdn.length);
 			}
 	
 			self.qosMsg = "查詢中...";

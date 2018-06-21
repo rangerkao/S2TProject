@@ -31,22 +31,23 @@ public class ActionLogAOP {
 	
 	@Around("pointCutMethod()") //定義環繞通知
 	public Object doAround(ProceedingJoinPoint pjp) throws Throwable {
-	ActionContext context = ActionContext.getContext();
-	Map<String, Object> session = context.getSession();
-	String account = (String) session.get("s2t.account");
-	
-	String params = "";
-	for(Object s:pjp.getArgs())
-		params+=s+",";
-	
-	if(!"".equals(params))
-		params=params.substring(0,params.length()-1);
-	
-	String function = pjp.getStaticPart().toString();
-	
-	Object object = pjp.proceed();
-	String result = (object==null ?"":object.toString());
-	new ActionDao().insertAction(account, params, function, result); 
-	return object;
+		System.out.println("ActionLogAOP");
+		ActionContext context = ActionContext.getContext();
+		Map<String, Object> session = context.getSession();
+		String account = (String) session.get("s2t.account");
+		
+		String params = "";
+		for(Object s:pjp.getArgs())
+			params+=s+",";
+		
+		if(!"".equals(params))
+			params=params.substring(0,params.length()-1);
+		
+		String function = pjp.getStaticPart().toString();
+		
+		Object object = pjp.proceed();
+		String result = (object==null ?"":object.toString());
+		new ActionDao().insertAction(account, params, function, result); 
+		return object;
 	}
 }

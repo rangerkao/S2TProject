@@ -44,8 +44,8 @@
 				
 				<input type="button" value="save" class="btn btn-danger btn-xs" style="margin-left: 50px;" ng-click="sCtrl.updateSubscriber()"  ng-show="sCtrl.showSave&&!sCtrl.hideNotNecessary">
 				
-				<button ng-show="sCtrl.showSave&&!sCtrl.hideNotNecessary&&role &&(role=='admin'||role=='apply_Proccesser')" ng-disabled="sCtrl.custInfo.serviceId==null"  class="btn btn-info btn-xs"  ng-click="sCtrl.insertApp()" >新增</button>
-			<!-- 	<button data-toggle="modal" data-target="#serviceidModal" class="btn btn-success btn-xs" >choose serviceId</button>
+<!-- 				<button ng-show="sCtrl.showSave&&!sCtrl.hideNotNecessary&&role &&(role=='admin'||role=='apply_Proccesser'||role=='customerService')" ng-disabled="sCtrl.custInfo.serviceId==null"  class="btn btn-info btn-xs"  ng-click="sCtrl.insertApp()" >新增申請書記錄</button>
+ -->			<!-- 	<button data-toggle="modal" data-target="#serviceidModal" class="btn btn-success btn-xs" >choose serviceId</button>
 				<modal title="Choose a serviceid" id="serviceidModal">
 					<table class="dataTable">
 						<tr ng-repeat="item in sCtrl.serviceIdList" ng-click="sCtrl.chooseServiceId(item)">

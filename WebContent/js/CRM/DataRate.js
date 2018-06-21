@@ -16,11 +16,17 @@ angular.module('MainApp')
 		self.query = function(){
 			AjaxService.query('queryDataRate',{})
 			.success(function(data, status, headers, config) { 
-				self.data =data['data'];
-				self.dataList=data['data'];
-				self.proccessSearch();
+				console.log("data rate result:"+data);
+				if(data['error']){
+					
+				}else{
+					self.data =data['data'];
+					self.dataList=data['data'];
+					self.proccessSearch();
+				}
+				
 		    }).error(function(data, status, headers, config) {   
-		    	self.Error=data['error'];
+		    	self.Error="ERROR"
 		    }).then(function(){
 		    	self.rateMsg = '查詢完成!';
 		    });

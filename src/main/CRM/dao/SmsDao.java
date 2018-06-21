@@ -56,13 +56,13 @@ public class SmsDao extends CRMBaseDao{
 					+ "		WHERE C.PHONENUMBER = '"+CHTMSISDN+"' "
 					)
 					+ "		UNION "
-					+ "		SELECT 'Landing' SCLASS,D.PHONENUMBER SEND_NUMBER,D.CONTENT MSG,D.CREATETIME SENDTIME "
-					+ "		FROM S2T_BL_SMS_LOG D "
-					+ "		WHERE D.PHONENUMBER = '"+S2TMSISDN+"' "
+					+ "		SELECT 'Landing' SCLASS,D.SEND_NUMBER SEND_NUMBER,D.CONTENT MSG,D.SEND_TIME SENDTIME "
+					+ "		FROM LANDING_SMS_LOG D "
+					+ "		WHERE D.SEND_NUMBER = '"+S2TMSISDN+"' "
 					+ ") "
 					+dateCondiyion
 					+ " ORDER BY SENDTIME DESC ";
-
+			
 			System.out.println(sql);
 			rs = st.executeQuery(sql);
 			
@@ -70,7 +70,13 @@ public class SmsDao extends CRMBaseDao{
 				SMS r = new SMS();
 				r.setSmsclass(rs.getString("SCLASS"));
 				r.setPhoneno(rs.getString("SEND_NUMBER"));
-				r.setContent(processEncodeData(rs.getString("MSG"),"ISO-8859-1","BIG5"));
+				
+				
+				if("Landing".equalsIgnoreCase(rs.getString("SCLASS")))
+					r.setContent(processEncodeData(rs.getString("MSG"),"ISO-8859-1","UTF-8"));
+				else
+					r.setContent(processEncodeData(rs.getString("MSG"),"ISO-8859-1","BIG5"));
+				
 				r.setSendTime(rs.getString("SENDTIME"));
 				result.add(r);
 			}

@@ -19,14 +19,15 @@ public class CRMBaseDao extends BaseDao{
 		// TODO Auto-generated constructor stub
 	}
 	
-	public String queryServiceIdbyS2tMsisdn(String s2tMsisdn) throws Exception{
+	public String queryServiceIdbyS2tMsisdn(String s2tMsisdn,boolean isTeminated) throws Exception{
 		
 		String serviceid = null;
 		
 		Statement st1 = null;
 		ResultSet rs = null ;
 		
-		String sql1 = " SELECT SERVICEID  from service where SERVICECODE = '"+s2tMsisdn+"' and DateCanceled is null ";
+		String sql1 = " SELECT MAX(SERVICEID) SERVICEID from service where SERVICECODE = '"+s2tMsisdn+"' "
+				+ (isTeminated?"and DateCanceled is not null":"and DateCanceled is null ");
 		
 		
 		String sql2 = "SELECT MAX(A.SERVICEID) SERVICEID "
@@ -67,11 +68,16 @@ public class CRMBaseDao extends BaseDao{
 		return serviceid;
 	}
 	
-	public String queryServiceIdbyChtMsisdn(String chtMsisdn) throws Exception{
+	//public String queryServiceIdbyChtMsisdn(String chtMsisdn) throws Exception{
+	public Subscriber queryServiceIdbyChtMsisdn(String chtMsisdn) throws Exception{
+		Subscriber s = new Subscriber();
+		s.setChtMsisdn(chtMsisdn); 
+		
 		String serviceid = null;
 		
 		Statement st = null;
 		ResultSet rs = null ;
+		//查詢現行資料
 		String sql = "select A.SERVICEID "
 					+ "from FOLLOWMEDATA A "
 					+ "where A.FOLLOWMENUMBER = '"+chtMsisdn+"' ";
@@ -84,6 +90,7 @@ public class CRMBaseDao extends BaseDao{
 			
 			while(rs.next()){
 				serviceid = rs.getString("SERVICEID");
+				s.setServiceId(serviceid);
 			}
 			
 			if(serviceid == null){
@@ -92,87 +99,183 @@ public class CRMBaseDao extends BaseDao{
 				String time = null;
 				String workType = null;
 				
-				sql = "Select  A.S2T_MSISDN,A.S2T_IMSI,to_char(A.CMCC_OPERATIONDATE,'yyyyMMddhh24miss') TIME,A.WORK_TYPE "
-						+ "from S2T_TB_TYPB_WO_SYNC_FILE_DTL A "
-						+ "where A.ORIGINAL_CMCC_MSISDN like '%"+chtMsisdn+"%' "
-						+ "AND trim(A.S2T_MSISDN) is not null "
-						+ "order by A.WORK_ORDER_NBR DESC ";
+				
+				
+				//20180118 add
+				sql = "select to_char(REQTIME,'yyyyMMddhh24miss') TIME,"
+						+ "SUBSTR(A.content,instr(content,'S2T_IMSI=')+length('S2T_IMSI='),15) S2T_IMSI,"
+						+ "SUBSTR(A.content,instr(content,'TWNLD_IMSI=')+length('TWNLD_IMSI='),15) TWNLD_IMSI,"
+						+ "SUBSTR(A.content,instr(content,'Req_Status=')+length('Req_Status='),2) WORK_TYPE " 
+						+ "from provlog A "
+						+ "where content like '%"+chtMsisdn+"%' "
+						+ "order by REQTIME DESC";
+				String s2tMsisdn = null;
+				String s2tIMSI = null;
+				String homeIMSI = null;
 				
 				System.out.println("sql:"+sql);
 				rs = st.executeQuery(sql);
 				
-				String s2tMsisdn = null;
-<<<<<<< HEAD
-				String s2tIMSI = null;
-=======
->>>>>>> refs/remotes/origin/master
+				//PROVLOG 查的到資料，環球卡用戶
 				if(rs.next()){
+					System.out.println("IS CHT USER.");
 					time = rs.getString("TIME");
-					s2tMsisdn = rs.getString("S2T_MSISDN");
 					workType = rs.getString("WORK_TYPE");
-<<<<<<< HEAD
 					s2tIMSI = rs.getString("S2T_IMSI");
-=======
->>>>>>> refs/remotes/origin/master
-				}
-				System.out.println("workType:"+workType);
-				//20170921 確認是否換過號
-				if(!"99".equals(workType)) {
+					homeIMSI = rs.getString("TWNLD_IMSI");
 					
-					
-					rs = null;
-					
-					
-					String sql2 = "Select  A.S2T_MSISDN,A.S2T_IMSI,to_char(A.CMCC_OPERATIONDATE,'yyyyMMddhh24miss') TIME,A.WORK_TYPE,A.ORIGINAL_CMCC_MSISDN " + 
-							"from S2T_TB_TYPB_WO_SYNC_FILE_DTL A " + 
-							"where A.S2T_IMSI = '"+s2tIMSI+"' " + 
-							"and A.CMCC_OPERATIONDATE > to_date('"+time+"','yyyyMMddhh24miss')" + 
-							"order by A.WORK_ORDER_NBR ";
-					System.out.println("sql:"+sql2);
-					rs = st.executeQuery(sql2);
-
-					if(rs.next()) {
-						workType = rs.getString("WORK_TYPE");
-						chtMsisdn = rs.getString("ORIGINAL_CMCC_MSISDN");
-					}
 					System.out.println("workType:"+workType);
-					//如果同imsi之後的第一筆為05，表示有換號，重新查詢最後一筆的紀錄
-					if("05".equals(workType)) {
+					//20170921 確認是否換過號
+					int count = 0;
+					while(!"99".equals(workType)&&!"0".equals(workType)&&count<=10) {
+						count++; //防無限迴圈
 						rs = null;
-						
-						sql = "Select  A.S2T_MSISDN,A.S2T_IMSI,to_char(A.CMCC_OPERATIONDATE,'yyyyMMddhh24miss') TIME,A.WORK_TYPE "
-								+ "from S2T_TB_TYPB_WO_SYNC_FILE_DTL A "
-								+ "where A.ORIGINAL_CMCC_MSISDN like '%"+chtMsisdn+"%' "
-								+ "AND trim(A.S2T_MSISDN) is not null "
-								+ "order by A.WORK_ORDER_NBR DESC ";
+						workType = "0";
+						//查詢是否同IMSI之後是否有05換中華號
+						//20180118 add
+						sql = "select to_char(REQTIME,'yyyyMMddhh24miss') TIME,"
+								+ "SUBSTR(A.content,instr(content,'S2T_IMSI=')+length('S2T_IMSI='),15) S2T_IMSI,"
+								+ "SUBSTR(A.content,instr(content,'Req_Status=')+length('Req_Status='),2) WORK_TYPE, " 
+								+ "SUBSTR(A.content,instr(content,'TWNLD_MSISDN=')+length('TWNLD_MSISDN='),12) TWNLD_MSISDN "
+								+ "from provlog A "
+								+ "where content like '%"+s2tIMSI+"%' "
+								+ "and A.REQTIME > to_date('"+time+"','yyyyMMddhh24miss')" 
+								+ "order by REQTIME ";
 						
 						System.out.println("sql:"+sql);
 						rs = st.executeQuery(sql);
-						
-						if(rs.next()){
+
+						if(rs.next()) {
 							time = rs.getString("TIME");
-							s2tMsisdn = rs.getString("S2T_MSISDN");
 							workType = rs.getString("WORK_TYPE");
-							s2tIMSI = rs.getString("S2T_IMSI");
+							chtMsisdn = rs.getString("TWNLD_MSISDN");
+						}
+						System.out.println("workType:"+workType);
+						//如果同imsi之後的第一筆為05，表示有換號，重新查詢是否退租
+						if("05".equals(workType)) {
+							rs = null;
+							workType = "0";
+							//20180118 add
+							sql = "select to_char(REQTIME,'yyyyMMddhh24miss') TIME,"
+									+ "SUBSTR(A.content,instr(content,'S2T_IMSI=')+length('S2T_IMSI='),15) S2T_IMSI,"
+									+ "SUBSTR(A.content,instr(content,'Req_Status=')+length('Req_Status='),2) WORK_TYPE " 
+									+ "from provlog A "
+									+ "where content like '%"+chtMsisdn+"%' "
+									+ "and A.REQTIME > to_date('"+time+"','yyyyMMddhh24miss')" 
+									+ "order by REQTIME DESC";
+							
+							System.out.println("sql:"+sql);
+							rs = st.executeQuery(sql);
+							
+							if(rs.next()){
+								time = rs.getString("TIME");
+								workType = rs.getString("WORK_TYPE");
+								s2tIMSI = rs.getString("S2T_IMSI");
+							}
 						}
 					}
-				}
+					//查詢在最後一張工單之後所獲得的S2TMSISDN
+					rs = null;
+					
+					//20180118 add 查詢Service
+					String sql2 = "Select  A.S2T_MSISDN,A.S2T_IMSI,to_char(A.CMCC_OPERATIONDATE,'yyyyMMddhh24miss') TIME,A.WORK_TYPE,A.ORIGINAL_CMCC_MSISDN " + 
+							"from S2T_TB_TYPB_WO_SYNC_FILE_DTL A " + 
+							"where A.S2T_IMSI = '"+s2tIMSI+"' " + 
+							"and A.CMCC_OPERATIONDATE <= to_date('"+time+"','yyyyMMddhh24miss')" + 
+							"order by A.WORK_ORDER_NBR DESC";
+					
+					System.out.println("sql:"+sql2);
+					rs = st.executeQuery(sql2);
+					
+					if(rs.next()) {
+						s2tMsisdn = rs.getString("S2T_MSISDN");
+					}
+				//非環球卡用戶	
+				}else {
+					System.out.println("NOT CHT USER.");
+					rs = null;
+					//查詢最後一張工單
+					sql = "Select  A.S2T_MSISDN,A.S2T_IMSI,to_char(A.CMCC_OPERATIONDATE,'yyyyMMddhh24miss') TIME,A.WORK_TYPE "
+					+ "from S2T_TB_TYPB_WO_SYNC_FILE_DTL A "
+					+ "where A.ORIGINAL_CMCC_MSISDN like '%"+chtMsisdn+"%' "
+					+ "AND trim(A.S2T_MSISDN) is not null "
+					+ "order by A.WORK_ORDER_NBR DESC ";
+			
+					System.out.println("sql:"+sql);
+					rs = st.executeQuery(sql);
+					if(rs.next()){
+						time = rs.getString("TIME");
+						s2tMsisdn = rs.getString("S2T_MSISDN");
+						workType = rs.getString("WORK_TYPE");
+						s2tIMSI = rs.getString("S2T_IMSI");
+						
+						System.out.println("workType:"+workType);
+						//20170921 確認是否換過號
+						int count = 1;
+						while(!"99".equals(workType)&&!"0".equals(workType)&&count<=10) {
+							count++;
+							rs = null;
+							workType = "0";
+							String sql2 = "Select  A.S2T_MSISDN,A.S2T_IMSI,to_char(A.CMCC_OPERATIONDATE,'yyyyMMddhh24miss') TIME,A.WORK_TYPE,A.ORIGINAL_CMCC_MSISDN " + 
+									"from S2T_TB_TYPB_WO_SYNC_FILE_DTL A " + 
+									"where A.S2T_IMSI = '"+s2tIMSI+"' " + 
+									"and A.CMCC_OPERATIONDATE > to_date('"+time+"','yyyyMMddhh24miss')" + 
+									"order by A.WORK_ORDER_NBR ";
+							
+							System.out.println("sql:"+sql2);
+							rs = st.executeQuery(sql2);
 
-				rs = null;
-				
-				sql = "select A.SERVICEID "
-						+ "from service A "
-						+ "where A.servicecode = '"+s2tMsisdn+"' "
-						+ "and A.DATEACTIVATED<to_date('"+time+"','yyyyMMddhh24miss') "
-						+ "and "+("99".equals(workType)?"A.DATECANCELED>to_date('"+time+"','yyyyMMddhh24miss')" : "A.DATECANCELED is null");				
-				System.out.println(sql);
-				rs = st.executeQuery(sql);
-				
-				while(rs.next()){
-					serviceid = rs.getString("SERVICEID");
+							if(rs.next()) {
+								time = rs.getString("TIME");
+								workType = rs.getString("WORK_TYPE");
+								chtMsisdn = rs.getString("ORIGINAL_CMCC_MSISDN");
+							}
+							System.out.println("workType:"+workType);
+							//如果同imsi之後的第一筆為05，表示有換號，重新查詢最後一筆的紀錄
+							if("05".equals(workType)) {
+								rs = null;
+								workType = "0";
+								sql = "Select  A.S2T_MSISDN,A.S2T_IMSI,to_char(A.CMCC_OPERATIONDATE,'yyyyMMddhh24miss') TIME,A.WORK_TYPE "
+										+ "from S2T_TB_TYPB_WO_SYNC_FILE_DTL A "
+										+ "where A.ORIGINAL_CMCC_MSISDN like '%"+chtMsisdn+"%' "
+										+ "AND trim(A.S2T_MSISDN) is not null "
+										+ "and A.CMCC_OPERATIONDATE > to_date('"+time+"','yyyyMMddhh24miss')"
+										+ "order by A.WORK_ORDER_NBR DESC ";
+								
+								System.out.println("sql:"+sql);
+								rs = st.executeQuery(sql);
+								
+								if(rs.next()){
+									time = rs.getString("TIME");
+									workType = rs.getString("WORK_TYPE");
+									s2tIMSI = rs.getString("S2T_IMSI");
+								}	
+							}
+						}
+					}	
+				}
+				//從service查詢 對應的Serviceid
+				if(s2tMsisdn!=null) {
+					rs = null;
+					
+					sql = "select A.SERVICEID "
+							+ "from service A "
+							+ "where A.servicecode = '"+s2tMsisdn+"' "
+							+ "and A.DATEACTIVATED<=to_date('"+time+"','yyyyMMddhh24miss') "
+							+ "and "+("99".equals(workType)?"A.DATECANCELED>=to_date('"+time+"','yyyyMMddhh24miss')" : "A.DATECANCELED is null");				
+					System.out.println(sql);
+					rs = st.executeQuery(sql);
+					
+					while(rs.next()){
+						serviceid = rs.getString("SERVICEID");
+						s.setServiceId(serviceid);
+					}
 				}
 				
 				//serviceid = queryServiceIdbyS2tMsisdn(s2tMsisdn);
+				s.setS2tIMSI(s2tIMSI);
+				s.setS2tMsisdn(s2tMsisdn);
+				s.setHomeIMSI(homeIMSI);
 			}
 
 		}finally{
@@ -183,11 +286,11 @@ public class CRMBaseDao extends BaseDao{
 			} catch (Exception e) {
 			}
 		}
-		return serviceid;
+		return s;
 	}
 	
 	public String queryServiceIdbyS2tImsi(String s2tImsi) throws Exception{
-String serviceid = null;
+		String serviceid = null;
 		
 		Statement st1 = null;
 		ResultSet rs = null ;
@@ -224,7 +327,7 @@ String serviceid = null;
 					s2tMsisdn = rs.getString("S2T_MSISDN");
 				}
 				
-				serviceid = queryServiceIdbyS2tMsisdn(s2tMsisdn);
+				serviceid = queryServiceIdbyS2tMsisdn(s2tMsisdn,true);
 			}
 
 		}finally{

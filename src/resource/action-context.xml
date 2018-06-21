@@ -15,9 +15,9 @@
         >
         
         <aop:aspectj-autoproxy proxy-target-class="true"/>
-        <!-- <bean id="aspect" class="main.common.aop.AOPtest" />  -->
-        <!-- <bean id="sessionCheckAspect" class="main.common.aop.sessionCheckAOP" />
-        <bean id="sactionLogAspect" class="main.common.aop.ActionLogAOP" /> -->
+        <!-- <bean id="aspect" class="main.common.aop.AOPtest" /> -->
+        <!-- <bean id="sessionCheckAspect" class="main.common.aop.sessionCheckAOP" /> -->
+       	<!-- <bean id="sactionLogAspect" class="main.common.aop.ActionLogAOP" /> -->
 
 
 		<!-- <context:annotation-config/>
@@ -30,5 +30,7 @@
     	<!-- <context:component-scan base-package="main.common.aop" /> -->
     	<context:component-scan base-package="main.common.service" />
     	<context:component-scan base-package="main.common.dao" />
+    	
+    	
     	
 </beans>

@@ -23,6 +23,5 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="D:/MEGAsync/download/jar/mysql-connector-java-5.1.17-bin.jar"/>
-	<classpathentry kind="lib" path="D:/MEGAsync/download/jar/ojdbc14.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

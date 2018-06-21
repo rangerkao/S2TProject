@@ -24,17 +24,17 @@ public class ApplicationDao extends CRMBaseDao {
 	
 	public List<ApplicationData> queryByS2tMsisdn(String s2tMsisdn) throws Exception{
 		List<ApplicationData> result = new ArrayList<ApplicationData>();
-		String serviceId = queryServiceIdbyS2tMsisdn(s2tMsisdn);
+		String serviceId = queryServiceIdbyS2tMsisdn(s2tMsisdn,false);
 		result = queryApplication(serviceId);
 		return result;
 	}
 	
-	public List<ApplicationData> queryByChtMsisdn(String chtMsisdn) throws Exception{
+	/*public List<ApplicationData> queryByChtMsisdn(String chtMsisdn) throws Exception{
 		List<ApplicationData> result = new ArrayList<ApplicationData>();
 		String serviceId = queryServiceIdbyChtMsisdn(chtMsisdn);
 		result = queryApplication(serviceId);
 		return result;
-	}
+	}*/
 	
 	public List<ApplicationData> queryByServiceId(String serviceId) throws Exception{
 		List<ApplicationData> result = new ArrayList<ApplicationData>();

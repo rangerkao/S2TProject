@@ -20,7 +20,7 @@ public class QosDao extends CRMBaseDao {
 	//查詢列表
 	public List<QosBean> queryQosList() throws Exception{
 		String sql=
-				"SELECT A.PROVISIONID,A.IMSI,A.MSISDN,A.PLAN,A.ACTION,A.RESPONSE_CODE,A.RESULT_CODE,to_char(A.CERATE_TIME,'yyyyMMdd hh24:mi:ss') ctime "
+				"SELECT A.PROVISIONID,A.IMSI,A.MSISDN,A.PLAN,A.ACTION,A.RESPONSE_CODE,A.RESULT_CODE,to_char(A.CERATE_TIME,'yyyyMMdd hh24:mi:ss') ctime,TYPE "
 				+ "FROM QOS_PROVISION_LOG A "
 				+ "ORDER BY A.CERATE_TIME DESC ";
 
@@ -56,6 +56,7 @@ public class QosDao extends CRMBaseDao {
 				qosdata.setResultCode(rc);
 				qosdata.setReturnCode(rc2);
 				qosdata.setCreateTime(rs.getString("ctime"));
+				qosdata.setType(rs.getString("TYPE"));
 				list.add(qosdata);
 			}
 		} finally{
@@ -75,7 +76,7 @@ public class QosDao extends CRMBaseDao {
 	//查詢列表
 	public List<QosBean> queryQosList(String imsi,String msisdn,String activedate,String canceldate) throws Exception{
 		String sql=
-				"SELECT A.PROVISIONID,A.IMSI,A.MSISDN,A.PLAN,A.ACTION,A.RESPONSE_CODE,A.RESULT_CODE,to_char(A.CERATE_TIME,'yyyyMMdd hh24:mi:ss') ctime "
+				"SELECT A.PROVISIONID,A.IMSI,A.MSISDN,A.PLAN,A.ACTION,A.RESPONSE_CODE,A.RESULT_CODE,to_char(A.CERATE_TIME,'yyyyMMdd hh24:mi:ss') ctime,TYPE "
 				+ "FROM QOS_PROVISION_LOG A "
 				+ "WHERE 1=1 "
 				+ "AND A.CERATE_TIME > to_date('"+activedate+"','yyyy/MM/dd hh24:mi:ss') "
@@ -118,6 +119,7 @@ public class QosDao extends CRMBaseDao {
 				qosdata.setResultCode(rc);
 				qosdata.setReturnCode(rc2);
 				qosdata.setCreateTime(rs.getString("ctime"));
+				qosdata.setType(rs.getString("TYPE"));
 				list.add(qosdata);
 			} 
 		} finally {

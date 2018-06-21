@@ -37,25 +37,76 @@ angular.module('MainApp')
 			/*8525609nnnn->861841103nnnn
 			8526640nnnn->861391048nnnn
 			8526947nnnn->861391037nnnn*/
-			$(".chinaArea input,.chinaArea button").removeAttr("disabled");
+			/*$(".chinaArea input,.chinaArea button").removeAttr("disabled");
 			if(s2tNumber.match(/^8525609.+/g))
 				self.chinaMsisdn = s2tNumber.replace("8525609","861841103");
 			else if(s2tNumber.match(/^8526640.+/g))
 				self.chinaMsisdn = s2tNumber.replace("8526640","861391048");
 			else if(s2tNumber.match(/^8526947.+/g))
-				self.chinaMsisdn = s2tNumber.replace("8526947","861391037");
+				self.chinaMsisdn = s2tNumber.replace("8526947","861391037");*/
 			//20170517 add
 //			8618411045xxx	85252215xxx
 //			8618411046xxx	85252216xxx
 //			8618411040xxx	85253940xxx
 
-			else if(s2tNumber.match(/^85252215.+/g))
+			/*else if(s2tNumber.match(/^85252215.+/g))
 				self.chinaMsisdn = s2tNumber.replace("85252215","8618411045");
 			else if(s2tNumber.match(/^85252216.+/g))
 				self.chinaMsisdn = s2tNumber.replace("85252216","8618411046");
 			else if(s2tNumber.match(/^85253940.+/g))
-				self.chinaMsisdn = s2tNumber.replace("85253940","8618411040");
+				self.chinaMsisdn = s2tNumber.replace("85253940","8618411040");*/
+//20180613 add
+			
+			if(s2tNumber.match(/^85252215.+/g))
+				self.chinaMsisdn = s2tNumber.replace("85252215","8618411045");
+				
+			else if(s2tNumber.match(/^85252216.+/g))
+				self.chinaMsisdn = s2tNumber.replace("85252216","8618411046");
 
+			else if(s2tNumber.match(/^85253940.+/g))
+				self.chinaMsisdn = s2tNumber.replace("85253940","8618411040");
+				
+			else if(s2tNumber.match(/^8525609.+/g))
+				self.chinaMsisdn = s2tNumber.replace("8525609","861841103");
+				
+			else if(s2tNumber.match(/^8526640.+/g))
+				self.chinaMsisdn = s2tNumber.replace("8526640","861391048");
+				
+			else if(s2tNumber.match(/^852676585.+/g))
+				self.chinaMsisdn = s2tNumber.replace("852676585","86184110485");
+				
+			else if(s2tNumber.match(/^852676586.+/g))
+				self.chinaMsisdn = s2tNumber.replace("852676586","86184110486");
+				
+			else if(s2tNumber.match(/^852676587.+/g))
+				self.chinaMsisdn = s2tNumber.replace("852676587","86184110487");
+				
+			else if(s2tNumber.match(/^852676588.+/g))
+				self.chinaMsisdn = s2tNumber.replace("852676588","86184110488");
+				
+			else if(s2tNumber.match(/^852676589.+/g))
+				self.chinaMsisdn = s2tNumber.replace("852676589","86184110489");
+				
+			else if(s2tNumber.match(/^852676590.+/g))
+				self.chinaMsisdn = s2tNumber.replace("852676590","86184110490");
+				
+			else if(s2tNumber.match(/^852676591.+/g))
+				self.chinaMsisdn = s2tNumber.replace("852676591","86184110491");
+				
+			else if(s2tNumber.match(/^852676592.+/g))
+				self.chinaMsisdn = s2tNumber.replace("852676592","86184110492");
+				
+			else if(s2tNumber.match(/^852676593.+/g))
+				self.chinaMsisdn = s2tNumber.replace("852676593","86184110493");
+				
+			else if(s2tNumber.match(/^852676594.+/g))
+				self.chinaMsisdn = s2tNumber.replace("852676594xx","86184110494");
+				
+			else if(s2tNumber.match(/^8526947.+/g))
+				self.chinaMsisdn = s2tNumber.replace("8526947","861391037");
+				
+				
+			
 			if(!self.chinaMsisdn){
 				alert("中國門號無法對應規則");
 				$(".chinaArea input,.chinaArea button").attr("disabled","true");

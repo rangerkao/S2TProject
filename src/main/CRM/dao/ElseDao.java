@@ -242,18 +242,19 @@ public class ElseDao extends CRMBaseDao{
 					+ "where A.CONTENT like '%S2T_IMSI="+s2tIMSI+"%' AND A.CONTENT like '%Req_Status=07%' "
 					+ "order by A.REQTIME desc ";*/
 			
-			sql = "select instr(A.content,'CHNA') CD "
+			sql = "select instr(A.content,'CHNA') CD,to_char(A.REQTIME,'MM/dd') EF "
 					+ "from PROVLOG A "
 					+ "where (A.CONTENT like '%TWNLD_MSISDN="+chtMsisdn+"%' or A.CONTENT like '%S2T_IMSI="+s2tIMSI+"%'  )"
-					+ "AND (A.CONTENT like '%Req_Status=07%' or A.CONTENT like '%Req_Status=99%') "
+					+ "AND (A.CONTENT like '%CHNA%' or A.CONTENT like '%CHND%') "
 					+ "order by A.REQTIME desc ";
 			rs = st.executeQuery(sql);
 			
 			//只取最後一筆
 			if(rs.next()){
 				int cd = rs.getInt("CD");
+				String ef = rs.getString("EF");
 				if(cd!=0)
-					result.add("＊已申請中國固定號");
+					result.add("＊"+ef+"已申請中國固定號");
 			}
 		} finally{
 			try {

@@ -197,7 +197,7 @@ public class SubscriberDao extends CRMBaseDao{
 		List<Subscriber> result = new ArrayList<Subscriber>();
 
 		try{
-			String serviceid = queryServiceIdbyS2tMsisdn(s2tMsisdn);
+			String serviceid = queryServiceIdbyS2tMsisdn(s2tMsisdn,false);
 			if(serviceid!= null &&!"".equals(serviceid))
 				result.add(queryDataByServiceId(serviceid));
 			
@@ -243,9 +243,24 @@ public class SubscriberDao extends CRMBaseDao{
 		List<Subscriber> result = new ArrayList<Subscriber>();
 		
 		try{
-			String serviceid = queryServiceIdbyChtMsisdn(chtMsisdn);
-			if(serviceid!= null &&!"".equals(serviceid))
-				result.add(queryDataByServiceId(serviceid));
+			Subscriber s = queryServiceIdbyChtMsisdn(chtMsisdn);
+			//String serviceid = queryServiceIdbyChtMsisdn(chtMsisdn);
+			if(s.getServiceId()!= null &&!"".equals(s.getServiceId())) {
+				Subscriber s2 = queryDataByServiceId(s.getServiceId());
+				if(s2.getChtMsisdn()==null||"".equals(s2.getChtMsisdn().trim()))
+					s2.setChtMsisdn(s.getChtMsisdn());
+				
+				if(s2.getHomeIMSI()==null||"".equals(s2.getHomeIMSI().trim()))
+					s2.setHomeIMSI(s.getHomeIMSI());
+
+				if(s2.getS2tIMSI()==null||"".equals(s2.getS2tIMSI().trim()))
+					s2.setS2tIMSI(s.getS2tIMSI());
+				
+				if(s2.getS2tMsisdn()==null||"".equals(s2.getS2tMsisdn().trim()))
+					s2.setS2tMsisdn(s.getS2tMsisdn());
+				result.add(s2);
+			}
+				
 			
 			/*if(result.size()==0){
 				result.add(s);
@@ -569,7 +584,7 @@ public class SubscriberDao extends CRMBaseDao{
 				+ "					WHEN '10' THEN 'waiting' "
 				+ "					ELSE 'else' END) STAUS, "
 				+ "					C. SERVICECODE S2TMSISDN,C.PRICEPLANID, "
-				+ "					to_char(C.DATEACTIVATED,'yyyy/MM/dd hh24:mi:ss') DATEACTIVATED,nvl(to_char(C.DATECANCELED,'yyyy/MM/dd hh24:mi:ss'),'') DATECANCELED,F.HOMEIMSI,F.IMSI "
+				+ "					to_char(C.DATECREATED,'yyyy/MM/dd hh24:mi:ss') DATEACTIVATED,nvl(to_char(C.DATECANCELED,'yyyy/MM/dd hh24:mi:ss'),'') DATECANCELED,F.HOMEIMSI,F.IMSI "
 				+ "FROM SERVICE C,IMSI F "
 				+ "WHERE C.SERVICEID = F.SERVICEID(+) AND C.SERVICEID = "+id+" ";
 		
@@ -612,9 +627,7 @@ public class SubscriberDao extends CRMBaseDao{
 				+ "to_char(A.DATEACTIVATED,'yyyy/MM/dd hh24:mi:ss') DATEACTIVATED,nvl(to_char(B.COMPLETEDATE,'yyyy/MM/dd hh24:mi:ss'),'') DATECANCELED "
 				+ "FROM SERVICE A, TERMINATIONORDER B "
 				+ "WHERE A.SERVICEID=B.TERMOBJID and serviceid = "+id+" ";
-		
-		
-		
+
 		Statement st = null;
 		ResultSet rs = null;
 		Connection conn = getConn3();
@@ -658,6 +671,7 @@ public class SubscriberDao extends CRMBaseDao{
 			//closeConnection();
 		}
 
+		boolean isCanceled = false;
 		conn = null;
 		conn = getConn1();
 		try {
@@ -679,6 +693,8 @@ public class SubscriberDao extends CRMBaseDao{
 				
 				result.setActivatedDate(rs.getString("DATEACTIVATED"));
 				//result.setCanceledDate(rs.getString("DATECANCELED"));
+				//20180202
+				isCanceled = rs.getString("DATECANCELED")!=null;
 				
 				result.setHomeIMSI(rs.getString("HOMEIMSI"));
 			}
@@ -692,27 +708,32 @@ public class SubscriberDao extends CRMBaseDao{
 			//closeConnection();
 		}
 		
-		//20170110
-		conn = null;
-		conn = getConn2();
-		try {
-			st = conn.createStatement();
-			rs = st.executeQuery(sql3);
-			System.out.println("Execute SQL:"+sql3);
-			if(rs.next()){
-				//只有已退租才會記錄
-				//result.setActivatedDate(rs.getString("DATEACTIVATED"));
-				result.setCanceledDate(rs.getString("DATECANCELED"));
-			}
-		} finally{
+		if(isCanceled) {
+			//20170110
+			conn = null;
+			conn = getConn2();
 			try {
-				if(rs!=null) rs.close();
-				if(st!=null) st.close();
-				closeConn2(conn);
-			} catch (Exception e) {
+				st = conn.createStatement();
+				rs = st.executeQuery(sql3);
+				System.out.println("Execute SQL:"+sql3);
+				if(rs.next()){
+					//只有已退租才會記錄
+					//result.setActivatedDate(rs.getString("DATEACTIVATED"));
+					result.setCanceledDate(rs.getString("DATECANCELED"));
+				}
+			} finally{
+				try {
+					if(rs!=null) rs.close();
+					if(st!=null) st.close();
+					closeConn2(conn);
+				} catch (Exception e) {
+				}
+				//closeConnection();
 			}
-			//closeConnection();
+		}else {
+			result.setCanceledDate("");
 		}
+		
 		
 		//20170310
 		//20170626 mod
@@ -724,14 +745,30 @@ public class SubscriberDao extends CRMBaseDao{
 			//20170310 add 查詢CHTMSISDN
 			//20170510 mod 以環球卡Table查詢
 			
+			String sql41 = "select count(1) cd from FOLLOWMEDATA where serviceid = "+id+" AND Followmenumber like '886%' ";
+
 			String sql4 = "select Followmenumber from FOLLOWMEDATA A where serviceid = "+id+" AND Followmenumber like '886%' ";
 			st = conn.createStatement();
-			System.out.println("Execute SQL:"+sql4);
-			rs = st.executeQuery(sql4);
 			
-			if(rs.next()){
-				chtMsisdn = rs.getString("Followmenumber");
+			System.out.println("Execute SQL:"+sql41);
+			rs = st.executeQuery(sql41);
+			boolean onlyOne886FollowMeNumber = false;
+			if(rs.next()) {
+				onlyOne886FollowMeNumber = rs.getInt("cd")==1;
 			}
+			
+			if(onlyOne886FollowMeNumber) {
+				rs = null;
+				
+				System.out.println("Execute SQL:"+sql4);
+				rs = st.executeQuery(sql4);
+				
+				if(rs.next()){
+					chtMsisdn = rs.getString("Followmenumber");
+				}
+			}
+			
+			
 			
 			if(chtMsisdn == null || "".equals(chtMsisdn)){
 				sql4 = "select Replace(nvl(A.FORWARD_TO_HOME_NO,A.FORWARD_TO_S2T_NO_1),'+','') MSISDN "

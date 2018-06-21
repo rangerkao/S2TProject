@@ -25,11 +25,13 @@ public class sessionCheckAOP{
 	
 	@Around("pointCutMethod()") 
 	public Object doAround(ProceedingJoinPoint pjp) throws Throwable {
+		System.out.println("sessionCheckAOP");
 		/*HttpServletRequest request = SysContent.getRequest();  
         HttpServletResponse response = SysContent.getResponse();  
         HttpSession session = SysContent.getSession(); */ 
 		//BaseDao.setRequestTime(new Date());
-		ActionContext context = ActionContext.getContext();
+		
+		/*ActionContext context = ActionContext.getContext();
 		Map<String, Object> session = context.getSession();
 		String account = (String) session.get("s2t.account");
 		Object o= "needLogin";
@@ -37,8 +39,8 @@ public class sessionCheckAOP{
 		if(account != null){
 			o = pjp.proceed();
 			System.out.println("ACCount:"+account);
-		}
-		return o;
+		}*/
+		return pjp.proceed();
 	}
 
 }

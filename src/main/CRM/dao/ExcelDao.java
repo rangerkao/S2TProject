@@ -107,10 +107,10 @@ public class ExcelDao extends CRMBaseDao{
 		try{
 			//System.out.println("query remain data!");
 			
-			String sql = "SELECT F.PARTNERMSISDN,E.SERVICECODE,E.DATEACTIVATED,E.DATECANCELED,E.SERVICEID "
+			String sql = "SELECT F.PARTNERMSISDN,E.SERVICECODE,E.DATEACTIVATED,E.DATECANCELED,E.SERVICEID,E.PRICEPLANID "
 					+ "FROM AVAILABLEMSISDN F,"
 					+ "		(	SELECT A.SERVICEID,A.SERVICECODE ||(CASE WHEN A.STATUS!=1 THEN '  (TERMINATED)' END) SERVICECODE, "
-					+ "						A.DATEACTIVATED,A.DATECANCELED,A.STATUS s "
+					+ "						A.DATEACTIVATED,A.DATECANCELED,A.STATUS s,A.PRICEPLANID "
 					+ "			FROM SERVICE A ,"
 					+ "					(	SELECT B.SERVICEID,MAX(B.DATEACTIVATED) DATEACTIVATED "
 					+ "						FROM SERVICE B GROUP BY SERVICEID) B "
@@ -133,6 +133,7 @@ public class ExcelDao extends CRMBaseDao{
 				m3.put("SERVICECODE", rs.getString("SERVICECODE"));
 				m3.put("DATEACTIVATED", rs.getString("DATEACTIVATED"));
 				m3.put("DATECANCELED", rs.getString("DATECANCELED"));
+				m3.put("PRICEPLANID", rs.getString("PRICEPLANID"));
 				m2.put(rs.getString("SERVICEID"), m3);
 			}
 			
@@ -191,9 +192,39 @@ public class ExcelDao extends CRMBaseDao{
 			} catch (Exception e) {
 			}
 		}
+		
+		//20180119 查詢Priceplan 資料
+		
+		st = null;
+		rs = null;
+		
+		Map<String, String> pricaplanMap = new HashMap<String,String>();
+		try{
+			String sql = "SELECT A.EFFECTIVITY,  A.PRICEPLANID,  A.NAME,  A.ALIASES,  A.PRODUCTION,  A.DESCRIPTION " + 
+					"FROM PRICEPLAN_DETAIL A \r\n" + 
+					"WHERE A.PRICEPLANID in (select priceplanid from service group by priceplanid)";
+			
+			conn = getConn1();
+			st = conn.createStatement();
+			System.out.println("Execute SQL :"+sql);
+			rs = st.executeQuery(sql);
+			
+			while(rs.next()){
+				pricaplanMap.put(rs.getString("PRICEPLANID"), processEncodeData(rs.getString("ALIASES"), "ISO-8859-1", "BIG5"));
+			}
+		}finally{
+			try {
+				if(st!=null) st.close();
+				if(rs!=null) rs.close();
+				closeConn1(conn);
+			} catch (Exception e) {
+			}
+		}
+		
+		
 		//System.out.println("Set remain data!");
 		Set<String> serviceids = new HashSet<String>();
-		
+		//在CRM USER清單中
 		for(Map<String, Object> m : result){
 			String serviceid = (m.get("SERVICEID")!=null ?m.get("SERVICEID").toString():"");
 			
@@ -203,8 +234,11 @@ public class ExcelDao extends CRMBaseDao{
 				m.put("SERVICECODE",m2.get(m.get("SERVICEID")).get("SERVICECODE"));
 				m.put("DATEACTIVATED",m2.get(m.get("SERVICEID")).get("DATEACTIVATED"));
 				m.put("DATECANCELED",m2.get(m.get("SERVICEID")).get("DATECANCELED"));
+				m.put("PRICEPLANID", m2.get(m.get("SERVICEID")).get("PRICEPLANID"));
+				m.put("PRICEPLANID_ALIASES", pricaplanMap.get(m.get("PRICEPLANID")));
 			}
 		}
+		//不在CRM USER清單中
 		for(String serviceid : m2.keySet()){
 			if(!serviceids.contains(serviceid)){
 				Map<String, Object> m = new HashMap<String, Object>();
@@ -213,6 +247,8 @@ public class ExcelDao extends CRMBaseDao{
 				m.put("SERVICECODE",m2.get(serviceid).get("SERVICECODE"));
 				m.put("DATEACTIVATED",m2.get(serviceid).get("DATEACTIVATED"));
 				m.put("DATECANCELED",m2.get(serviceid).get("DATECANCELED"));
+				m.put("PRICEPLANID", m2.get(serviceid).get("PRICEPLANID"));
+				m.put("PRICEPLANID_ALIASES", pricaplanMap.get(m.get("PRICEPLANID")));
 				result.add(m);
 			}
 		}
